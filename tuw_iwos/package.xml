@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>tuw_iwos</name>
+  <version>0.0.0</version>
+  <description>Tools for independent wheel offset steering.</description>
+
+  <maintainer email="eugen.kaltenegger@gmail.com">Eugen Kaltenegger</maintainer>
+
+  <license>BSD</license>
+
+  <author email="eugen.kaltenegger@gmail.com">Eugen Kaltenegger</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <export>
+    <metapackage />
+  </export>
+</package>
