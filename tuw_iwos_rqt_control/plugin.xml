@@ -1,0 +1,17 @@
+<library path="src">
+  <class name="iwos Control" type="tuw_iwos_rqt_control.tuw_iwos_rqt_control.IWOSControl" base_class_type="rqt_gui_py::Plugin">
+    <description>
+      IWOS Control
+    </description>
+    <qtgui>
+      <group>
+        <label>IWOS</label>
+        <icon type="theme">folder</icon>
+        <statustip>Plugins for IWOS</statustip>
+      </group>
+      <label>IWOS Control</label>
+      <icon type="theme">input-gaming</icon>
+      <statustip>IWOS Control GUI</statustip>
+    </qtgui>
+  </class>
+</library>
