@@ -1,0 +1,1029 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+  <class>IWOS_Control</class>
+  <widget class="QWidget" name="IWOS_Control">
+    <property name="windowTitle">
+      <string>IWOS Control</string>
+    </property>
+    <!-- UI start -->
+    <layout class="QVBoxLayout" name="main_horizontal_layout">
+      <!-- topic start -->
+      <item>
+        <layout class="QHBoxLayout" name="topic">
+          <item>
+            <widget class="QLabel" name="topic_label">
+              <property name="text">
+                <string>Topic:</string>
+              </property>
+            </widget>
+          </item>
+          <item>
+            <widget class="QLineEdit" name="topic_edit"/>
+          </item>
+        </layout>
+      </item>
+      <!--  topic start -->
+      <!-- control start -->
+      <item>
+        <layout class="QHBoxLayout" name="main_vertical_layout">
+          <item>
+            <!-- revolute control start -->
+            <widget class="QGroupBox" name="revolute_control">
+              <property name="title">
+                <string>Revolute Control</string>
+              </property>
+              <layout class="QVBoxLayout" name="revolute_control_vertical_layout">
+                <item>
+                  <widget class="QTabWidget" name="revolute_control_tab_widget">
+                    <!-- revolute control synchronized start -->
+                    <widget class="QWidget" name="revolute_control_synchronized_tab_widget">
+                      <attribute name="title">
+                        <string>Synchronized</string>
+                      </attribute>
+
+                      <layout class="QVBoxLayout" name="revolute_control_synchronized_tab_widget_vertical_layout">
+                        <item>
+                          <spacer name="revolute_control_synchronized_tab_widget_vertical_layout_upper_spacer">
+                            <property name="orientation">
+                              <enum>Qt::Vertical</enum>
+                            </property>
+                            <property name="sizeHint" stdset="0">
+                              <size>
+                                <width>20</width>
+                                <height>40</height>
+                              </size>
+                            </property>
+                          </spacer>
+                        </item>
+                        <item>
+                          <widget class="QGroupBox" name="revolute_control_synchronized_group_box">
+                            <property name="title">
+                              <string>Revolute Synchronized</string>
+                            </property>
+                            <property name="alignment">
+                              <set>Qt::AlignCenter</set>
+                            </property>
+                            <layout class="QVBoxLayout" name="revolute_control_synchronized_vertical_layout">
+                              <item>
+                                <widget class="QSlider" name="revolute_control_synchronized_slider">
+                                  <property name="orientation">
+                                    <enum>Qt::Horizontal</enum>
+                                  </property>
+                                </widget>
+                              </item>
+                              <item>
+                                <layout class="QHBoxLayout" name="revolute_control_synchronized_button">
+                                  <item>
+                                    <widget class="QPushButton" name="revolute_control_synchronized_button_decrease">
+                                      <property name="font">
+                                        <font>
+                                          <pointsize>12</pointsize>
+                                        </font>
+                                      </property>
+                                      <property name="text">
+                                        <string>--</string>
+                                      </property>
+                                    </widget>
+                                  </item>
+                                  <item>
+                                    <spacer name="revolute_control_synchronized_button_left_spacer">
+                                      <property name="orientation">
+                                        <enum>Qt::Horizontal</enum>
+                                      </property>
+                                      <property name="sizeHint" stdset="0">
+                                        <size>
+                                          <width>40</width>
+                                          <height>20</height>
+                                        </size>
+                                      </property>
+                                    </spacer>
+                                  </item>
+                                  <item>
+                                    <widget class="QPushButton" name="revolute_control_synchronized_button_reset">
+                                      <property name="font">
+                                        <font>
+                                          <pointsize>12</pointsize>
+                                        </font>
+                                      </property>
+                                      <property name="text">
+                                        <string>0</string>
+                                      </property>
+                                    </widget>
+                                  </item>
+                                  <item>
+                                    <spacer name="revolute_control_synchronized_button_right_spacer">
+                                      <property name="orientation">
+                                        <enum>Qt::Horizontal</enum>
+                                      </property>
+                                      <property name="sizeHint" stdset="0">
+                                        <size>
+                                          <width>40</width>
+                                          <height>20</height>
+                                        </size>
+                                      </property>
+                                    </spacer>
+                                  </item>
+                                  <item>
+                                    <widget class="QPushButton" name="revolute_control_synchronized_button_increase">
+                                      <property name="font">
+                                        <font>
+                                          <pointsize>12</pointsize>
+                                        </font>
+                                      </property>
+                                      <property name="text">
+                                        <string>++</string>
+                                      </property>
+                                    </widget>
+                                  </item>
+                                </layout>
+                              </item>
+                              <item>
+                                <layout class="QHBoxLayout" name="revolute_control_synchronized_value">
+                                  <item>
+                                    <widget class="QDoubleSpinBox" name="revolute_control_synchronized_value_minimum">
+                                      <property name="font">
+                                        <font>
+                                          <pointsize>12</pointsize>
+                                        </font>
+                                      </property>
+                                    </widget>
+                                  </item>
+                                  <item>
+                                    <spacer name="revolute_control_synchronized_value_left_spacer">
+                                      <property name="orientation">
+                                        <enum>Qt::Horizontal</enum>
+                                      </property>
+                                      <property name="sizeHint" stdset="0">
+                                        <size>
+                                          <width>40</width>
+                                          <height>20</height>
+                                        </size>
+                                      </property>
+                                    </spacer>
+                                  </item>
+                                  <item>
+                                    <widget class="QLabel" name="revolute_control_synchronized_value_current">
+                                      <property name="font">
+                                        <font>
+                                          <pointsize>12</pointsize>
+                                        </font>
+                                      </property>
+                                      <property name="text">
+                                        <string>value</string>
+                                      </property>
+                                    </widget>
+                                  </item>
+                                  <item>
+                                    <spacer name="revolute_control_synchronized_value_right_spacer">
+                                      <property name="orientation">
+                                        <enum>Qt::Horizontal</enum>
+                                      </property>
+                                      <property name="sizeHint" stdset="0">
+                                        <size>
+                                          <width>40</width>
+                                          <height>20</height>
+                                        </size>
+                                      </property>
+                                    </spacer>
+                                  </item>
+                                  <item>
+                                    <widget class="QDoubleSpinBox" name="revolute_control_synchronized_value_maximum">
+                                      <property name="font">
+                                        <font>
+                                          <pointsize>12</pointsize>
+                                        </font>
+                                      </property>
+                                    </widget>
+                                  </item>
+                                </layout>
+                              </item>
+                            </layout>
+                          </widget>
+                        </item>
+                        <item>
+                          <spacer name="revolute_control_synchronized_tab_widget_vertical_layout_lower_spacer">
+                            <property name="orientation">
+                              <enum>Qt::Vertical</enum>
+                            </property>
+                            <property name="sizeHint" stdset="0">
+                              <size>
+                                <width>20</width>
+                                <height>40</height>
+                              </size>
+                            </property>
+                          </spacer>
+                        </item>
+                      </layout>
+                    </widget>
+                    <!-- revolute control synchronized end -->
+
+                    <!-- revolute control separate start -->
+                    <widget class="QWidget" name="revolute_control_separate_tab_widget">
+                      <attribute name="title">
+                        <string>Separate</string>
+                      </attribute>
+                      <layout class="QVBoxLayout" name="revolute_control_separate_tab_widget_vertical_layout">
+                        <item>
+                          <spacer name="revolute_control_separate_tab_widget_vertical_layout_upper_spacer">
+                            <property name="orientation">
+                              <enum>Qt::Vertical</enum>
+                            </property>
+                            <property name="sizeHint" stdset="0">
+                              <size>
+                                <width>20</width>
+                                <height>40</height>
+                              </size>
+                            </property>
+                          </spacer>
+                        </item>
+                        <item>
+                          <layout class="QHBoxLayout" name="revolute_control_separate_horizontal_layout">
+                            <!-- revolute control separate left start -->
+                            <item>
+                              <widget class="QGroupBox" name="revolute_control_separate_left_group_box">
+                                <property name="title">
+                                  <string>Revolute Left</string>
+                                </property>
+                                <property name="alignment">
+                                  <set>Qt::AlignCenter</set>
+                                </property>
+                                <layout class="QVBoxLayout" name="revolute_control_separate_left_vertical_layout">
+                                  <item>
+                                    <widget class="QSlider" name="revolute_control_separate_left_slider">
+                                      <property name="orientation">
+                                        <enum>Qt::Horizontal</enum>
+                                      </property>
+                                    </widget>
+                                  </item>
+                                  <item>
+                                    <layout class="QHBoxLayout" name="revolute_control_separate_left_button">
+                                      <item>
+                                        <widget class="QPushButton" name="revolute_control_separate_left_button_decrease">
+                                          <property name="font">
+                                            <font>
+                                              <pointsize>12</pointsize>
+                                            </font>
+                                          </property>
+                                          <property name="text">
+                                            <string>--</string>
+                                          </property>
+                                        </widget>
+                                      </item>
+                                      <item>
+                                        <spacer name="revolute_control_separate_left_button_left_spacer">
+                                          <property name="orientation">
+                                            <enum>Qt::Horizontal</enum>
+                                          </property>
+                                          <property name="sizeHint" stdset="0">
+                                            <size>
+                                              <width>40</width>
+                                              <height>20</height>
+                                            </size>
+                                          </property>
+                                        </spacer>
+                                      </item>
+                                      <item>
+                                        <widget class="QPushButton" name="revolute_control_separate_button_left_reset">
+                                          <property name="font">
+                                            <font>
+                                              <pointsize>12</pointsize>
+                                            </font>
+                                          </property>
+                                          <property name="text">
+                                            <string>0</string>
+                                          </property>
+                                        </widget>
+                                      </item>
+                                      <item>
+                                        <spacer name="revolute_control_separate_left_button_right_spacer">
+                                          <property name="orientation">
+                                            <enum>Qt::Horizontal</enum>
+                                          </property>
+                                          <property name="sizeHint" stdset="0">
+                                            <size>
+                                              <width>40</width>
+                                              <height>20</height>
+                                            </size>
+                                          </property>
+                                        </spacer>
+                                      </item>
+                                      <item>
+                                        <widget class="QPushButton" name="revolute_control_separate_left_button_increase">
+                                          <property name="font">
+                                            <font>
+                                              <pointsize>12</pointsize>
+                                            </font>
+                                          </property>
+                                          <property name="text">
+                                            <string>++</string>
+                                          </property>
+                                        </widget>
+                                      </item>
+                                    </layout>
+                                  </item>
+                                  <item>
+                                    <layout class="QHBoxLayout" name="revolute_control_separate_left_value">
+                                      <item>
+                                        <widget class="QDoubleSpinBox" name="revolute_control_separate_left_value_minimum">
+                                          <property name="font">
+                                            <font>
+                                              <pointsize>12</pointsize>
+                                            </font>
+                                          </property>
+                                        </widget>
+                                      </item>
+                                      <item>
+                                        <spacer name="revolute_control_separate_left_value_left_spacer">
+                                          <property name="orientation">
+                                            <enum>Qt::Horizontal</enum>
+                                          </property>
+                                          <property name="sizeHint" stdset="0">
+                                            <size>
+                                              <width>40</width>
+                                              <height>20</height>
+                                            </size>
+                                          </property>
+                                        </spacer>
+                                      </item>
+                                      <item>
+                                        <widget class="QLabel" name="revolute_control_separate_left_value_current">
+                                          <property name="font">
+                                            <font>
+                                              <pointsize>12</pointsize>
+                                            </font>
+                                          </property>
+                                          <property name="text">
+                                            <string>value</string>
+                                          </property>
+                                        </widget>
+                                      </item>
+                                      <item>
+                                        <spacer name="revolute_control_separate_left_value_right_spacer">
+                                          <property name="orientation">
+                                            <enum>Qt::Horizontal</enum>
+                                          </property>
+                                          <property name="sizeHint" stdset="0">
+                                            <size>
+                                              <width>40</width>
+                                              <height>20</height>
+                                            </size>
+                                          </property>
+                                        </spacer>
+                                      </item>
+                                      <item>
+                                        <widget class="QDoubleSpinBox" name="revolute_control_separate_left_value_maximum"/>
+                                      </item>
+                                    </layout>
+                                  </item>
+                                </layout>
+                              </widget>
+                            </item>
+                            <!-- revolute control separate left end -->
+
+                            <!-- revolute control separate right start -->
+                            <item>
+                              <widget class="QGroupBox" name="revolute_control_separate_right_group_box">
+                                <property name="title">
+                                  <string>Revolute Right</string>
+                                </property>
+                                <property name="alignment">
+                                  <set>Qt::AlignCenter</set>
+                                </property>
+                                <layout class="QVBoxLayout" name="revolute_control_separate_right_vertical_layout">
+                                  <item>
+                                    <widget class="QSlider" name="revolute_control_separate_right_slider">
+                                      <property name="orientation">
+                                        <enum>Qt::Horizontal</enum>
+                                      </property>
+                                    </widget>
+                                  </item>
+                                  <item>
+                                    <layout class="QHBoxLayout" name="revolute_control_separate_right_button">
+                                      <item>
+                                        <widget class="QPushButton" name="revolute_control_separate_right_button_decrease">
+                                          <property name="font">
+                                            <font>
+                                              <pointsize>12</pointsize>
+                                            </font>
+                                          </property>
+                                          <property name="text">
+                                            <string>--</string>
+                                          </property>
+                                        </widget>
+                                      </item>
+                                      <item>
+                                        <spacer name="revolute_control_separate_right_button_left_spacer">
+                                          <property name="orientation">
+                                            <enum>Qt::Horizontal</enum>
+                                          </property>
+                                          <property name="sizeHint" stdset="0">
+                                            <size>
+                                              <width>40</width>
+                                              <height>20</height>
+                                            </size>
+                                          </property>
+                                        </spacer>
+                                      </item>
+                                      <item>
+                                        <widget class="QPushButton" name="revolute_control_separate_button_right_reset">
+                                          <property name="font">
+                                            <font>
+                                              <pointsize>12</pointsize>
+                                            </font>
+                                          </property>
+                                          <property name="text">
+                                            <string>0</string>
+                                          </property>
+                                        </widget>
+                                      </item>
+                                      <item>
+                                        <spacer name="revolute_control_separate_right_button_right_spacer">
+                                          <property name="orientation">
+                                            <enum>Qt::Horizontal</enum>
+                                          </property>
+                                          <property name="sizeHint" stdset="0">
+                                            <size>
+                                              <width>40</width>
+                                              <height>20</height>
+                                            </size>
+                                          </property>
+                                        </spacer>
+                                      </item>
+                                      <item>
+                                        <widget class="QPushButton" name="revolute_control_separate_right_button_increase">
+                                          <property name="font">
+                                            <font>
+                                              <pointsize>12</pointsize>
+                                            </font>
+                                          </property>
+                                          <property name="text">
+                                            <string>++</string>
+                                          </property>
+                                        </widget>
+                                      </item>
+                                    </layout>
+                                  </item>
+                                  <item>
+                                    <layout class="QHBoxLayout" name="revolute_control_separate_right_value">
+                                      <item>
+                                        <widget class="QDoubleSpinBox" name="revolute_control_separate_right_value_minimum"/>
+                                      </item>
+                                      <item>
+                                        <spacer name="revolute_control_separate_right_value_left_spacer">
+                                          <property name="orientation">
+                                            <enum>Qt::Horizontal</enum>
+                                          </property>
+                                          <property name="sizeHint" stdset="0">
+                                            <size>
+                                              <width>40</width>
+                                              <height>20</height>
+                                            </size>
+                                          </property>
+                                        </spacer>
+                                      </item>
+                                      <item>
+                                        <widget class="QLabel" name="revolute_control_separate_right_value_current">
+                                          <property name="font">
+                                            <font>
+                                              <pointsize>12</pointsize>
+                                            </font>
+                                          </property>
+                                          <property name="text">
+                                            <string>value</string>
+                                          </property>
+                                        </widget>
+                                      </item>
+                                      <item>
+                                        <spacer name="revolute_control_separate_right_value_right_spacer">
+                                          <property name="orientation">
+                                            <enum>Qt::Horizontal</enum>
+                                          </property>
+                                          <property name="sizeHint" stdset="0">
+                                            <size>
+                                              <width>40</width>
+                                              <height>20</height>
+                                            </size>
+                                          </property>
+                                        </spacer>
+                                      </item>
+                                      <item>
+                                        <widget class="QDoubleSpinBox" name="revolute_control_separate_right_value_maximum">
+                                          <property name="font">
+                                            <font>
+                                              <pointsize>12</pointsize>
+                                            </font>
+                                          </property>
+                                        </widget>
+                                      </item>
+                                    </layout>
+                                  </item>
+                                </layout>
+                              </widget>
+                            </item>
+                            <!-- revolute control separate right end -->
+                          </layout>
+                        </item>
+                        <item>
+                          <spacer name="revolute_control_separate_tab_widget_vertical_layout_lower_spacer">
+                            <property name="orientation">
+                              <enum>Qt::Vertical</enum>
+                            </property>
+                            <property name="sizeHint" stdset="0">
+                              <size>
+                                <width>20</width>
+                                <height>40</height>
+                              </size>
+                            </property>
+                          </spacer>
+                        </item>
+                      </layout>
+                    </widget>
+                    <!-- revolute control separate end -->
+                  </widget>
+                </item>
+              </layout>
+            </widget>
+            <!-- revolute control end -->
+          </item>
+          <item>
+            <!-- steering control start -->
+            <widget class="QGroupBox" name="steering_control">
+              <property name="title">
+                <string>Steering Control</string>
+              </property>
+              <layout class="QVBoxLayout" name="steering_control_vertical_layout">
+                <item>
+                  <widget class="QTabWidget" name="steering_control_tab_widget">
+                    <!-- steering control synchronized start -->
+                    <widget class="QWidget" name="steering_control_synchronized_tab_widget">
+                      <attribute name="title">
+                        <string>Synchronized</string>
+                      </attribute>
+                      <layout class="QHBoxLayout" name="steering_control_synchronized_tab_widget_horizontal_layout">
+                        <item>
+                          <spacer name="steering_control_synchronized_tab_widget_horizontal_layout_left_spacer">
+                            <property name="orientation">
+                              <enum>Qt::Horizontal</enum>
+                            </property>
+                            <property name="sizeHint" stdset="0">
+                              <size>
+                                <width>40</width>
+                                <height>20</height>
+                              </size>
+                            </property>
+                          </spacer>
+                        </item>
+                        <item>
+                          <widget class="QGroupBox" name="steering_control_synchronized_group_box">
+                            <property name="title">
+                              <string>Velocity Synchronized</string>
+                            </property>
+                            <property name="alignment">
+                              <set>Qt::AlignCenter</set>
+                            </property>
+                            <layout class="QHBoxLayout" name="steering_control_synchronized_horizontal_layout">
+                              <item>
+                                <layout class="QVBoxLayout" name="steering_control_synchronized_button">
+                                  <item>
+                                    <widget class="QPushButton" name="steering_control_synchronized_button_increase">
+                                      <property name="text">
+                                        <string>++</string>
+                                      </property>
+                                    </widget>
+                                  </item>
+                                  <item>
+                                    <spacer name="steering_control_synchronized_button_upper_spacer">
+                                      <property name="orientation">
+                                        <enum>Qt::Vertical</enum>
+                                      </property>
+                                      <property name="sizeHint" stdset="0">
+                                        <size>
+                                          <width>20</width>
+                                          <height>40</height>
+                                        </size>
+                                      </property>
+                                    </spacer>
+                                  </item>
+                                  <item>
+                                    <widget class="QPushButton" name="steering_control_synchronized_button_reset">
+                                      <property name="text">
+                                        <string>0</string>
+                                      </property>
+                                    </widget>
+                                  </item>
+                                  <item>
+                                    <spacer name="steering_control_synchronized_button_lower_spacer">
+                                      <property name="orientation">
+                                        <enum>Qt::Vertical</enum>
+                                      </property>
+                                      <property name="sizeHint" stdset="0">
+                                        <size>
+                                          <width>20</width>
+                                          <height>40</height>
+                                        </size>
+                                      </property>
+                                    </spacer>
+                                  </item>
+                                  <item>
+                                    <widget class="QPushButton" name="steering_control_synchronized_button_decrease">
+                                      <property name="text">
+                                        <string>--</string>
+                                      </property>
+                                    </widget>
+                                  </item>
+                                </layout>
+                              </item>
+                              <item>
+                                <widget class="QSlider" name="steering_control_synchronized_slider">
+                                  <property name="orientation">
+                                    <enum>Qt::Vertical</enum>
+                                  </property>
+                                </widget>
+                              </item>
+                              <item>
+                                <layout class="QVBoxLayout" name="steering_control_synchronized_value">
+                                  <item>
+                                    <widget class="QDoubleSpinBox" name="steering_control_synchronized_value_maximum">
+                                      <property name="font">
+                                        <font>
+                                          <pointsize>12</pointsize>
+                                        </font>
+                                      </property>
+                                    </widget>
+                                  </item>
+                                  <item>
+                                    <spacer name="steering_control_synchronized_value_upper_spacer">
+                                      <property name="orientation">
+                                        <enum>Qt::Vertical</enum>
+                                      </property>
+                                      <property name="sizeHint" stdset="0">
+                                        <size>
+                                          <width>20</width>
+                                          <height>40</height>
+                                        </size>
+                                      </property>
+                                    </spacer>
+                                  </item>
+                                  <item>
+                                    <widget class="QLabel" name="steering_control_synchronized_value_current">
+                                      <property name="text">
+                                        <string>cur</string>
+                                      </property>
+                                      <property name="alignment">
+                                        <set>Qt::AlignCenter</set>
+                                      </property>
+                                    </widget>
+                                  </item>
+                                  <item>
+                                    <spacer name="steering_control_synchronized_value_lower_spacer">
+                                      <property name="orientation">
+                                        <enum>Qt::Vertical</enum>
+                                      </property>
+                                      <property name="sizeHint" stdset="0">
+                                        <size>
+                                          <width>20</width>
+                                          <height>40</height>
+                                        </size>
+                                      </property>
+                                    </spacer>
+                                  </item>
+                                  <item>
+                                    <widget class="QDoubleSpinBox" name="steering_control_synchronized_value_minimum">
+                                      <property name="font">
+                                        <font>
+                                          <pointsize>12</pointsize>
+                                        </font>
+                                      </property>
+                                    </widget>
+                                  </item>
+                                </layout>
+                              </item>
+                            </layout>
+                          </widget>
+                        </item>
+                        <item>
+                          <spacer name="steering_control_synchronized_tab_widget_vertical_layout_right_spacer">
+                            <property name="orientation">
+                              <enum>Qt::Horizontal</enum>
+                            </property>
+                            <property name="sizeHint" stdset="0">
+                              <size>
+                                <width>40</width>
+                                <height>20</height>
+                              </size>
+                            </property>
+                          </spacer>
+                        </item>
+                      </layout>
+                    </widget>
+                    <!-- steering control synchronized end -->
+
+                    <!-- steering control separate start -->
+                    <widget class="QWidget" name="steering_control_separate_tab_widget">
+                      <attribute name="title">
+                        <string>Seperate</string>
+                      </attribute>
+                      <layout class="QHBoxLayout" name="steering_control_separate_tab_widget_horizontal_layout">
+                        <item>
+                          <spacer name="steering_control_separate_tab_widget_horizontal_layout_upper_spacer">
+                            <property name="orientation">
+                              <enum>Qt::Horizontal</enum>
+                            </property>
+                            <property name="sizeHint" stdset="0">
+                              <size>
+                                <width>40</width>
+                                <height>20</height>
+                              </size>
+                            </property>
+                          </spacer>
+                        </item>
+                        <item>
+                          <layout class="QHBoxLayout" name="steering_control_separate_horizontal_layout">
+                            <!-- steering control separate left start -->
+                            <item>
+                              <widget class="QGroupBox" name="steering_control_separate_left_group_box">
+                                <property name="title">
+                                  <string>Velocity Left</string>
+                                </property>
+                                <property name="alignment">
+                                  <set>Qt::AlignCenter</set>
+                                </property>
+
+                                <layout class="QHBoxLayout" name="steering_control_separate_left_horizontal_layout">
+                                  <item>
+                                    <layout class="QVBoxLayout" name="steering_control_separate_left_button">
+                                      <item>
+                                        <widget class="QPushButton" name="steering_control_separate_left_button_increase">
+                                          <property name="text">
+                                            <string>++</string>
+                                          </property>
+                                        </widget>
+                                      </item>
+                                      <item>
+                                        <spacer name="steering_control_separate_left_button_upper_spacer">
+                                          <property name="orientation">
+                                            <enum>Qt::Vertical</enum>
+                                          </property>
+                                          <property name="sizeHint" stdset="0">
+                                            <size>
+                                              <width>20</width>
+                                              <height>40</height>
+                                            </size>
+                                          </property>
+                                        </spacer>
+                                      </item>
+                                      <item>
+                                        <widget class="QPushButton" name="steering_control_separate_button_left_reset">
+                                          <property name="text">
+                                            <string>0</string>
+                                          </property>
+                                        </widget>
+                                      </item>
+                                      <item>
+                                        <spacer name="steering_control_separate_left_button_lower_spacer">
+                                          <property name="orientation">
+                                            <enum>Qt::Vertical</enum>
+                                          </property>
+                                          <property name="sizeHint" stdset="0">
+                                            <size>
+                                              <width>20</width>
+                                              <height>40</height>
+                                            </size>
+                                          </property>
+                                        </spacer>
+                                      </item>
+                                      <item>
+                                        <widget class="QPushButton" name="steering_control_separate_left_button_decrease">
+                                          <property name="text">
+                                            <string>--</string>
+                                          </property>
+                                        </widget>
+                                      </item>
+                                    </layout>
+                                  </item>
+                                  <item>
+                                    <widget class="QSlider" name="steering_control_separate_left_slider">
+                                      <property name="orientation">
+                                        <enum>Qt::Vertical</enum>
+                                      </property>
+                                    </widget>
+                                  </item>
+                                  <item>
+                                    <layout class="QVBoxLayout" name="steering_control_separate_left_value">
+                                      <item>
+                                        <widget class="QDoubleSpinBox" name="steering_control_separate_left_value_maximum"/>
+                                      </item>
+                                      <item>
+                                        <spacer name="steering_control_separate_left_value_upper_spacer">
+                                          <property name="orientation">
+                                            <enum>Qt::Vertical</enum>
+                                          </property>
+                                          <property name="sizeHint" stdset="0">
+                                            <size>
+                                              <width>20</width>
+                                              <height>40</height>
+                                            </size>
+                                          </property>
+                                        </spacer>
+                                      </item>
+                                      <item>
+                                        <widget class="QLabel" name="steering_control_separate_left_value_current">
+                                          <property name="text">
+                                            <string>cur</string>
+                                          </property>
+                                          <property name="alignment">
+                                            <set>Qt::AlignCenter</set>
+                                          </property>
+                                        </widget>
+                                      </item>
+                                      <item>
+                                        <spacer name="steering_control_separate_left_value_lower_spacer">
+                                          <property name="orientation">
+                                            <enum>Qt::Vertical</enum>
+                                          </property>
+                                          <property name="sizeHint" stdset="0">
+                                            <size>
+                                              <width>20</width>
+                                              <height>40</height>
+                                            </size>
+                                          </property>
+                                        </spacer>
+                                      </item>
+                                      <item>
+                                        <widget class="QDoubleSpinBox" name="steering_control_separate_left_value_minimum"/>
+                                      </item>
+                                    </layout>
+                                  </item>
+                                </layout>
+
+                              </widget>
+                            </item>
+                            <!-- steering control separate left end -->
+
+                            <!-- steering control separate right start -->
+                            <item>
+                              <widget class="QGroupBox" name="steering_control_separate_right_group_box">
+                                <property name="title">
+                                  <string>Velocity Right</string>
+                                </property>
+                                <property name="alignment">
+                                  <set>Qt::AlignCenter</set>
+                                </property>
+                                <layout class="QHBoxLayout" name="steering_control_separate_right_horizontal_layout">
+                                  <item>
+                                    <layout class="QVBoxLayout" name="steering_control_separate_right_button">
+                                      <item>
+                                        <widget class="QPushButton" name="steering_control_separate_right_button_increase">
+                                          <property name="text">
+                                            <string>++</string>
+                                          </property>
+                                        </widget>
+                                      </item>
+                                      <item>
+                                        <spacer name="steering_control_separate_right_button_upper_spacer">
+                                          <property name="orientation">
+                                            <enum>Qt::Vertical</enum>
+                                          </property>
+                                          <property name="sizeHint" stdset="0">
+                                            <size>
+                                              <width>20</width>
+                                              <height>40</height>
+                                            </size>
+                                          </property>
+                                        </spacer>
+                                      </item>
+                                      <item>
+                                        <widget class="QPushButton" name="steering_control_separate_button_right_reset">
+                                          <property name="text">
+                                            <string>0</string>
+                                          </property>
+                                        </widget>
+                                      </item>
+                                      <item>
+                                        <spacer name="steering_control_separate_right_button_lower_spacer">
+                                          <property name="orientation">
+                                            <enum>Qt::Vertical</enum>
+                                          </property>
+                                          <property name="sizeHint" stdset="0">
+                                            <size>
+                                              <width>20</width>
+                                              <height>40</height>
+                                            </size>
+                                          </property>
+                                        </spacer>
+                                      </item>
+                                      <item>
+                                        <widget class="QPushButton" name="steering_control_separate_right_button_decrease">
+                                          <property name="text">
+                                            <string>--</string>
+                                          </property>
+                                        </widget>
+                                      </item>
+                                    </layout>
+                                  </item>
+                                  <item>
+                                    <widget class="QSlider" name="steering_control_separate_right_slider">
+                                      <property name="orientation">
+                                        <enum>Qt::Vertical</enum>
+                                      </property>
+                                    </widget>
+                                  </item>
+                                  <item>
+                                    <layout class="QVBoxLayout" name="steering_control_separate_right_value">
+                                      <item>
+                                        <widget class="QDoubleSpinBox" name="steering_control_separate_right_value_maximum"/>
+                                      </item>
+                                      <item>
+                                        <spacer name="steering_control_separate_right_value_upper_spacer">
+                                          <property name="orientation">
+                                            <enum>Qt::Vertical</enum>
+                                          </property>
+                                          <property name="sizeHint" stdset="0">
+                                            <size>
+                                              <width>20</width>
+                                              <height>40</height>
+                                            </size>
+                                          </property>
+                                        </spacer>
+                                      </item>
+                                      <item>
+                                        <widget class="QLabel" name="steering_control_separate_right_value_current">
+                                          <property name="text">
+                                            <string>cur</string>
+                                          </property>
+                                          <property name="alignment">
+                                            <set>Qt::AlignCenter</set>
+                                          </property>
+                                        </widget>
+                                      </item>
+                                      <item>
+                                        <spacer name="steering_control_separate_right_value_lower_spacer">
+                                          <property name="orientation">
+                                            <enum>Qt::Vertical</enum>
+                                          </property>
+                                          <property name="sizeHint" stdset="0">
+                                            <size>
+                                              <width>20</width>
+                                              <height>40</height>
+                                            </size>
+                                          </property>
+                                        </spacer>
+                                      </item>
+                                      <item>
+                                        <widget class="QDoubleSpinBox" name="steering_control_separate_right_value_minimum"/>
+                                      </item>
+                                    </layout>
+                                  </item>
+                                </layout>
+                              </widget>
+                            </item>
+                            <!-- steering control separate right end -->
+                          </layout>
+                        </item>
+                        <item>
+                          <spacer name="revolute_control_separate_tab_widget_vertical_layout_lower_spacer">
+                            <property name="orientation">
+                              <enum>Qt::Horizontal</enum>
+                            </property>
+                            <property name="sizeHint" stdset="0">
+                              <size>
+                                <width>40</width>
+                                <height>20</height>
+                              </size>
+                            </property>
+                          </spacer>
+                        </item>
+                      </layout>
+                    </widget>
+                    <!-- steering control separate start -->
+                  </widget>
+                </item>
+              </layout>
+            </widget>
+            <!-- steering control end -->
+          </item>
+        </layout>
+      </item>
+      <!-- control end -->
+      <!-- emergency stop button start -->
+      <item>
+        <widget class="QPushButton" name="emergency_stop">
+          <property name="font">
+            <font>
+              <pointsize>24</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+            </font>
+          </property>
+          <property name="text">
+            <string>Emergency Stop</string>
+          </property>
+        </widget>
+      </item>
+      <!-- emergency stop button end -->
+    </layout>
+    <!-- UI end -->
+  </widget>
+  <resources/>
+  <connections/>
+</ui>
