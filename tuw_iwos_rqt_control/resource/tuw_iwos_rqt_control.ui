@@ -26,8 +26,8 @@
       <!-- control start -->
       <item>
         <layout class="QHBoxLayout" name="main_vertical_layout">
+          <!-- revolute control start -->
           <item>
-            <!-- revolute control start -->
             <widget class="QGroupBox" name="revolute_control">
               <property name="title">
                 <string>Revolute Control</string>
@@ -146,6 +146,15 @@
                                           <pointsize>12</pointsize>
                                         </font>
                                       </property>
+                                      <property name="minimum">
+                                        <double>-1.000000000000000</double>
+                                      </property>
+                                      <property name="maximum">
+                                        <double>0.000000000000000</double>
+                                      </property>
+                                      <property name="singleStep">
+                                        <double>0.010000000000000</double>
+                                      </property>
                                     </widget>
                                   </item>
                                   <item>
@@ -192,6 +201,15 @@
                                         <font>
                                           <pointsize>12</pointsize>
                                         </font>
+                                      </property>
+                                      <property name="minimum">
+                                        <double>0.000000000000000</double>
+                                      </property>
+                                      <property name="maximum">
+                                        <double>1.000000000000000</double>
+                                      </property>
+                                      <property name="singleStep">
+                                        <double>0.010000000000000</double>
                                       </property>
                                     </widget>
                                   </item>
@@ -330,6 +348,15 @@
                                               <pointsize>12</pointsize>
                                             </font>
                                           </property>
+                                          <property name="minimum">
+                                            <double>-1.000000000000000</double>
+                                          </property>
+                                          <property name="maximum">
+                                            <double>0.000000000000000</double>
+                                          </property>
+                                          <property name="singleStep">
+                                            <double>0.010000000000000</double>
+                                          </property>
                                         </widget>
                                       </item>
                                       <item>
@@ -371,7 +398,22 @@
                                         </spacer>
                                       </item>
                                       <item>
-                                        <widget class="QDoubleSpinBox" name="revolute_control_separate_left_value_maximum"/>
+                                        <widget class="QDoubleSpinBox" name="revolute_control_separate_left_value_maximum">
+                                          <property name="font">
+                                            <font>
+                                              <pointsize>12</pointsize>
+                                            </font>
+                                          </property>
+                                          <property name="minimum">
+                                            <double>0.000000000000000</double>
+                                          </property>
+                                          <property name="maximum">
+                                            <double>1.000000000000000</double>
+                                          </property>
+                                          <property name="singleStep">
+                                            <double>0.010000000000000</double>
+                                          </property>
+                                        </widget>
                                       </item>
                                     </layout>
                                   </item>
@@ -466,7 +508,22 @@
                                   <item>
                                     <layout class="QHBoxLayout" name="revolute_control_separate_right_value">
                                       <item>
-                                        <widget class="QDoubleSpinBox" name="revolute_control_separate_right_value_minimum"/>
+                                        <widget class="QDoubleSpinBox" name="revolute_control_separate_right_value_minimum">
+                                          <property name="font">
+                                            <font>
+                                              <pointsize>12</pointsize>
+                                            </font>
+                                          </property>
+                                          <property name="minimum">
+                                            <double>-1.000000000000000</double>
+                                          </property>
+                                          <property name="maximum">
+                                            <double>0.000000000000000</double>
+                                          </property>
+                                          <property name="singleStep">
+                                            <double>0.010000000000000</double>
+                                          </property>
+                                        </widget>
                                       </item>
                                       <item>
                                         <spacer name="revolute_control_separate_right_value_left_spacer">
@@ -513,6 +570,15 @@
                                               <pointsize>12</pointsize>
                                             </font>
                                           </property>
+                                          <property name="minimum">
+                                            <double>0.000000000000000</double>
+                                          </property>
+                                          <property name="maximum">
+                                            <double>1.000000000000000</double>
+                                          </property>
+                                          <property name="singleStep">
+                                            <double>0.010000000000000</double>
+                                          </property>
                                         </widget>
                                       </item>
                                     </layout>
@@ -543,10 +609,10 @@
                 </item>
               </layout>
             </widget>
-            <!-- revolute control end -->
           </item>
+          <!-- revolute control end -->
+          <!-- steering control start -->
           <item>
-            <!-- steering control start -->
             <widget class="QGroupBox" name="steering_control">
               <property name="title">
                 <string>Steering Control</string>
@@ -649,6 +715,20 @@
                                           <pointsize>12</pointsize>
                                         </font>
                                       </property>
+                                      <property name="font">
+                                        <font>
+                                          <pointsize>12</pointsize>
+                                        </font>
+                                      </property>
+                                      <property name="minimum">
+                                        <double>0.000000000000000</double>
+                                      </property>
+                                      <property name="maximum">
+                                        <double>0.500000000000000</double>
+                                      </property>
+                                      <property name="singleStep">
+                                        <double>0.100000000000000</double>
+                                      </property>
                                     </widget>
                                   </item>
                                   <item>
@@ -693,6 +773,15 @@
                                         <font>
                                           <pointsize>12</pointsize>
                                         </font>
+                                      </property>
+                                      <property name="minimum">
+                                        <double>-0.500000000000000</double>
+                                      </property>
+                                      <property name="maximum">
+                                        <double>0.000000000000000</double>
+                                      </property>
+                                      <property name="singleStep">
+                                        <double>0.100000000000000</double>
                                       </property>
                                     </widget>
                                   </item>
@@ -811,7 +900,22 @@
                                   <item>
                                     <layout class="QVBoxLayout" name="steering_control_separate_left_value">
                                       <item>
-                                        <widget class="QDoubleSpinBox" name="steering_control_separate_left_value_maximum"/>
+                                        <widget class="QDoubleSpinBox" name="steering_control_separate_left_value_maximum">
+                                          <property name="font">
+                                            <font>
+                                              <pointsize>12</pointsize>
+                                            </font>
+                                          </property>
+                                          <property name="minimum">
+                                            <double>0.000000000000000</double>
+                                          </property>
+                                          <property name="maximum">
+                                            <double>0.500000000000000</double>
+                                          </property>
+                                          <property name="singleStep">
+                                            <double>0.100000000000000</double>
+                                          </property>
+                                        </widget>
                                       </item>
                                       <item>
                                         <spacer name="steering_control_separate_left_value_upper_spacer">
@@ -850,7 +954,22 @@
                                         </spacer>
                                       </item>
                                       <item>
-                                        <widget class="QDoubleSpinBox" name="steering_control_separate_left_value_minimum"/>
+                                        <widget class="QDoubleSpinBox" name="steering_control_separate_left_value_minimum">
+                                          <property name="font">
+                                            <font>
+                                              <pointsize>12</pointsize>
+                                            </font>
+                                          </property>
+                                          <property name="minimum">
+                                            <double>-0.500000000000000</double>
+                                          </property>
+                                          <property name="maximum">
+                                            <double>0.000000000000000</double>
+                                          </property>
+                                          <property name="singleStep">
+                                            <double>0.100000000000000</double>
+                                          </property>
+                                        </widget>
                                       </item>
                                     </layout>
                                   </item>
@@ -931,7 +1050,22 @@
                                   <item>
                                     <layout class="QVBoxLayout" name="steering_control_separate_right_value">
                                       <item>
-                                        <widget class="QDoubleSpinBox" name="steering_control_separate_right_value_maximum"/>
+                                        <widget class="QDoubleSpinBox" name="steering_control_separate_right_value_maximum">
+                                          <property name="font">
+                                            <font>
+                                              <pointsize>12</pointsize>
+                                            </font>
+                                          </property>
+                                          <property name="minimum">
+                                            <double>0.000000000000000</double>
+                                          </property>
+                                          <property name="maximum">
+                                            <double>0.500000000000000</double>
+                                          </property>
+                                          <property name="singleStep">
+                                            <double>0.100000000000000</double>
+                                          </property>
+                                        </widget>
                                       </item>
                                       <item>
                                         <spacer name="steering_control_separate_right_value_upper_spacer">
@@ -970,7 +1104,22 @@
                                         </spacer>
                                       </item>
                                       <item>
-                                        <widget class="QDoubleSpinBox" name="steering_control_separate_right_value_minimum"/>
+                                        <widget class="QDoubleSpinBox" name="steering_control_separate_right_value_minimum">
+                                          <property name="font">
+                                            <font>
+                                              <pointsize>12</pointsize>
+                                            </font>
+                                          </property>
+                                          <property name="minimum">
+                                            <double>-0.500000000000000</double>
+                                          </property>
+                                          <property name="maximum">
+                                            <double>0.000000000000000</double>
+                                          </property>
+                                          <property name="singleStep">
+                                            <double>0.100000000000000</double>
+                                          </property>
+                                        </widget>
                                       </item>
                                     </layout>
                                   </item>
@@ -1000,8 +1149,8 @@
                 </item>
               </layout>
             </widget>
-            <!-- steering control end -->
           </item>
+          <!-- steering control end -->
         </layout>
       </item>
       <!-- control end -->
