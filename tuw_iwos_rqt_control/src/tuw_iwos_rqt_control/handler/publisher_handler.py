@@ -6,7 +6,9 @@ from tuw_nav_msgs.msg import JointsIWS
 
 
 class PublisherHandler:
-
+    """
+    class to handle publisher field and publisher instance
+    """
     def __init__(self, plugin, widget):
         self._plugin = plugin
         self._widget = widget

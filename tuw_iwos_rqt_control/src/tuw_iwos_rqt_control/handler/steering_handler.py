@@ -7,7 +7,9 @@ from tuw_iwos_rqt_control.handler.steering.steering_synchronized_handler import 
 
 
 class SteeringHandler:
-
+    """
+    class to handle steering controllers nested in tabs
+    """
     unit = 'm/s'
     default_limit = float(1.0)
 

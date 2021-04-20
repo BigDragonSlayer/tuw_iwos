@@ -1,7 +1,15 @@
 #!/usr/bin/env python
 
 class ControllerTool:
-
+    """
+    class to operate a control unit
+    a control unit consists:
+    - slider
+    - decrease and increase button
+    - reset button
+    - minimum and a maximum spinbox
+    - info field
+    """
     slider_factor = 1000
     number_of_slider_steps = 20
 

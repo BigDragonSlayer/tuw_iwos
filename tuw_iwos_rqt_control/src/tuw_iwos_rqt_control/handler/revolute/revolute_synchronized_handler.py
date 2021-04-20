@@ -5,7 +5,9 @@ from tuw_iwos_rqt_control.tool.synchronized_controller import SynchronizedContro
 
 
 class RevoluteSynchronizedHandler(SynchronizedController):
-
+    """
+    class holding and instantiating synchronized steering controllers
+    """
     def __init__(self, plugin, widget, unit, default_minimum, default_maximum):
         self._controller = ControllerTool(
             plugin=plugin,

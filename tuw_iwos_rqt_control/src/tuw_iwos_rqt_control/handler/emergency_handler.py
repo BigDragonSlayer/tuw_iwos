@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
 class EmergencyHandler:
-
+    """
+    class to handle emergency button and emergency state
+    """
     def __init__(self, plugin, widget):
         self._plugin = plugin
         self._widget = widget

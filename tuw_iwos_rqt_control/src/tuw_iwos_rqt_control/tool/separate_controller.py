@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
 class SeparateController:
-
+    """
+    class to hold a separate controllers for left and right
+    """
     def __init__(self, controller_left, controller_right):
         self._controller_left = controller_left
         self._controller_right = controller_right

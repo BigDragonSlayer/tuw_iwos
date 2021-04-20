@@ -7,7 +7,9 @@ from tuw_iwos_rqt_control.handler.revolute.revolute_synchronized_handler import 
 
 
 class RevoluteHandler:
-
+    """
+    class to handle revolute controllers nested in tabs
+    """
     unit = 'rad'
     default_limit = float(0.1)
 

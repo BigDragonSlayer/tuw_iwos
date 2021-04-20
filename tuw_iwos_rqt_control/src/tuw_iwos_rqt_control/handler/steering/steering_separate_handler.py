@@ -5,7 +5,9 @@ from tuw_iwos_rqt_control.tool.separate_controller import SeparateController
 
 
 class SteeringSeparateHandler(SeparateController):
-
+    """
+    class holding and instantiating the separate steering controller
+    """
     def __init__(self, plugin, widget, unit, default_minimum, default_maximum):
         self._controller_left = ControllerTool(
             plugin=plugin,

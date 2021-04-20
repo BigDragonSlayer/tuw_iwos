@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
 class SynchronizedController:
-
+    """
+    class to hold a combined controller for left and right
+    """
     def __init__(self, controller):
         self._controlTool = controller
 
