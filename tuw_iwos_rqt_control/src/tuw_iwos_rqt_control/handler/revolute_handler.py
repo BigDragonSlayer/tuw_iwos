@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 import rospy
 
 from tuw_iwos_rqt_control.handler.revolute.revolute_separate_handler import RevoluteSeparateHandler
@@ -47,3 +48,11 @@ class RevoluteHandler:
 
     def fetch_values(self):
         return self._current_handler.fetch_values()
+
+    def enable(self):
+        self._revolute_separate_handler.enable()
+        self._revolute_synchronized_handler.enable()
+
+    def disable(self):
+        self._revolute_separate_handler.disable()
+        self._revolute_synchronized_handler.disable()

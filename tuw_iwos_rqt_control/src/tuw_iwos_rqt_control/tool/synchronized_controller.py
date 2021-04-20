@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-
 class SynchronizedController:
 
     def __init__(self, controller):
@@ -13,3 +12,9 @@ class SynchronizedController:
     def update_values(self, values):
         average = (values[0] + values[1]) / 2
         self._controlTool.update_value(average)
+
+    def enable(self):
+        self._controlTool.enable()
+
+    def disable(self):
+        self._controlTool.disable()

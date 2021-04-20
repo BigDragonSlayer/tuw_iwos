@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 import rospy
 
 from tuw_iwos_rqt_control.handler.steering.steering_separate_handler import SteeringSeparateHandler
@@ -47,3 +48,11 @@ class SteeringHandler:
 
     def fetch_values(self):
         return self._current_handler.fetch_values()
+
+    def enable(self):
+        self._steering_separate_handler.enable()
+        self._steering_synchronized_handler.enable()
+
+    def disable(self):
+        self._steering_separate_handler.disable()
+        self._steering_synchronized_handler.disable()

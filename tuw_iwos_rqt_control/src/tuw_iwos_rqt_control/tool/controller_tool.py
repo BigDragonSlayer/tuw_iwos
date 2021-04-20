@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-
 class ControllerTool:
 
     slider_factor = 1000
@@ -18,6 +17,14 @@ class ControllerTool:
         self._minimum = minimum
         self._maximum = maximum
         self._info = info
+
+        self._ui_elements = [self._slider,
+                             self._decrease_button,
+                             self._increase_button,
+                             self._reset_button,
+                             self._minimum,
+                             self._maximum,
+                             self._info]
 
         self._slider.valueChanged.connect(self._on_slider_change)
         self._decrease_button.clicked.connect(self._on_decrease)
@@ -87,3 +94,11 @@ class ControllerTool:
         self._slider.setMinimum(minimum * self.slider_factor)
         self._slider.setMaximum(maximum * self.slider_factor)
         self._slider.setSingleStep(slider_range / self.number_of_slider_steps * self.slider_factor)
+
+    def enable(self):
+        for element in self._ui_elements:
+            element.setEnabled(True)
+
+    def disable(self):
+        for element in self._ui_elements:
+            element.setEnabled(False)

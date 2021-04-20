@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 import rospy
 
 from tuw_nav_msgs.msg import JointsIWS
@@ -55,3 +56,9 @@ class PublisherHandler:
         if self._publisher is not None:
             self._publisher.unregister()
             self._publisher = None
+
+    def enable(self):
+        self._topic_edit.setEnabled(True)
+
+    def disable(self):
+        self._topic_edit.setEnabled(False)
