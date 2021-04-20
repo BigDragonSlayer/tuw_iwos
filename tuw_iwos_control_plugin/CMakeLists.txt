@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(tuw_iwos_rqt_control)
+project(tuw_iwos_control_plugin)
 
 find_package(catkin REQUIRED)
 
@@ -15,6 +15,6 @@ install(DIRECTORY resource
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 
-catkin_install_python(PROGRAMS scripts/tuw_iwos_rqt_control
+catkin_install_python(PROGRAMS scripts/tuw_iwos_control_plugin
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )

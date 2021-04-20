@@ -12,16 +12,16 @@ from PyQt5.QtWidgets import QWidget
 from tuw_nav_msgs.msg import JointsIWS
 
 
-class IWOSControl(Plugin):
+class ControlPlugin(Plugin):
     """
     class to publish messages based on UI
     """
     def __init__(self, context):
-        super(IWOSControl, self).__init__(context)
+        super(ControlPlugin, self).__init__(context)
         # setup plugin
         self.setObjectName('IWOSPlugin')
         self._widget = QWidget()
-        ui_file = os.path.join(rospkg.RosPack().get_path('tuw_iwos_rqt_control'), 'resource', 'tuw_iwos_rqt_control.ui')
+        ui_file = os.path.join(rospkg.RosPack().get_path('tuw_iwos_control_plugin'), 'resource', 'tuw_iwos_rqt_control.ui')
         loadUi(ui_file, self._widget)
         self._widget.setObjectName('IWOSPluginUI')
         if context.serial_number() > 1:

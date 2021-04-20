@@ -2,9 +2,9 @@
 
 import sys
 
-from tuw_iwos_rqt_control.tuw_iwos_rqt_control import IWOSControl
+from tuw_iwos_control_plugin.tuw_iwos_control_plugin import ControlPlugin
 from rqt_gui.main import Main
 
-plugin = 'IWOS_Control'
+plugin = 'IWOS Control Plugin'
 main = Main(filename=plugin)
 sys.exit(main.main(standalone=plugin))
