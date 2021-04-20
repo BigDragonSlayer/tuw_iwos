@@ -9,7 +9,7 @@ from tuw_iwos_rqt_control.handler.steering.steering_synchronized_handler import 
 class SteeringHandler:
 
     unit = 'm/s'
-    default_limit = float(2.0)
+    default_limit = float(1.0)
 
     def __init__(self, plugin, widget):
         self._plugin = plugin

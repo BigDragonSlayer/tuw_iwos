@@ -724,7 +724,7 @@
                                         <double>0.000000000000000</double>
                                       </property>
                                       <property name="maximum">
-                                        <double>0.500000000000000</double>
+                                        <double>2.000000000000000</double>
                                       </property>
                                       <property name="singleStep">
                                         <double>0.100000000000000</double>
@@ -775,7 +775,7 @@
                                         </font>
                                       </property>
                                       <property name="minimum">
-                                        <double>-0.500000000000000</double>
+                                        <double>-2.000000000000000</double>
                                       </property>
                                       <property name="maximum">
                                         <double>0.000000000000000</double>
@@ -910,7 +910,7 @@
                                             <double>0.000000000000000</double>
                                           </property>
                                           <property name="maximum">
-                                            <double>0.500000000000000</double>
+                                            <double>2.000000000000000</double>
                                           </property>
                                           <property name="singleStep">
                                             <double>0.100000000000000</double>
@@ -961,7 +961,7 @@
                                             </font>
                                           </property>
                                           <property name="minimum">
-                                            <double>-0.500000000000000</double>
+                                            <double>-2.000000000000000</double>
                                           </property>
                                           <property name="maximum">
                                             <double>0.000000000000000</double>
@@ -1060,7 +1060,7 @@
                                             <double>0.000000000000000</double>
                                           </property>
                                           <property name="maximum">
-                                            <double>0.500000000000000</double>
+                                            <double>2.000000000000000</double>
                                           </property>
                                           <property name="singleStep">
                                             <double>0.100000000000000</double>
@@ -1111,7 +1111,7 @@
                                             </font>
                                           </property>
                                           <property name="minimum">
-                                            <double>-0.500000000000000</double>
+                                            <double>-2.000000000000000</double>
                                           </property>
                                           <property name="maximum">
                                             <double>0.000000000000000</double>

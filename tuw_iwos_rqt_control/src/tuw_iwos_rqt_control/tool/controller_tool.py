@@ -60,9 +60,9 @@ class ControllerTool:
         minimum = self._minimum.value()
         maximum = self._maximum.value()
         scale = (abs(maximum) + abs(minimum)) / 2
-        if scale > 1:
+        if scale >= 1:
             self._info.setText('%0.2f %s' % (value, unit))
-        if scale <= 1:
+        if scale < 1:
             self._info.setText('%0.3f %s' % (value, unit))
 
     def _on_increase(self):
