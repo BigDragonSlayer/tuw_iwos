@@ -2,8 +2,8 @@
 
 import rospy
 
-from tuw_iwos_rqt_control.handler.steering.steering_separate_handler import SteeringSeparateHandler
-from tuw_iwos_rqt_control.handler.steering.steering_synchronized_handler import SteeringSynchronizedHandler
+from tuw_iwos_control_plugin.handler.steering.steering_separate_handler import SteeringSeparateHandler
+from tuw_iwos_control_plugin.handler.steering.steering_synchronized_handler import SteeringSynchronizedHandler
 
 
 class SteeringHandler:

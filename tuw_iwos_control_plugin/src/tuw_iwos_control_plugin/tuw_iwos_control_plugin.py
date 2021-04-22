@@ -2,10 +2,10 @@
 
 import os
 import rospkg
-from tuw_iwos_rqt_control.handler.emergency_handler import EmergencyHandler
-from tuw_iwos_rqt_control.handler.publisher_handler import PublisherHandler
-from tuw_iwos_rqt_control.handler.revolute_handler import RevoluteHandler
-from tuw_iwos_rqt_control.handler.steering_handler import SteeringHandler
+from tuw_iwos_control_plugin.handler.emergency_handler import EmergencyHandler
+from tuw_iwos_control_plugin.handler.publisher_handler import PublisherHandler
+from tuw_iwos_control_plugin.handler.revolute_handler import RevoluteHandler
+from tuw_iwos_control_plugin.handler.steering_handler import SteeringHandler
 from qt_gui.plugin import Plugin
 from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QWidget
@@ -21,7 +21,7 @@ class ControlPlugin(Plugin):
         # setup plugin
         self.setObjectName('IWOSPlugin')
         self._widget = QWidget()
-        ui_file = os.path.join(rospkg.RosPack().get_path('tuw_iwos_control_plugin'), 'resource', 'tuw_iwos_rqt_control.ui')
+        ui_file = os.path.join(rospkg.RosPack().get_path('tuw_iwos_control_plugin'), 'resource', 'tuw_iwos_control_plugin.ui')
         loadUi(ui_file, self._widget)
         self._widget.setObjectName('IWOSPluginUI')
         if context.serial_number() > 1:

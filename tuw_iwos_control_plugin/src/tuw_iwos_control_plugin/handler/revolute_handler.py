@@ -2,8 +2,8 @@
 
 import rospy
 
-from tuw_iwos_rqt_control.handler.revolute.revolute_separate_handler import RevoluteSeparateHandler
-from tuw_iwos_rqt_control.handler.revolute.revolute_synchronized_handler import RevoluteSynchronizedHandler
+from tuw_iwos_control_plugin.handler.revolute.revolute_separate_handler import RevoluteSeparateHandler
+from tuw_iwos_control_plugin.handler.revolute.revolute_synchronized_handler import RevoluteSynchronizedHandler
 
 
 class RevoluteHandler:

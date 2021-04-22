@@ -19,6 +19,7 @@
   <exec_depend>rqt_gui</exec_depend>
   <exec_depend>rqt_gui_py</exec_depend>
   <exec_depend>python_qt_binding</exec_depend>
+  <exec_depend>tuw_nav_msgs</exec_depend>
 
   <export>
     <rqt_gui plugin="${prefix}/plugin.xml"/>

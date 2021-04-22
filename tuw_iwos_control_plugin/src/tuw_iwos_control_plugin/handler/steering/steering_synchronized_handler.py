@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-from tuw_iwos_rqt_control.tool.controller_tool import ControllerTool
-from tuw_iwos_rqt_control.tool.synchronized_controller import SynchronizedController
+from tuw_iwos_control_plugin.tool.controller_tool import ControllerTool
+from tuw_iwos_control_plugin.tool.synchronized_controller import SynchronizedController
 
 
 class SteeringSynchronizedHandler(SynchronizedController):
