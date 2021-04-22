@@ -15,7 +15,7 @@ Pressing the _emergency stop_ button disables the UI.
 Pressing the _emergency stop_ button again enables the UI.
 No message is sent until any value in the UI is changed.
 
-<img src="https://user-images.githubusercontent.com/18448304/115720182-18f6d080-a37d-11eb-97a5-df1f192e4964.png" alt="plugin screenshot" width="400"/>
+![plugin screenshot](https://user-images.githubusercontent.com/18448304/115721706-996a0100-a37e-11eb-89b9-94296831a4c7.png)
 
 [1]: http://wiki.ros.org/rqt
 [2]: https://github.com/tuw-robotics/tuw_msgs/blob/master/tuw_nav_msgs/msg/JointsIWS.msg
