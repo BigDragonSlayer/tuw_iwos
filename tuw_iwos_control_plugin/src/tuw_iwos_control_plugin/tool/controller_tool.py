@@ -34,7 +34,8 @@ class ControllerTool:
                              self._maximum,
                              self._info]
 
-        self._slider.valueChanged.connect(self._on_slider_change)
+        self._slider.valueChanged.connect(self._on_slider_drag)
+        self._slider.sliderReleased.connect(self._on_slider_release)
         self._decrease_button.clicked.connect(self._on_decrease)
         self._increase_button.clicked.connect(self._on_increase)
         self._reset_button.clicked.connect(self._on_reset)
@@ -57,7 +58,10 @@ class ControllerTool:
     def _publish_message(self):
         self._plugin.publish_message()
 
-    def _on_slider_change(self):
+    def _on_slider_drag(self):
+        self._update_info()
+
+    def _on_slider_release(self):
         self._publish_message()
         self._update_info()
 
@@ -75,17 +79,15 @@ class ControllerTool:
 
     def _on_increase(self):
         self._slider.setValue(self._slider.value() + self._slider.singleStep())
+        self._on_slider_release()
 
     def _on_decrease(self):
         self._slider.setValue(self._slider.value() - self._slider.singleStep())
+        self._on_slider_release()
 
     def _on_reset(self):
-        if self._slider.value() != 0:
-            self._slider.setValue(0)
-            return
-        if self._slider.value() == 0:
-            self._publish_message()
-            return
+        self._slider.setValue(0)
+        self._on_slider_release()
 
     def _on_minimum_change(self, value):
         self._slider.setMinimum(value)
