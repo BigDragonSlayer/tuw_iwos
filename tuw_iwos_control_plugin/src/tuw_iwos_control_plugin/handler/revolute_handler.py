@@ -11,7 +11,7 @@ class RevoluteHandler:
     class to handle revolute controllers nested in tabs
     """
     unit = 'rad'
-    default_limit = float(0.1)
+    default_limit = float(0.5)
 
     def __init__(self, plugin, widget):
         self._plugin = plugin
