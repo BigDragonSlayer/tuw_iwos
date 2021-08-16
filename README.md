@@ -15,20 +15,14 @@ Start the plugin with:
 rosrun tuw_iwos_control_plugin tuw_iwos_control_plugin
 ```
 
- <div>
-    <img src="tuw_iwos_control_plugin/screenshots/screenshot-gui-separate-active.png" alt="Screenshot" style="width:45%">
-    <img src="tuw_iwos_control_plugin/screenshots/screenshot-gui-synchronized-active.png" alt="Screenshot" style="width:45%">
-</div> 
+![Screenshot](./tuw_iwos_control_plugin/screenshots/screenshot-gui-separate-active.png) | ![Screenshot](tuw_iwos_control_plugin/screenshots/screenshot-gui-synchronized-active.png)
 
 The stop the servos and motors a message with steering velocity (m/s) of zero and revolute torque (nm) of zero is sent.
 Pressing the _stop_ button disables the UI.
 Pressing the _stop_ button again enables the UI.
 No message is sent until any value in the UI is changed.
 
- <div>
-    <img src="tuw_iwos_control_plugin/screenshots/screenshot-gui-separate-stopped.png" alt="Screenshot" style="width:45%">
-    <img src="tuw_iwos_control_plugin/screenshots/screenshot-gui-synchronized-stopped.png" alt="Screenshot" style="width:45%">
-</div> 
+![Screenshot](./tuw_iwos_control_plugin/screenshots/screenshot-gui-separate-stopped.png) | ![Screenshot](tuw_iwos_control_plugin/screenshots/screenshot-gui-synchronized-stopped.png)
 
 [1]: http://wiki.ros.org/rqt
 [2]: https://github.com/tuw-robotics/tuw_msgs/blob/master/tuw_nav_msgs/msg/JointsIWS.msg
