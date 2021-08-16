@@ -15,14 +15,21 @@ Start the plugin with:
 rosrun tuw_iwos_control_plugin tuw_iwos_control_plugin
 ```
 
-![plugin screenshot](https://user-images.githubusercontent.com/18448304/115721706-996a0100-a37e-11eb-89b9-94296831a4c7.png)
+ <div>
+    <img src="tuw_iwos_control_plugin/screenshots/screenshot-gui-separate-active.png" alt="Screenshot" style="width:45%">
+    <img src="tuw_iwos_control_plugin/screenshots/screenshot-gui-synchronized-active.png" alt="Screenshot" style="width:45%">
+</div> 
 
-In case of an emergency a message with steering velocity (m/s) of zero and revolute torque (nm) of zero is sent.
-Pressing the _emergency stop_ button disables the UI.
-Pressing the _emergency stop_ button again enables the UI.
+The stop the servos and motors a message with steering velocity (m/s) of zero and revolute torque (nm) of zero is sent.
+Pressing the _stop_ button disables the UI.
+Pressing the _stop_ button again enables the UI.
 No message is sent until any value in the UI is changed.
 
-![tuw_iwos_control_plugin_both_emergency](https://user-images.githubusercontent.com/18448304/115726722-46df1380-a383-11eb-82fc-36f88201b9ea.png)
+ <div>
+    <img src="tuw_iwos_control_plugin/screenshots/screenshot-gui-separate-stopped.png" alt="Screenshot" style="width:45%">
+    <img src="tuw_iwos_control_plugin/screenshots/screenshot-gui-synchronized-stopped.png" alt="Screenshot" style="width:45%">
+</div> 
+
 
 [1]: http://wiki.ros.org/rqt
 [2]: https://github.com/tuw-robotics/tuw_msgs/blob/master/tuw_nav_msgs/msg/JointsIWS.msg

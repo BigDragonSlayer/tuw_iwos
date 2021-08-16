@@ -2,7 +2,7 @@
 
 import os
 import rospkg
-from tuw_iwos_control_plugin.handler.emergency_handler import EmergencyHandler
+from tuw_iwos_control_plugin.handler.stop_handler import StopHandler
 from tuw_iwos_control_plugin.handler.publisher_handler import PublisherHandler
 from tuw_iwos_control_plugin.handler.revolute_handler import RevoluteHandler
 from tuw_iwos_control_plugin.handler.steering_handler import SteeringHandler
@@ -28,7 +28,7 @@ class ControlPlugin(Plugin):
             self._widget.setWindowTitle(self._widget.windowTitle() + (' (%d)' % context.serial_number()))
         context.add_widget(self._widget)
 
-        self.emergency_handler = EmergencyHandler(self, self._widget)
+        self.stop_handler = StopHandler(self, self._widget)
         self.publisher_handler = PublisherHandler(self, self._widget)
         self.revolute_handler = RevoluteHandler(self, self._widget)
         self.steering_handler = SteeringHandler(self, self._widget)
@@ -37,17 +37,17 @@ class ControlPlugin(Plugin):
     def publish_message(self):
         """
         creates and publishes a JointIWS message
-        revolute and steering command are fetched from UI if emergency is disabled, or are zero if emergency is enabled
+        revolute and steering command are fetched from UI if stop is disabled, or are zero if stop is enabled
         :return:
         """
         message = JointsIWS()
-        if self.emergency_handler.emergency() is False:
+        if self.stop_handler.stop() is False:
             message.type_revolute = "cmd_position"  # rad
             message.type_steering = "cmd_velocity"  # m/s
             message.revolute = self.revolute_handler.fetch_values()
             message.steering = self.steering_handler.fetch_values()
 
-        if self.emergency_handler.emergency() is True:
+        if self.stop_handler.stop() is True:
             message.type_revolute = "cmd_torque"    # nm
             message.type_steering = "cmd_velocity"  # m/s
             message.revolute = [0.0, 0.0]
@@ -55,10 +55,10 @@ class ControlPlugin(Plugin):
 
         self.publisher_handler.publish(message)
 
-    def enable_emergency_mode(self):
+    def enable_stop_mode(self):
         """
-        enables emergency mode
-        in emergency mode emergency button turns red, other UI elements are disables, messages sent contain only zero
+        enables stop mode
+        in stop mode stop button turns red, other UI elements are disables, messages sent contain only zero
         :return:
         """
         self.publish_message()
@@ -66,10 +66,10 @@ class ControlPlugin(Plugin):
         self.revolute_handler.disable()
         self.steering_handler.disable()
 
-    def disable_emergency_mode(self):
+    def disable_stop_mode(self):
         """
-        disables emergency mode
-        in emergency mode emergency button turns red, other UI elements are disables, messages sent contain only zero
+        disables stop mode
+        in stop mode stop button turns red, other UI elements are disables, messages sent contain only zero
         :return:
         """
         self.publisher_handler.enable()

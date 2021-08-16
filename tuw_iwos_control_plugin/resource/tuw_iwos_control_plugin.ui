@@ -1154,9 +1154,9 @@
         </layout>
       </item>
       <!-- control end -->
-      <!-- emergency stop button start -->
+      <!-- stop button start -->
       <item>
-        <widget class="QPushButton" name="emergency_stop">
+        <widget class="QPushButton" name="stop">
           <property name="font">
             <font>
               <pointsize>24</pointsize>
@@ -1165,11 +1165,11 @@
             </font>
           </property>
           <property name="text">
-            <string>Emergency Stop</string>
+            <string>Stop</string>
           </property>
         </widget>
       </item>
-      <!-- emergency stop button end -->
+      <!-- stop button end -->
     </layout>
     <!-- UI end -->
   </widget>
