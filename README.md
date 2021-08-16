@@ -30,7 +30,6 @@ No message is sent until any value in the UI is changed.
     <img src="tuw_iwos_control_plugin/screenshots/screenshot-gui-synchronized-stopped.png" alt="Screenshot" style="width:45%">
 </div> 
 
-
 [1]: http://wiki.ros.org/rqt
 [2]: https://github.com/tuw-robotics/tuw_msgs/blob/master/tuw_nav_msgs/msg/JointsIWS.msg
 [3]: https://github.com/tuw-robotics/tuw_msgs
