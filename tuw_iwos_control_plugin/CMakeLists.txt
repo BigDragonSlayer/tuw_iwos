@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(tuw_iwos_control_plugin)
 
-find_package(catkin REQUIRED)
+find_package(catkin REQUIRED
+  rospy
+)
 
 catkin_package()
 
