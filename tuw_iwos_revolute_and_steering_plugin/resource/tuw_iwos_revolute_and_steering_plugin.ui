@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
-  <class>IWOS_Control</class>
-  <widget class="QWidget" name="IWOS_Control">
+  <class>IWOS_revolute_and_steering_plugin</class>
+  <widget class="QWidget" name="IWOS_revolute_and_steering_plugin">
     <property name="windowTitle">
-      <string>IWOS Control</string>
+      <string>IWOS Revolute and Steering GUI</string>
     </property>
     <!-- UI start -->
     <layout class="QVBoxLayout" name="main_horizontal_layout">
