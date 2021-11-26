@@ -1,0 +1,9 @@
+<launch>
+  
+  <include file="$(find tuw_trinamic_iwos_revolute_controller)/launch/iwos_revolute_controller.launch"/>
+
+  <include file="$(find tuw_dynamixel_iwos_steering_controller)/launch/iwos_steering_controller.launch"/>
+  
+  <include file="$(find tuw_gamepad)/launch/iwos_diffdrive.launch"/>
+  
+</launch>

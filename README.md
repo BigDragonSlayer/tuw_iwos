@@ -27,6 +27,10 @@ No message is sent until any value in the UI is changed.
 |:---:|:---:|
 ![Screenshot](./tuw_iwos_control_plugin/screenshots/screenshot-gui-synchronized-stopped.png) | ![Screenshot](tuw_iwos_control_plugin/screenshots/screenshot-gui-separate-stopped.png)
 
+## `tuw_iwos_launches`
+Package containing launch files for the IWOS robot.
+- `iwos_gamepad_control.launch`: launch drivers for steering and revolute and launch a node to publish command with the Logitech F710 gamepad.
+
 [rqt]: http://wiki.ros.org/rqt
 [JointIWS]: https://github.com/tuw-robotics/tuw_msgs/blob/master/tuw_nav_msgs/msg/JointsIWS.msg
 [tuw_msgs]: https://github.com/tuw-robotics/tuw_msgs
