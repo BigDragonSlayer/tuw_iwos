@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 
-from tuw_iwos_control_plugin.tool.controller_tool import ControllerTool
-from tuw_iwos_control_plugin.tool.synchronized_controller import SynchronizedController
+from tuw_iwos_revolute_and_steering_plugin.tool.controller_tool import ControllerTool
+from tuw_iwos_revolute_and_steering_plugin.tool.synchronized_controller import SynchronizedController
 
 
 class RevoluteSynchronizedHandler(SynchronizedController):
     """
-    class holding and instantiating synchronized steering controllers
+    class holding and instantiating synchronized revolute controllers
     """
     def __init__(self, plugin, widget, unit, default_minimum, default_maximum):
         self._controller = ControllerTool(

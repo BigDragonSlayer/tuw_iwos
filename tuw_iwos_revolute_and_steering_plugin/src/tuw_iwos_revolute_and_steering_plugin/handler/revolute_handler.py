@@ -2,16 +2,16 @@
 
 import rospy
 
-from tuw_iwos_control_plugin.handler.revolute.revolute_separate_handler import RevoluteSeparateHandler
-from tuw_iwos_control_plugin.handler.revolute.revolute_synchronized_handler import RevoluteSynchronizedHandler
+from tuw_iwos_revolute_and_steering_plugin.handler.revolute.revolute_separate_handler import RevoluteSeparateHandler
+from tuw_iwos_revolute_and_steering_plugin.handler.revolute.revolute_synchronized_handler import RevoluteSynchronizedHandler
 
 
 class RevoluteHandler:
     """
     class to handle revolute controllers nested in tabs
     """
-    unit = 'rad'
-    default_limit = float(0.5)
+    unit = 'm/s'
+    default_limit = float(1.0)
 
     def __init__(self, plugin, widget):
         self._plugin = plugin

@@ -12,11 +12,11 @@ The plugin sends `cmd_velocity` (unit: m/s) values for the steering and `cmd_pos
 
 Start the plugin with:
 ```
-rosrun tuw_iwos_control_plugin tuw_iwos_control_plugin
+rosrun tuw_iwos_revolute_and_steering_plugin tuw_iwos_revolute_and_steering_plugin 
 ```
 | Synchronized | Separate |
 |:---:|:---:|
-| ![Screenshot](./tuw_iwos_control_plugin/screenshots/screenshot-gui-synchronized-active.png) | ![Screenshot](tuw_iwos_control_plugin/screenshots/screenshot-gui-separate-active.png) |
+| ![Screenshot](tuw_iwos_revolute_and_steering_plugin/screenshots/screenshot-gui-synchronized-active.png) | ![Screenshot](tuw_iwos_revolute_and_steering_plugin/screenshots/screenshot-gui-separate-active.png) |
 
 The stop the servos and motors a message with steering velocity (m/s) of zero and revolute torque (nm) of zero is sent.
 Pressing the _stop_ button disables the UI.
@@ -25,7 +25,12 @@ No message is sent until any value in the UI is changed.
 
 | Synchronized | Separate |
 |:---:|:---:|
-![Screenshot](./tuw_iwos_control_plugin/screenshots/screenshot-gui-synchronized-stopped.png) | ![Screenshot](tuw_iwos_control_plugin/screenshots/screenshot-gui-separate-stopped.png)
+![Screenshot](tuw_iwos_revolute_and_steering_plugin/screenshots/screenshot-gui-synchronized-stopped.png) | ![Screenshot](tuw_iwos_revolute_and_steering_plugin/screenshots/screenshot-gui-separate-stopped.png)
+
+## `tuw_iwos_launches`
+Package containing launch files for the IWOS robot.
+- `iwos_gamepad_control.launch`: launch drivers for revolute and steering and launch a node to publish [JointIWS][JointIWS] commands with a Logitech F710 gamepad.
+- `iwos_plugin_control.launch`: launch drivers for revolute and steering and launch a node to publish [JointIWS][JointIWS] commands with a RQT plugin.
 
 [rqt]: http://wiki.ros.org/rqt
 [JointIWS]: https://github.com/tuw-robotics/tuw_msgs/blob/master/tuw_nav_msgs/msg/JointsIWS.msg

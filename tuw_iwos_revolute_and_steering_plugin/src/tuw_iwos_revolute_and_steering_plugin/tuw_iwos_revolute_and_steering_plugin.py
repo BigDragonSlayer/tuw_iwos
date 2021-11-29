@@ -2,26 +2,29 @@
 
 import os
 import rospkg
-from tuw_iwos_control_plugin.handler.stop_handler import StopHandler
-from tuw_iwos_control_plugin.handler.publisher_handler import PublisherHandler
-from tuw_iwos_control_plugin.handler.revolute_handler import RevoluteHandler
-from tuw_iwos_control_plugin.handler.steering_handler import SteeringHandler
+from tuw_iwos_revolute_and_steering_plugin.handler.stop_handler import StopHandler
+from tuw_iwos_revolute_and_steering_plugin.handler.publisher_handler import PublisherHandler
+from tuw_iwos_revolute_and_steering_plugin.handler.steering_handler import SteeringHandler
+from tuw_iwos_revolute_and_steering_plugin.handler.revolute_handler import RevoluteHandler
 from qt_gui.plugin import Plugin
 from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QWidget
 from tuw_nav_msgs.msg import JointsIWS
 
 
-class ControlPlugin(Plugin):
+class RevoluteAndSteeringPlugin(Plugin):
     """
     class to publish messages based on UI
     """
+
     def __init__(self, context):
-        super(ControlPlugin, self).__init__(context)
+        super(RevoluteAndSteeringPlugin, self).__init__(context)
         # setup plugin
         self.setObjectName('IWOSPlugin')
         self._widget = QWidget()
-        ui_file = os.path.join(rospkg.RosPack().get_path('tuw_iwos_control_plugin'), 'resource', 'tuw_iwos_control_plugin.ui')
+        ui_file = os.path.join(rospkg.RosPack().get_path('tuw_iwos_revolute_and_steering_plugin'),
+                               'resource',
+                               'tuw_iwos_revolute_and_steering_plugin.ui')
         loadUi(ui_file, self._widget)
         self._widget.setObjectName('IWOSPluginUI')
         if context.serial_number() > 1:
@@ -30,28 +33,28 @@ class ControlPlugin(Plugin):
 
         self.stop_handler = StopHandler(self, self._widget)
         self.publisher_handler = PublisherHandler(self, self._widget)
-        self.revolute_handler = RevoluteHandler(self, self._widget)
         self.steering_handler = SteeringHandler(self, self._widget)
+        self.revolute_handler = RevoluteHandler(self, self._widget)
         return
 
     def publish_message(self):
         """
         creates and publishes a JointIWS message
-        revolute and steering command are fetched from UI if stop is disabled, or are zero if stop is enabled
+        steering and revolute command are fetched from UI if stop is disabled, or are zero if stop is enabled
         :return:
         """
         message = JointsIWS()
         if self.stop_handler.stop() is False:
-            message.type_revolute = "cmd_position"  # rad
-            message.type_steering = "cmd_velocity"  # m/s
-            message.revolute = self.revolute_handler.fetch_values()
+            message.type_steering = "cmd_position"  # rad
+            message.type_revolute = "cmd_velocity"  # m/s
             message.steering = self.steering_handler.fetch_values()
+            message.revolute = self.revolute_handler.fetch_values()
 
         if self.stop_handler.stop() is True:
-            message.type_revolute = "cmd_torque"    # nm
-            message.type_steering = "cmd_velocity"  # m/s
-            message.revolute = [0.0, 0.0]
+            message.type_steering = "cmd_torque"  # nm
+            message.type_revolute = "cmd_velocity"  # m/s
             message.steering = [0.0, 0.0]
+            message.revolute = [0.0, 0.0]
 
         self.publisher_handler.publish(message)
 
@@ -63,8 +66,8 @@ class ControlPlugin(Plugin):
         """
         self.publish_message()
         self.publisher_handler.disable()
-        self.revolute_handler.disable()
         self.steering_handler.disable()
+        self.revolute_handler.disable()
 
     def disable_stop_mode(self):
         """
@@ -73,8 +76,8 @@ class ControlPlugin(Plugin):
         :return:
         """
         self.publisher_handler.enable()
-        self.revolute_handler.enable()
         self.steering_handler.enable()
+        self.revolute_handler.enable()
 
     def shutdown_plugin(self):
         self.publisher_handler.unregister_publisher()

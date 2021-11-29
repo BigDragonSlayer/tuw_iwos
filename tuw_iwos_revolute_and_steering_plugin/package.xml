@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>tuw_iwos_control_plugin</name>
+
+  <name>tuw_iwos_revolute_and_steering_plugin</name>
   <version>0.0.0</version>
   <description>RQT plugin to control independent wheel offset steering</description>
 

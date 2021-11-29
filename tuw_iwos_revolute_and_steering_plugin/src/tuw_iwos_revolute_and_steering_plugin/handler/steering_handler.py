@@ -2,16 +2,16 @@
 
 import rospy
 
-from tuw_iwos_control_plugin.handler.steering.steering_separate_handler import SteeringSeparateHandler
-from tuw_iwos_control_plugin.handler.steering.steering_synchronized_handler import SteeringSynchronizedHandler
+from tuw_iwos_revolute_and_steering_plugin.handler.steering.steering_separate_handler import SteeringSeparateHandler
+from tuw_iwos_revolute_and_steering_plugin.handler.steering.steering_synchronized_handler import SteeringSynchronizedHandler
 
 
 class SteeringHandler:
     """
     class to handle steering controllers nested in tabs
     """
-    unit = 'm/s'
-    default_limit = float(1.0)
+    unit = 'rad'
+    default_limit = float(0.5)
 
     def __init__(self, plugin, widget):
         self._plugin = plugin
