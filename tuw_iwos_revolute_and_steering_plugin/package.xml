@@ -13,14 +13,16 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
-  <build_depend>rospy</build_depend>
   <build_depend>roslint</build_depend>
+  <build_depend>rospy</build_depend>
 
-  <exec_depend>rostopic</exec_depend>
+  <exec_depend>rospy</exec_depend>
   <exec_depend>rqt_gui</exec_depend>
   <exec_depend>rqt_gui_py</exec_depend>
-  <exec_depend>python_qt_binding</exec_depend>
-  <exec_depend>tuw_nav_msgs</exec_depend>
+  <exec_depend>python3-qt5-bindings</exec_depend>
+
+  <!-- pull request outstanding for this dependency to become part of rosdistro/noetic/distributions.yaml -->
+  <depend>tuw_nav_msgs</depend>
 
   <export>
     <rqt_gui plugin="${prefix}/plugin.xml"/>
