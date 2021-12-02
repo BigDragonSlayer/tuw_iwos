@@ -3,6 +3,11 @@
 ## `tuw_iwos`
 Metapackage for `tuw_iwos`.
 
+## `tuw_iwos_launches`
+Package containing launch files for the IWOS robot.
+- `iwos_gamepad_control.launch`: launch drivers for revolute and steering and launch a node to publish [JointIWS][JointIWS] commands with a Logitech F710 gamepad.
+- `iwos_plugin_control.launch`: launch drivers for revolute and steering and launch a node to publish [JointIWS][JointIWS] commands with a RQT plugin.
+
 ## `tuw_iwos_control_plugin`
 Plugin for ros [rqt][rqt] to send [JointIWS][JointIWS] messages from the [`tuw_msgs` package][tuw_msgs].
 The messages contain `cmd_velocity` for the steering array and `cmd_position` or `cmd_torque` for the revolute array.
@@ -26,11 +31,6 @@ No message is sent until any value in the UI is changed.
 | Synchronized | Separate |
 |:---:|:---:|
 ![Screenshot](tuw_iwos_revolute_and_steering_plugin/screenshots/screenshot-gui-synchronized-stopped.png) | ![Screenshot](tuw_iwos_revolute_and_steering_plugin/screenshots/screenshot-gui-separate-stopped.png)
-
-## `tuw_iwos_launches`
-Package containing launch files for the IWOS robot.
-- `iwos_gamepad_control.launch`: launch drivers for revolute and steering and launch a node to publish [JointIWS][JointIWS] commands with a Logitech F710 gamepad.
-- `iwos_plugin_control.launch`: launch drivers for revolute and steering and launch a node to publish [JointIWS][JointIWS] commands with a RQT plugin.
 
 [rqt]: http://wiki.ros.org/rqt
 [JointIWS]: https://github.com/tuw-robotics/tuw_msgs/blob/master/tuw_nav_msgs/msg/JointsIWS.msg
