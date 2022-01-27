@@ -17,9 +17,9 @@ from tuw_iwos_controller_revolute.exception.invalid_path_exception import Invali
 class RevoluteControllerNode:
 
     def __init__(self, wheel_diameter):
-        self._node_name = 'IWOS_CONTROLLER_REVOLUTE'
+        self._node_name = 'IWOS_REVOLUTE_CONTROLLER'
 
-        self._wheel_diameter = wheel_diameter
+        self._wheel_diameter = float(wheel_diameter)
         self._config = None
         self._reconfigure_server = None
 
@@ -72,18 +72,23 @@ class RevoluteControllerNode:
             data_class=JointState,
             queue_size=100)
 
+        rospy.spin()
+
     def callback_reconfigure(self, dynamic_reconfigure, level):
         if level == -1:
-            return self._config.to_dynamic_revonfigure()
+            return self._config.to_dynamic_reconfigure()
 
         self._config = RevoluteConfig().from_dynamic_reconfigure(dynamic_reconfigure)
         return self._config.to_dynamic_reconfigure()
 
     def callback_command(self, message_in):
-        if message_in.type_revolute is "cmd_velocity":
+        if message_in.type_revolute == "cmd_velocity":
             message_out = Float64Array()
+
             for value in message_in.revolute:
-                target_velocity_ms = value * -1
+                if value > self._config.max_velocity:
+                    value = self._config.max_velocity
+                target_velocity_ms = float(value) * self._config.velocity_scale
                 target_velocity_rps = target_velocity_ms / (self._wheel_diameter * math.pi)
                 target_velocity_rpm = target_velocity_rps * 60
                 message_out.val.append(target_velocity_rpm)
@@ -116,7 +121,7 @@ class RevoluteControllerNode:
 if __name__ == '__main__':
     try:
         arguments = rospy.myargv(argv=sys.argv)
-        wheel_diameter_arg = arguments[0]
+        wheel_diameter_arg = arguments[1]
         revolute_controller_node = RevoluteControllerNode(wheel_diameter=wheel_diameter_arg)
         revolute_controller_node.run()
     except rospy.ROSInterruptException:
