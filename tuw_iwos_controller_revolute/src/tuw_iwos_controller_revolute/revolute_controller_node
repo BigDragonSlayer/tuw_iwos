@@ -19,7 +19,7 @@ class RevoluteControllerNode:
     def __init__(self, wheel_diameter):
         self._node_name = 'IWOS_REVOLUTE_CONTROLLER'
 
-        self._wheel_diameter = float(wheel_diameter)
+        self._wheel_circumference = float(wheel_diameter) * math.pi
         self._config = None
         self._reconfigure_server = None
 
@@ -69,7 +69,7 @@ class RevoluteControllerNode:
 
         self._state_publisher = rospy.Publisher(
             name=self._state_publisher_topic,
-            data_class=JointState,
+            data_class=JointsIWS,
             queue_size=100)
 
         rospy.spin()
@@ -85,13 +85,11 @@ class RevoluteControllerNode:
         if message_in.type_revolute == "cmd_velocity":
             message_out = Float64Array()
 
-            for value in message_in.revolute:
-                if value > self._config.max_velocity:
-                    value = self._config.max_velocity
-                target_velocity_ms = float(value) * self._config.velocity_scale
-                target_velocity_rps = target_velocity_ms / (self._wheel_diameter * math.pi)
-                target_velocity_rpm = target_velocity_rps * 60
-                message_out.val.append(target_velocity_rpm)
+            for value_in in message_in.revolute:
+                if value_in > self._config.max_velocity:
+                    value_in = self._config.max_velocity
+                value_out = self.mps_to_rpm(mps=float(value_in)) * self._config.velocity_scale
+                message_out.val.append(value_out)
             if self._config.reverse_left_wheel:
                 message_out.val[0] *= -1
             if self._config.reverse_right_wheel:
@@ -107,7 +105,7 @@ class RevoluteControllerNode:
     def callback_state(self, message_in):
         message_out = JointsIWS(header=message_in.header)
         message_out.type_revolute = 'measured_velocity'
-        message_out.revolute = message_in.velocity
+        message_out.revolute = [self.rpm_to_mps(value) for value in list(message_in.velocity)]
         if self._config.exchange_wheels:
             message_out.revolute.reverse()
         if self._config.reverse_left_wheel:
@@ -116,6 +114,12 @@ class RevoluteControllerNode:
             message_out.revolute[1] *= -1
 
         self._state_publisher.publish(message_out)
+
+    def rpm_to_mps(self, rpm):
+        return float(rpm) * self._wheel_circumference / 60
+
+    def mps_to_rpm(self, mps):
+        return float(mps) * 60 / self._wheel_circumference
 
 
 if __name__ == '__main__':
