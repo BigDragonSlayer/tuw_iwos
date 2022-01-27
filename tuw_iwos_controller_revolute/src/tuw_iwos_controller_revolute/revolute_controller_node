@@ -1,0 +1,123 @@
+#!/usr/bin/env python3
+
+import math
+import rospy
+import sys
+from dynamic_reconfigure.server import Server
+from sensor_msgs.msg import JointState
+from tuw_iwos_controller_revolute.cfg import RevoluteControllerConfig
+from tuw_nav_msgs.msg import Float64Array
+from tuw_nav_msgs.msg import JointsIWS
+
+from tuw_iwos_controller_revolute.config.revolute_config import RevoluteConfig
+from tuw_iwos_controller_revolute.exception.invalid_file_exception import InvalidFileException
+from tuw_iwos_controller_revolute.exception.invalid_path_exception import InvalidPathException
+
+
+class RevoluteControllerNode:
+
+    def __init__(self, wheel_diameter):
+        self._node_name = 'IWOS_CONTROLLER_REVOLUTE'
+
+        self._wheel_diameter = wheel_diameter
+        self._config = None
+        self._reconfigure_server = None
+
+        self._command_subscriber_topic = 'iwos_cmd'
+        self._command_publisher_topic = 'iwos_cmd_revolute'
+
+        self._state_subscriber_topic = 'iwos_state_revolute_raw'
+        self._state_publisher_topic = 'iwos_state_revolute'
+
+        self._command_subscriber = None
+        self._command_publisher = None
+
+        self._state_subscriber = None
+        self._state_publisher = None
+
+    def run(self):
+        rospy.init_node(self._node_name)
+
+        try:
+            config_file_path = rospy.get_param(param_name='iwos_controller_revolute_config')
+            self._config = RevoluteConfig().from_file(config_file_path=config_file_path)
+        except InvalidPathException:
+            rospy.logerr('%s: failed to load config (invalid path)', self._node_name)
+        except InvalidFileException:
+            rospy.logerr('%s: failed to load config (invalid file)', self._node_name)
+
+        self._reconfigure_server = Server(
+            type=RevoluteControllerConfig,
+            callback=self.callback_reconfigure)
+
+        self._command_subscriber = rospy.Subscriber(
+            name=self._command_subscriber_topic,
+            data_class=JointsIWS,
+            callback=self.callback_command,
+            queue_size=100)
+
+        self._command_publisher = rospy.Publisher(
+            name=self._command_publisher_topic,
+            data_class=Float64Array,
+            queue_size=100)
+
+        self._state_subscriber = rospy.Subscriber(
+            name=self._state_subscriber_topic,
+            data_class=JointState,
+            callback=self.callback_state,
+            queue_size=100)
+
+        self._state_publisher = rospy.Publisher(
+            name=self._state_publisher_topic,
+            data_class=JointState,
+            queue_size=100)
+
+    def callback_reconfigure(self, dynamic_reconfigure, level):
+        if level == -1:
+            return self._config.to_dynamic_revonfigure()
+
+        self._config = RevoluteConfig().from_dynamic_reconfigure(dynamic_reconfigure)
+        return self._config.to_dynamic_reconfigure()
+
+    def callback_command(self, message_in):
+        if message_in.type_revolute is "cmd_velocity":
+            message_out = Float64Array()
+            for value in message_in.revolute:
+                target_velocity_ms = value * -1
+                target_velocity_rps = target_velocity_ms / (self._wheel_diameter * math.pi)
+                target_velocity_rpm = target_velocity_rps * 60
+                message_out.val.append(target_velocity_rpm)
+            if self._config.reverse_left_wheel:
+                message_out.val[0] *= -1
+            if self._config.reverse_right_wheel:
+                message_out.val[1] *= -1
+            if self._config.exchange_wheels:
+                message_out.val.reverse()
+
+            self._command_publisher.publish(message_out)
+
+        else:
+            rospy.logerr('%s: revolute type %s not supported', self._node_name, message_in.type_revolute)
+
+    def callback_state(self, message_in):
+        message_out = JointsIWS(header=message_in.header)
+        message_out.type_revolute = 'measured_velocity'
+        message_out.revolute = message_in.velocity
+        if self._config.exchange_wheels:
+            message_out.revolute.reverse()
+        if self._config.reverse_left_wheel:
+            message_out.revolute[0] *= -1
+        if self._config.reverse_right_wheel:
+            message_out.revolute[1] *= -1
+
+        self._state_publisher.publish(message_out)
+
+
+if __name__ == '__main__':
+    try:
+        arguments = rospy.myargv(argv=sys.argv)
+        wheel_diameter_arg = arguments[0]
+        revolute_controller_node = RevoluteControllerNode(wheel_diameter=wheel_diameter_arg)
+        revolute_controller_node.run()
+    except rospy.ROSInterruptException:
+        rospy.logerr('ROS Interrupt Exception')
