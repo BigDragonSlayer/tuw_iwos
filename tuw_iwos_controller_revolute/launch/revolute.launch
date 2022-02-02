@@ -1,0 +1,6 @@
+<launch>
+
+  <include file="$(find tuw_iwos_controller_revolute)/launch/revolute_controller_node.launch"/>
+  <include file="$(find tuw_trinamic_controller)/launch/trinamic_controller_node_iwos.launch"/>
+
+</launch>
