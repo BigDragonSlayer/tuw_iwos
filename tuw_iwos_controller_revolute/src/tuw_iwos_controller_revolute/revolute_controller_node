@@ -4,9 +4,8 @@ import math
 import rospy
 import sys
 from dynamic_reconfigure.server import Server
-from sensor_msgs.msg import JointState
 from tuw_iwos_controller_revolute.cfg import RevoluteControllerConfig
-from tuw_nav_msgs.msg import Float64Array
+from tuw_nav_msgs.msg import Joints
 from tuw_nav_msgs.msg import JointsIWS
 
 from tuw_iwos_controller_revolute.config.revolute_config import RevoluteConfig
@@ -58,18 +57,18 @@ class RevoluteControllerNode:
 
         self._command_publisher = rospy.Publisher(
             name=self._command_publisher_topic,
-            data_class=Float64Array,
+            data_class=Joints,
             queue_size=100)
 
         self._state_subscriber = rospy.Subscriber(
             name=self._state_subscriber_topic,
-            data_class=JointState,
+            data_class=Joints,
             callback=self.callback_state,
             queue_size=100)
 
         self._state_publisher = rospy.Publisher(
             name=self._state_publisher_topic,
-            data_class=JointsIWS,
+            data_class=Joints,
             queue_size=100)
 
         rospy.spin()
@@ -83,19 +82,19 @@ class RevoluteControllerNode:
 
     def callback_command(self, message_in):
         if message_in.type_revolute == "cmd_velocity":
-            message_out = Float64Array()
+            message_out = Joints()
 
             for value_in in message_in.revolute:
                 if value_in > self._config.max_velocity:
                     value_in = self._config.max_velocity
                 value_out = self.mps_to_rpm(mps=float(value_in)) * self._config.velocity_scale
-                message_out.val.append(value_out)
+                message_out.velocity.append(value_out)
             if self._config.reverse_left_wheel:
-                message_out.val[0] *= -1
+                message_out.velocity[0] *= -1
             if self._config.reverse_right_wheel:
-                message_out.val[1] *= -1
+                message_out.velocity[1] *= -1
             if self._config.exchange_wheels:
-                message_out.val.reverse()
+                message_out.velocity.reverse()
 
             self._command_publisher.publish(message_out)
 
@@ -103,15 +102,25 @@ class RevoluteControllerNode:
             rospy.logerr('%s: revolute type %s not supported', self._node_name, message_in.type_revolute)
 
     def callback_state(self, message_in):
-        message_out = JointsIWS(header=message_in.header)
-        message_out.type_revolute = 'measured_velocity'
-        message_out.revolute = [self.rpm_to_mps(value) for value in list(message_in.velocity)]
+        message_out = Joints(header=message_in.header)
+        message_out.position = list(message_in.position)
+        message_out.velocity = [self.rpm_to_mps(value) for value in list(message_in.velocity)]
+        message_out.torque = list(message_in.torque)
+
         if self._config.exchange_wheels:
-            message_out.revolute.reverse()
+            message_out.position.reverse()
+            message_out.velocity.reverse()
+            message_out.torque.reverse()
+
         if self._config.reverse_left_wheel:
-            message_out.revolute[0] *= -1
+            message_out.position[0] *= -1
+            message_out.velocity[0] *= -1
+            message_out.torque[0] *= -1
+
         if self._config.reverse_right_wheel:
-            message_out.revolute[1] *= -1
+            message_out.position[1] *= -1
+            message_out.velocity[1] *= -1
+            message_out.torque[1] *= -1
 
         self._state_publisher.publish(message_out)
 
