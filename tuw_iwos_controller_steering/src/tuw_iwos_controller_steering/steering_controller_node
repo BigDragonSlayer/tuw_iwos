@@ -1,0 +1,161 @@
+#!/usr/bin/env python3
+
+import math
+import rospy
+import sys
+
+from dynamic_reconfigure.server import Server
+from tuw_iwos_controller_steering.cfg import SteeringControllerDynamicConfig
+from tuw_nav_msgs.msg import Joints
+from tuw_nav_msgs.msg import JointsIWS
+
+from tuw_iwos_controller_steering.config.steering_controller_config import SteeringControllerConfig
+from tuw_iwos_controller_steering.exception.invalid_file_exception import InvalidFileException
+from tuw_iwos_controller_steering.exception.invalid_path_exception import InvalidPathException
+
+
+class SteeringControllerNode:
+
+    def __init__(self):
+        self._node_name = 'IWOS_STEERING_CONTROLLER'
+
+        self._config = None
+        self._reconfigure_server = None
+
+        self._command_subscriber_topic = 'iwos_cmd'
+        self._command_publisher_topic = 'iwos_cmd_steering'
+
+        self._state_subscriber_topic = 'iwos_state_steering_raw'
+        self._state_publisher_topic = 'iwos_state_steering'
+
+        self._command_subscriber = None
+        self._command_publisher = None
+
+        self._state_subscriber = None
+        self._state_publisher = None
+
+    def run(self):
+        rospy.init_node(self._node_name)
+
+        try:
+            config_file_path = rospy.get_param(param_name='iwos_controller_steering_config')
+            self._config = SteeringControllerConfig().from_file(config_file_path=config_file_path)
+        except InvalidPathException:
+            rospy.logerr('%s: failed to load config (invalid path)', self._node_name)
+        except InvalidFileException:
+            rospy.logerr('%s: failed to load config (invalid file)', self._node_name)
+
+        self._reconfigure_server = Server(
+            type=SteeringControllerDynamicConfig,
+            callback=self.callback_reconfigure)
+
+        self._command_subscriber = rospy.Subscriber(
+            name=self._command_subscriber_topic,
+            data_class=JointsIWS,
+            callback=self.callback_command,
+            queue_size=100)
+
+        self._command_publisher = rospy.Publisher(
+            name=self._command_publisher_topic,
+            data_class=Joints,
+            queue_size=100)
+
+        self._state_subscriber = rospy.Subscriber(
+            name=self._state_subscriber_topic,
+            data_class=Joints,
+            callback=self.callback_state,
+            queue_size=100)
+
+        self._state_publisher = rospy.Publisher(
+            name=self._state_publisher_topic,
+            data_class=Joints,
+            queue_size=100)
+
+        rospy.spin()
+
+    def callback_reconfigure(self, dynamic_reconfigure, level):
+        if level == -1:
+            return self._config.to_dynamic_reconfigure()
+
+        self._config = SteeringControllerConfig().from_dynamic_reconfigure(dynamic_reconfigure)
+        return self._config.to_dynamic_reconfigure()
+
+    def callback_command(self, message_in):
+        if message_in.type_steering == "cmd_position":
+            message_out = Joints()
+
+            if not self._config.reverse_left_joint:
+                message_out.position.append(self.rad_to_position(rad=message_in.steering[0]))
+            else:
+                message_out.position.append(self.rad_to_position(rad=message_in.steering[0] * -1))
+
+            if not self._config.reverse_left_joint:
+                message_out.position.append(self.rad_to_position(rad=message_in.steering[1]))
+            else:
+                message_out.position.append(self.rad_to_position(rad=message_in.steering[1] * -1))
+
+            if self._config.exchange_joints:
+                message_out.position.reverse()
+
+            self._command_publisher.publish(message_out)
+
+        else:
+            rospy.logerr('%s: steering type %s not supported', self._node_name, message_in.type_steering)
+
+    def callback_state(self, message_in):
+        message_out = Joints(header=message_in.header)
+        message_out.position = [self.position_to_rad(position=position) for position in message_in.position]
+        message_out.velocity = list(message_in.velocity)
+        message_out.torque = list(message_in.torque)
+
+        if self._config.exchange_joints:
+            message_out.position.reverse()
+            message_out.velocity.reverse()
+            message_out.torque.reverse()
+
+        if self._config.reverse_left_joint:
+            message_out.position[0] *= -1
+            message_out.velocity[0] *= -1
+            message_out.torque[0] *= -1
+
+        if self._config.reverse_right_joint:
+            message_out.position[1] *= -1
+            message_out.velocity[1] *= -1
+            message_out.torque[1] *= -1
+
+        self._state_publisher.publish(message_out)
+
+    def rad_to_position(self, rad):
+        position_range_minimum = 0
+        position_range_maximum = 4095
+        position_range = position_range_maximum - position_range_minimum + 1
+        position_offset = self._config.joint_offset
+
+        deflection = (rad * position_range) / (2 * math.pi)
+        position = int(position_offset + deflection)
+        while position < position_range_minimum:
+            position += position_range
+        while position > position_range_maximum:
+            position -= position_range
+
+        return position
+
+    def position_to_rad(self, position):
+        position_range_minimum = 0
+        position_range_maximum = 4095
+        position_range = position_range_maximum - position_range_minimum + 1
+        position_offset = self._config.joint_offset
+
+        deflection = position - position_offset
+        rad = (deflection * 2 * math.pi) / position_range
+
+        return rad
+
+
+if __name__ == '__main__':
+    try:
+        arguments = rospy.myargv(argv=sys.argv)
+        steering_controller_node = SteeringControllerNode()
+        steering_controller_node.run()
+    except rospy.ROSInterruptException:
+        rospy.logerr('ROS Interrupt Exception')

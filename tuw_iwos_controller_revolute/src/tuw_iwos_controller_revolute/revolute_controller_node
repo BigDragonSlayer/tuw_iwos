@@ -3,6 +3,7 @@
 import math
 import rospy
 import sys
+
 from dynamic_reconfigure.server import Server
 from tuw_iwos_controller_revolute.cfg import RevoluteControllerDynamicConfig
 from tuw_nav_msgs.msg import Joints
@@ -89,6 +90,7 @@ class RevoluteControllerNode:
                     value_in = self._config.max_velocity
                 value_out = self.mps_to_rpm(mps=float(value_in)) * self._config.velocity_scale
                 message_out.velocity.append(value_out)
+
             if self._config.reverse_left_wheel:
                 message_out.velocity[0] *= -1
             if self._config.reverse_right_wheel:
