@@ -89,7 +89,7 @@ class SteeringControllerNode:
             else:
                 message_out.position.append(self.rad_to_position(rad=message_in.steering[0] * -1))
 
-            if not self._config.reverse_left_joint:
+            if not self._config.reverse_right_joint:
                 message_out.position.append(self.rad_to_position(rad=message_in.steering[1]))
             else:
                 message_out.position.append(self.rad_to_position(rad=message_in.steering[1] * -1))
