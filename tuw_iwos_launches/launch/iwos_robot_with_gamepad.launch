@@ -1,0 +1,7 @@
+<launch>
+  
+  <include file="$(find tuw_iwos_launches)/launch/iwos_robot.launch"/>
+  
+  <include file="$(find tuw_gamepad)/launch/iwos_diffdrive.launch"/>
+  
+</launch>
