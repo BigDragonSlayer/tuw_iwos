@@ -4,11 +4,11 @@ import math
 import rospy
 import sys
 from dynamic_reconfigure.server import Server
-from tuw_iwos_controller_revolute.cfg import RevoluteControllerConfig
+from tuw_iwos_controller_revolute.cfg import RevoluteControllerDynamicConfig
 from tuw_nav_msgs.msg import Joints
 from tuw_nav_msgs.msg import JointsIWS
 
-from tuw_iwos_controller_revolute.config.revolute_config import RevoluteConfig
+from tuw_iwos_controller_revolute.config.revolute_controller_config import RevoluteControllerConfig
 from tuw_iwos_controller_revolute.exception.invalid_file_exception import InvalidFileException
 from tuw_iwos_controller_revolute.exception.invalid_path_exception import InvalidPathException
 
@@ -39,14 +39,14 @@ class RevoluteControllerNode:
 
         try:
             config_file_path = rospy.get_param(param_name='iwos_controller_revolute_config')
-            self._config = RevoluteConfig().from_file(config_file_path=config_file_path)
+            self._config = RevoluteControllerConfig().from_file(config_file_path=config_file_path)
         except InvalidPathException:
             rospy.logerr('%s: failed to load config (invalid path)', self._node_name)
         except InvalidFileException:
             rospy.logerr('%s: failed to load config (invalid file)', self._node_name)
 
         self._reconfigure_server = Server(
-            type=RevoluteControllerConfig,
+            type=RevoluteControllerDynamicConfig,
             callback=self.callback_reconfigure)
 
         self._command_subscriber = rospy.Subscriber(
@@ -77,7 +77,7 @@ class RevoluteControllerNode:
         if level == -1:
             return self._config.to_dynamic_reconfigure()
 
-        self._config = RevoluteConfig().from_dynamic_reconfigure(dynamic_reconfigure)
+        self._config = RevoluteControllerConfig().from_dynamic_reconfigure(dynamic_reconfigure)
         return self._config.to_dynamic_reconfigure()
 
     def callback_command(self, message_in):

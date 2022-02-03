@@ -5,7 +5,7 @@ from tuw_iwos_controller_revolute.config.abstract_dynamic_config import Abstract
 from tuw_iwos_controller_revolute.config.config_file_reader import ConfigFileReader
 
 
-class RevoluteConfig(AbstractDefaultConfig, AbstractDynamicConfig):
+class RevoluteControllerConfig(AbstractDefaultConfig, AbstractDynamicConfig):
 
     def __init__(self):
         self.max_velocity = None
