@@ -1,7 +1,7 @@
 <launch>
 
-  <include file="$(find tuw_iwos_controller_steering)/launch/steering.launch"/>
-  <include file="$(find tuw_iwos_controller_revolute)/launch/revolute.launch"/>
+  <include file="$(find tuw_iwos_controller_steering)/launch/controller_with_device.launch"/>
+  <include file="$(find tuw_iwos_controller_revolute)/launch/controller_with_device.launch"/>
 
 
 </launch>
