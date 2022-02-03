@@ -1,0 +1,11 @@
+<launch>
+
+  <param name="iwos_controller_steering_config" value="$(find tuw_iwos_controller_steering)/cfg/steering_controller.yaml"/>
+
+  <node name="IWOS_STEERING_CONTROLLER" pkg="tuw_iwos_controller_steering" type="steering_controller_node"
+        required="true" output="screen" args="">
+    <remap from="dynamixel_cmd" to="iwos_cmd_steering"/>
+    <remap from="dynamixel_state" to="iwos_state_steering"/>
+  </node>
+
+</launch>
