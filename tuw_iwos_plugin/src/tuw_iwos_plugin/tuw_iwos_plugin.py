@@ -2,29 +2,29 @@
 
 import os
 import rospkg
-from tuw_iwos_revolute_and_steering_plugin.handler.stop_handler import StopHandler
-from tuw_iwos_revolute_and_steering_plugin.handler.publisher_handler import PublisherHandler
-from tuw_iwos_revolute_and_steering_plugin.handler.steering_handler import SteeringHandler
-from tuw_iwos_revolute_and_steering_plugin.handler.revolute_handler import RevoluteHandler
+from tuw_iwos_plugin.handler.stop_handler import StopHandler
+from tuw_iwos_plugin.handler.publisher_handler import PublisherHandler
+from tuw_iwos_plugin.handler.steering_handler import SteeringHandler
+from tuw_iwos_plugin.handler.revolute_handler import RevoluteHandler
 from qt_gui.plugin import Plugin
 from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QWidget
 from tuw_nav_msgs.msg import JointsIWS
 
 
-class RevoluteAndSteeringPlugin(Plugin):
+class IWOSPlugin(Plugin):
     """
     class to publish messages based on UI
     """
 
     def __init__(self, context):
-        super(RevoluteAndSteeringPlugin, self).__init__(context)
+        super(IWOSPlugin, self).__init__(context)
         # setup plugin
         self.setObjectName('IWOSPlugin')
         self._widget = QWidget()
-        ui_file = os.path.join(rospkg.RosPack().get_path('tuw_iwos_revolute_and_steering_plugin'),
+        ui_file = os.path.join(rospkg.RosPack().get_path('tuw_iwos_plugin'),
                                'resource',
-                               'tuw_iwos_revolute_and_steering_plugin.ui')
+                               'iwos_plugin.ui')
         loadUi(ui_file, self._widget)
         self._widget.setObjectName('IWOSPluginUI')
         if context.serial_number() > 1:

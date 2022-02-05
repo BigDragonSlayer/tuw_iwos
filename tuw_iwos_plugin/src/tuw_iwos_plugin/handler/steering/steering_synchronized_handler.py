@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-from tuw_iwos_revolute_and_steering_plugin.tool.controller_tool import ControllerTool
-from tuw_iwos_revolute_and_steering_plugin.tool.synchronized_controller import SynchronizedController
+from tuw_iwos_plugin.tool.controller_tool import ControllerTool
+from tuw_iwos_plugin.tool.synchronized_controller import SynchronizedController
 
 
 class SteeringSynchronizedHandler(SynchronizedController):

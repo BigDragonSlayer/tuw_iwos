@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
 
-  <name>tuw_iwos_revolute_and_steering_plugin</name>
+  <name>tuw_iwos_plugin</name>
   <version>0.0.0</version>
   <description>RQT plugin to control independent wheel offset steering</description>
 
@@ -21,7 +21,6 @@
   <exec_depend>rqt_gui_py</exec_depend>
   <exec_depend>python3-qt5-bindings</exec_depend>
 
-  <!-- pull request outstanding for this dependency to become part of rosdistro/noetic/distributions.yaml -->
   <depend>tuw_nav_msgs</depend>
 
   <export>

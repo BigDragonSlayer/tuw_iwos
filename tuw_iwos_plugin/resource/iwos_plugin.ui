@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
-  <class>IWOS_steering_and_revolute_plugin</class>
-  <widget class="QWidget" name="IWOS_steering_and_revolute_plugin">
+  <class>IWOS_plugin</class>
+  <widget class="QWidget" name="IWOS_plugin">
     <property name="windowTitle">
       <string>IWOS Steering and Revolute GUI</string>
     </property>

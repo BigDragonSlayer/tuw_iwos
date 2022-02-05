@@ -2,8 +2,8 @@
 
 import rospy
 
-from tuw_iwos_revolute_and_steering_plugin.handler.revolute.revolute_separate_handler import RevoluteSeparateHandler
-from tuw_iwos_revolute_and_steering_plugin.handler.revolute.revolute_synchronized_handler import RevoluteSynchronizedHandler
+from tuw_iwos_plugin.handler.revolute.revolute_separate_handler import RevoluteSeparateHandler
+from tuw_iwos_plugin.handler.revolute.revolute_synchronized_handler import RevoluteSynchronizedHandler
 
 
 class RevoluteHandler:

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(tuw_iwos_revolute_and_steering_plugin)
+project(tuw_iwos_plugin)
 
 find_package(catkin REQUIRED
   rospy
@@ -17,6 +17,6 @@ install(DIRECTORY resource
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 
-catkin_install_python(PROGRAMS scripts/tuw_iwos_revolute_and_steering_plugin
+catkin_install_python(PROGRAMS scripts/tuw_iwos_plugin
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
