@@ -103,7 +103,7 @@ class SteeringControllerNode:
             rospy.logerr('%s: steering type %s not supported', self._node_name, message_in.type_steering)
 
     def callback_state(self, message_in):
-        message_out = Joints(header=message_in.header)
+        message_out = Joints(header=message_in.header, name=["left_steering", "right_steering"])
         message_out.position = [self.position_to_rad(position=position) for position in message_in.position]
         message_out.velocity = list(message_in.velocity)
         message_out.torque = list(message_in.torque)

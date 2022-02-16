@@ -104,7 +104,7 @@ class RevoluteControllerNode:
             rospy.logerr('%s: revolute type %s not supported', self._node_name, message_in.type_revolute)
 
     def callback_state(self, message_in):
-        message_out = Joints(header=message_in.header)
+        message_out = Joints(header=message_in.header, name=["left_revolute", "right_revolute"])
         message_out.position = list(message_in.position)
         message_out.velocity = [self.rpm_to_mps(value) for value in list(message_in.velocity)]
         message_out.torque = list(message_in.torque)
