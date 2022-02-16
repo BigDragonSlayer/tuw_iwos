@@ -4,7 +4,8 @@
 
   <param name="joint_state_hz" value="$(arg joint_state_hz)"/>
 
-  <include file="$(find tuw_iwos_controller_steering)/launch/controller_with_device.launch"/>
   <include file="$(find tuw_iwos_controller_revolute)/launch/controller_with_device.launch"/>
+  <include file="$(find tuw_iwos_controller_steering)/launch/controller_with_device.launch"/>
+  <include file="$(find tuw_iwos_joints_states)/launch/iwos_joints_states.launch"/>
 
 </launch>
