@@ -105,7 +105,7 @@ class RevoluteControllerNode:
 
     def callback_state(self, message_in):
         message_out = Joints(header=message_in.header, name=["left_revolute", "right_revolute"])
-        message_out.position = list(message_in.position)
+        message_out.position = [self.steps_to_rad(value) for value in list(message_in.position)]
         message_out.velocity = [self.rpm_to_mps(value) for value in list(message_in.velocity)]
         message_out.torque = list(message_in.torque)
 
@@ -126,11 +126,17 @@ class RevoluteControllerNode:
 
         self._state_publisher.publish(message_out)
 
+    def mps_to_rpm(self, mps):
+        return float(mps) * 60 / self._wheel_circumference
+
     def rpm_to_mps(self, rpm):
         return float(rpm) * self._wheel_circumference / 60
 
-    def mps_to_rpm(self, mps):
-        return float(mps) * 60 / self._wheel_circumference
+    def rad_to_steps(self, rad):
+        return int(rad * self._config.sensor_steps / (2 * math.pi))
+
+    def steps_to_rad(self, steps):
+        return float(steps * 2 * math.pi / self._config.sensor_steps)
 
 
 if __name__ == '__main__':

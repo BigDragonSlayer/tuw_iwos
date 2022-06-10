@@ -4,6 +4,7 @@ import message_filters
 import rospy
 import sys
 
+from sensor_msgs.msg import JointState
 from tuw_nav_msgs.msg import Joints
 
 
@@ -13,27 +14,33 @@ class JointsStatesNode:
         self._node_name = 'IWOS_JOINTS_STATES'
 
         self._states_topics = states_topics
-        self._states_subscriber = None
+        self._state_subscribers = None
+        self._publisher_tuw = None
         self._publisher = None
 
     def run(self):
         rospy.init_node(self._node_name)
-        self._states_subscriber = [message_filters.Subscriber(topic, Joints) for topic in self._states_topics]
-        self._publisher = rospy.Publisher(name="iwos_state", data_class=Joints, queue_size=100)
-        slop = 1/(2 * rospy.get_param(param_name='joint_state_hz', default=30))
-        time_synchronizer = message_filters.ApproximateTimeSynchronizer(self._states_subscriber, 100, slop)
+        self._state_subscribers = [message_filters.Subscriber(topic, Joints) for topic in self._states_topics]
+        self._publisher_tuw = rospy.Publisher(name="iwos_state_joints_tuw", data_class=Joints, queue_size=100)
+        self._publisher = rospy.Publisher(name="iwos_state_joints", data_class=JointState, queue_size=100)
+        slop = 1 / (2 * rospy.get_param(param_name='joint_state_hz', default=30))
+        time_synchronizer = message_filters.ApproximateTimeSynchronizer(self._state_subscribers, 100, slop)
         time_synchronizer.registerCallback(self.time_synchronizer_callback)
 
         rospy.spin()
 
     def time_synchronizer_callback(self, *messages):
-        state = Joints(
-            header=messages[0].header,
-            name=[n for n_list in [list(message.name) for message in messages] for n in n_list],
-            position=[p for p_list in [list(message.position) for message in messages] for p in p_list],
-            velocity=[v for v_list in [list(message.velocity) for message in messages] for v in v_list],
-            torque=[t for t_list in [list(message.torque) for message in messages] for t in t_list])
+        header = messages[0].header
+        name = [n for n_list in [list(message.name) for message in messages] for n in n_list]
+        position = [p for p_list in [list(message.position) for message in messages] for p in p_list]
+        velocity = [v for v_list in [list(message.velocity) for message in messages] for v in v_list]
+        torque = [t for t_list in [list(message.torque) for message in messages] for t in t_list]
+        effort = torque
 
+        state_tuw = Joints(header=header, name=name, position=position, velocity=velocity, torque=torque)
+        state = JointState(header=header, name=name, position=position, velocity=velocity, effort=effort)
+
+        self._publisher_tuw.publish(state_tuw)
         self._publisher.publish(state)
 
 
