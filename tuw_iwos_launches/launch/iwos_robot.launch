@@ -7,5 +7,6 @@
   <include file="$(find tuw_iwos_controller_revolute)/launch/controller_with_device.launch"/>
   <include file="$(find tuw_iwos_controller_steering)/launch/controller_with_device.launch"/>
   <include file="$(find tuw_iwos_joints_states)/launch/iwos_joints_states.launch"/>
+  <include file="$(find tuw_iwos_robot_description)/launch/robot_description_publisher.launch"/>
 
 </launch>
