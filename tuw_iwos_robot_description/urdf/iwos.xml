@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<robot name="IWOS">
+
+  <link name="base_link">
+    <!-- empty base link -->
+  </link>
+
+  <!-- LEFT -->
+
+  <link name="left_fork_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://tuw_iwos_robot_description/resources/mesh/fork_link.dae"/>
+      </geometry>
+    </visual>
+  </link>
+  
+  <joint name="left_steering" type="revolute">
+    <parent link="base_link"/>
+    <child link="left_fork_link"/>
+    <axis xyz="0 0 1"/>
+    <origin xyz="0.1 0.15 0" rpy="0.0 0.0 0.0"/>
+    <limit effort="1000.0" lower="-0.436" upper="0.436" velocity="0.5"/>
+  </joint>
+
+  <link name="left_wheel_link">
+    <visual>
+      <origin xyz="0.10 0.0 0.04" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://tuw_iwos_robot_description/resources/mesh/wheel_link.dae"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="left_revolute" type="continuous">
+    <parent link="left_fork_link"/>
+    <child link="left_wheel_link"/>
+    <axis xyz="0 1 0"/>
+    <origin xyz="-0.10 0.0 -0.04" rpy="0.0 0.0 0.0"/>
+  </joint>
+  
+  <!-- RIGHT -->
+
+  <link name="right_fork_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://tuw_iwos_robot_description/resources/mesh/fork_link.dae"/>
+      </geometry>
+    </visual>
+  </link>
+  
+  <joint name="right_steering" type="revolute">
+    <parent link="base_link"/>
+    <child link="right_fork_link"/>
+    <axis xyz="0 0 1"/>
+    <origin xyz="0.1 -0.15 0" rpy="0.0 0.0 0.0"/>
+    <limit effort="1000.0" lower="-0.436" upper="0.436" velocity="0.5"/>
+  </joint>
+
+  <link name="right_wheel_link">
+
+    <visual>
+      <origin xyz="0.10 0.0 0.04" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://tuw_iwos_robot_description/resources/mesh/wheel_link.dae"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="right_revolute" type="continuous">
+    <parent link="right_fork_link"/>
+    <child link="right_wheel_link"/>
+    <axis xyz="0 1 0"/>
+    <origin xyz="-0.10 0.0 -0.04" rpy="0.0 0.0 0.0"/>
+  </joint>
+
+</robot>
