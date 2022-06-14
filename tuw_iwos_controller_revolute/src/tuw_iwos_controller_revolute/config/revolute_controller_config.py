@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 from typing import Optional
 
 from tuw_iwos_controller_revolute.config.abstract_default_config import AbstractDefaultConfig

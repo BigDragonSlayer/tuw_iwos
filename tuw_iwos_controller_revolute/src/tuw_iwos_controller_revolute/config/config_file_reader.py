@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
+import yaml
+
 from typing import Dict
 from typing import NewType
 from typing import Union
 from typing import TextIO
-
-import yaml
 
 from tuw_iwos_controller_revolute.exception.invalid_file_exception import InvalidFileException
 from tuw_iwos_controller_revolute.exception.invalid_path_exception import InvalidPathException
