@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from typing import Optional
 
 from tuw_iwos_controller_revolute.config.abstract_default_config import AbstractDefaultConfig
 from tuw_iwos_controller_revolute.config.abstract_dynamic_config import AbstractDynamicConfig
@@ -8,12 +9,12 @@ from tuw_iwos_controller_revolute.config.config_file_reader import ConfigFileRea
 class RevoluteControllerConfig(AbstractDefaultConfig, AbstractDynamicConfig):
 
     def __init__(self):
-        self.sensor_steps = None
-        self.max_velocity = None
-        self.velocity_scale = None
-        self.exchange_wheels = None
-        self.reverse_left_wheel = None
-        self.reverse_right_wheel = None
+        self.sensor_steps: Optional[int] = None
+        self.max_velocity: Optional[float] = None
+        self.velocity_scale: Optional[float] = None
+        self.exchange_wheels: Optional[bool] = None
+        self.reverse_left_wheel: Optional[bool] = None
+        self.reverse_right_wheel: Optional[bool] = None
 
     def from_file(self, config_file_path):
         config_content = ConfigFileReader.get_config_from_file(config_file_path=config_file_path)

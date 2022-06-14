@@ -4,7 +4,14 @@ import math
 import rospy
 import sys
 
+from typing import Dict
+from typing import NewType
+from typing import NoReturn
+from typing import Optional
+from typing import Union
+
 from dynamic_reconfigure.server import Server
+from rospy import Subscriber, Publisher
 from tuw_iwos_controller_revolute.cfg import RevoluteControllerDynamicConfig
 from tuw_nav_msgs.msg import Joints
 from tuw_nav_msgs.msg import JointsIWS
@@ -13,29 +20,31 @@ from tuw_iwos_controller_revolute.config.revolute_controller_config import Revol
 from tuw_iwos_controller_revolute.exception.invalid_file_exception import InvalidFileException
 from tuw_iwos_controller_revolute.exception.invalid_path_exception import InvalidPathException
 
+DynamicReconfigureDict = NewType("DynamicReconfigureDict", Dict[str, Union[str, int, float]])
+
 
 class RevoluteControllerNode:
 
-    def __init__(self, wheel_diameter):
-        self._node_name = 'IWOS_REVOLUTE_CONTROLLER'
+    def __init__(self, wheel_diameter: float) -> None:
+        self._node_name: str = 'IWOS_REVOLUTE_CONTROLLER'
 
-        self._wheel_circumference = float(wheel_diameter) * math.pi
-        self._config = None
-        self._reconfigure_server = None
+        self._wheel_circumference: float = wheel_diameter * math.pi
+        self._config: Optional[RevoluteControllerConfig] = None
+        self._reconfigure_server: Optional[Server] = None
 
-        self._command_subscriber_topic = 'iwos_cmd'
-        self._command_publisher_topic = 'iwos_cmd_revolute'
+        self._command_subscriber_topic: str = 'iwos_cmd'
+        self._command_publisher_topic: str = 'iwos_cmd_revolute'
 
-        self._state_subscriber_topic = 'iwos_state_revolute_raw'
-        self._state_publisher_topic = 'iwos_state_revolute'
+        self._state_subscriber_topic: str = 'iwos_state_revolute_raw'
+        self._state_publisher_topic: str = 'iwos_state_revolute'
 
-        self._command_subscriber = None
-        self._command_publisher = None
+        self._command_subscriber: Optional[Subscriber] = None
+        self._command_publisher: Optional[Publisher] = None
 
-        self._state_subscriber = None
-        self._state_publisher = None
+        self._state_subscriber: Optional[Subscriber] = None
+        self._state_publisher: Optional[Publisher] = None
 
-    def run(self):
+    def run(self) -> NoReturn:
         rospy.init_node(self._node_name)
 
         try:
@@ -74,21 +83,21 @@ class RevoluteControllerNode:
 
         rospy.spin()
 
-    def callback_reconfigure(self, dynamic_reconfigure, level):
+    def callback_reconfigure(self, dynamic_reconfigure: DynamicReconfigureDict, level: int) -> DynamicReconfigureDict:
         if level == -1:
             return self._config.to_dynamic_reconfigure()
 
         self._config = RevoluteControllerConfig().from_dynamic_reconfigure(dynamic_reconfigure)
         return self._config.to_dynamic_reconfigure()
 
-    def callback_command(self, message_in):
+    def callback_command(self, message_in: JointsIWS) -> NoReturn:
         if message_in.type_revolute == "cmd_velocity":
             message_out = Joints()
 
-            for value_in in message_in.revolute:
-                if value_in > self._config.max_velocity:
-                    value_in = self._config.max_velocity
-                value_out = self.mps_to_rpm(mps=float(value_in)) * self._config.velocity_scale
+            for mps in message_in.revolute:
+                if mps > self._config.max_velocity:
+                    mps = self._config.max_velocity
+                value_out = self.mps_to_rpm(mps=float(mps)) * self._config.velocity_scale
                 message_out.velocity.append(value_out)
 
             if self._config.reverse_left_wheel:
@@ -103,10 +112,10 @@ class RevoluteControllerNode:
         else:
             rospy.logerr('%s: revolute type %s not supported', self._node_name, message_in.type_revolute)
 
-    def callback_state(self, message_in):
+    def callback_state(self, message_in: Joints) -> NoReturn:
         message_out = Joints(header=message_in.header, name=["left_revolute", "right_revolute"])
-        message_out.position = [self.steps_to_rad(value) for value in list(message_in.position)]
-        message_out.velocity = [self.rpm_to_mps(value) for value in list(message_in.velocity)]
+        message_out.position = [self.steps_to_rad(steps=int(steps)) for steps in list(message_in.position)]
+        message_out.velocity = [self.rpm_to_mps(rpm=float(rpm)) for rpm in list(message_in.velocity)]
         message_out.torque = list(message_in.torque)
 
         if self._config.exchange_wheels:
@@ -126,16 +135,16 @@ class RevoluteControllerNode:
 
         self._state_publisher.publish(message_out)
 
-    def mps_to_rpm(self, mps):
-        return float(mps) * 60 / self._wheel_circumference
+    def mps_to_rpm(self, mps: float) -> float:
+        return float(mps * 60 / self._wheel_circumference)
 
-    def rpm_to_mps(self, rpm):
-        return float(rpm) * self._wheel_circumference / 60
+    def rpm_to_mps(self, rpm: float) -> float:
+        return float(rpm * self._wheel_circumference / 60)
 
-    def rad_to_steps(self, rad):
+    def rad_to_steps(self, rad: float) -> int:
         return int(rad * self._config.sensor_steps / (2 * math.pi))
 
-    def steps_to_rad(self, steps):
+    def steps_to_rad(self, steps: int) -> float:
         return float(steps * 2 * math.pi / self._config.sensor_steps)
 
 
