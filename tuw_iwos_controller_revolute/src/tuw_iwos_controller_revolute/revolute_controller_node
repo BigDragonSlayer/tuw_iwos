@@ -4,11 +4,8 @@ import math
 import rospy
 import sys
 
-from typing import Dict
-from typing import NewType
 from typing import NoReturn
 from typing import Optional
-from typing import Union
 
 from rospy import Publisher
 from rospy import Subscriber
@@ -19,11 +16,10 @@ from tuw_iwos_controller_revolute.cfg import RevoluteControllerDynamicConfig
 from tuw_nav_msgs.msg import Joints
 from tuw_nav_msgs.msg import JointsIWS
 
+from tuw_iwos_controller_revolute.config.abstract_dynamic_config import DynamicReconfigureDict
 from tuw_iwos_controller_revolute.config.revolute_controller_config import RevoluteControllerConfig
 from tuw_iwos_controller_revolute.exception.invalid_file_exception import InvalidFileException
 from tuw_iwos_controller_revolute.exception.invalid_path_exception import InvalidPathException
-
-DynamicReconfigureDict = NewType("DynamicReconfigureDict", Dict[str, Union[str, int, float]])
 
 
 class RevoluteControllerNode:
@@ -93,7 +89,7 @@ class RevoluteControllerNode:
         self._config = RevoluteControllerConfig().from_dynamic_reconfigure(dynamic_reconfigure)
         return self._config.to_dynamic_reconfigure()
 
-    def callback_command(self, message_in: JointsIWS) -> NoReturn:
+    def callback_command(self, message_in: JointsIWS) -> None:
         if message_in.type_revolute == "cmd_velocity":
             message_out = Joints()
 
@@ -115,7 +111,7 @@ class RevoluteControllerNode:
         else:
             rospy.logerr('%s: revolute type %s not supported', self._node_name, message_in.type_revolute)
 
-    def callback_state(self, message_in: Joints) -> NoReturn:
+    def callback_state(self, message_in: Joints) -> None:
         message_out = Joints(header=message_in.header, name=["left_revolute", "right_revolute"])
         message_out.position = [self.steps_to_rad(steps=int(steps)) for steps in list(message_in.position)]
         message_out.velocity = [self.rpm_to_mps(rpm=float(rpm)) for rpm in list(message_in.velocity)]

@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
 from typing import Optional
+from typing import Self
 
 from tuw_iwos_controller_revolute.config.abstract_default_config import AbstractDefaultConfig
-from tuw_iwos_controller_revolute.config.abstract_dynamic_config import AbstractDynamicConfig
+from tuw_iwos_controller_revolute.config.abstract_dynamic_config import AbstractDynamicConfig, DynamicReconfigureDict
 from tuw_iwos_controller_revolute.config.config_file_reader import ConfigFileReader
 
 
@@ -17,7 +18,7 @@ class RevoluteControllerConfig(AbstractDefaultConfig, AbstractDynamicConfig):
         self.reverse_left_wheel: Optional[bool] = None
         self.reverse_right_wheel: Optional[bool] = None
 
-    def from_file(self, config_file_path):
+    def from_file(self, config_file_path: str) -> Self:
         config_content = ConfigFileReader.get_config_from_file(config_file_path=config_file_path)
 
         self.sensor_steps = config_content["Sensor_Steps"]
@@ -29,7 +30,7 @@ class RevoluteControllerConfig(AbstractDefaultConfig, AbstractDynamicConfig):
 
         return self
 
-    def to_dynamic_reconfigure(self):
+    def to_dynamic_reconfigure(self) -> DynamicReconfigureDict:
         return {
             'sensor_steps': self.sensor_steps,
             'max_velocity': self.max_velocity,
@@ -39,7 +40,7 @@ class RevoluteControllerConfig(AbstractDefaultConfig, AbstractDynamicConfig):
             'reverse_right_wheel': self.reverse_right_wheel
         }
 
-    def from_dynamic_reconfigure(self, dynamic_config):
+    def from_dynamic_reconfigure(self, dynamic_config: DynamicReconfigureDict) -> Self:
         self.sensor_steps = dynamic_config['sensor_steps']
         self.max_velocity = dynamic_config['max_velocity']
         self.velocity_scale = dynamic_config['velocity_scale']

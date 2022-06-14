@@ -4,11 +4,8 @@ import math
 import rospy
 import sys
 
-from typing import Dict
-from typing import NewType
 from typing import NoReturn
 from typing import Optional
-from typing import Union
 
 from rospy import Publisher
 from rospy import Subscriber
@@ -18,11 +15,10 @@ from tuw_iwos_controller_steering.cfg import SteeringControllerDynamicConfig
 from tuw_nav_msgs.msg import Joints
 from tuw_nav_msgs.msg import JointsIWS
 
+from tuw_iwos_controller_steering.config.abstract_dynamic_config import DynamicReconfigureDict
 from tuw_iwos_controller_steering.config.steering_controller_config import SteeringControllerConfig
 from tuw_iwos_controller_steering.exception.invalid_file_exception import InvalidFileException
 from tuw_iwos_controller_steering.exception.invalid_path_exception import InvalidPathException
-
-DynamicReconfigureDict = NewType("DynamicReconfigureDict", Dict[str, Union[str, int, float]])
 
 
 class SteeringControllerNode:
@@ -45,7 +41,7 @@ class SteeringControllerNode:
         self._state_subscriber: Optional[Subscriber] = None
         self._state_publisher: Optional[Publisher] = None
 
-    def run(self):
+    def run(self) -> NoReturn:
         rospy.init_node(self._node_name)
 
         try:
@@ -91,7 +87,7 @@ class SteeringControllerNode:
         self._config = SteeringControllerConfig().from_dynamic_reconfigure(dynamic_reconfigure)
         return self._config.to_dynamic_reconfigure()
 
-    def callback_command(self, message_in: JointsIWS) -> NoReturn:
+    def callback_command(self, message_in: JointsIWS) -> None:
         if message_in.type_steering == "cmd_position":
             message_out = Joints()
 
@@ -113,7 +109,7 @@ class SteeringControllerNode:
         else:
             rospy.logerr('%s: steering type %s not supported', self._node_name, message_in.type_steering)
 
-    def callback_state(self, message_in: Joints) -> NoReturn:
+    def callback_state(self, message_in: Joints) -> None:
         message_out = Joints(header=message_in.header, name=["left_steering", "right_steering"])
         message_out.position = [self.position_to_rad(position=position) for position in message_in.position]
         message_out.velocity = list(message_in.velocity)

@@ -5,10 +5,10 @@ from abc import abstractmethod
 
 from typing import Dict
 from typing import NewType
-from typing import NoReturn
+from typing import Self
 from typing import Union
 
-DynamicReconfigureDict = NewType("DynamicReconfigureDict", Dict[str, Union[str, int, float]])
+DynamicReconfigureDict = NewType("DynamicReconfigureDict", Dict[str, Union[str, bool, int, float, None]])
 
 
 class AbstractDynamicConfig(ABC):
@@ -22,7 +22,7 @@ class AbstractDynamicConfig(ABC):
         pass
 
     @abstractmethod
-    def from_dynamic_reconfigure(self, dynamic_reconfigure: DynamicReconfigureDict) -> NoReturn:
+    def from_dynamic_reconfigure(self, dynamic_reconfigure: DynamicReconfigureDict) -> Self:
         """
         convert dynamic reconfigure dict to config
         :param dynamic_reconfigure: dynamic reconfigure dict
