@@ -4,6 +4,15 @@ import math
 import rospy
 import sys
 
+from typing import Dict
+from typing import NewType
+from typing import NoReturn
+from typing import Optional
+from typing import Union
+
+from rospy import Publisher
+from rospy import Subscriber
+
 from dynamic_reconfigure.server import Server
 from tuw_iwos_controller_steering.cfg import SteeringControllerDynamicConfig
 from tuw_nav_msgs.msg import Joints
@@ -13,26 +22,28 @@ from tuw_iwos_controller_steering.config.steering_controller_config import Steer
 from tuw_iwos_controller_steering.exception.invalid_file_exception import InvalidFileException
 from tuw_iwos_controller_steering.exception.invalid_path_exception import InvalidPathException
 
+DynamicReconfigureDict = NewType("DynamicReconfigureDict", Dict[str, Union[str, int, float]])
+
 
 class SteeringControllerNode:
 
     def __init__(self):
         self._node_name = 'IWOS_STEERING_CONTROLLER'
 
-        self._config = None
-        self._reconfigure_server = None
+        self._config: Optional[SteeringControllerConfig] = None
+        self._reconfigure_server: Optional[Server] = None
 
-        self._command_subscriber_topic = 'iwos_cmd'
-        self._command_publisher_topic = 'iwos_cmd_steering'
+        self._command_subscriber_topic: str = 'iwos_cmd'
+        self._command_publisher_topic: str = 'iwos_cmd_steering'
 
-        self._state_subscriber_topic = 'iwos_state_steering_raw'
-        self._state_publisher_topic = 'iwos_state_steering'
+        self._state_subscriber_topic: str = 'iwos_state_steering_raw'
+        self._state_publisher_topic: str = 'iwos_state_steering'
 
-        self._command_subscriber = None
-        self._command_publisher = None
+        self._command_subscriber: Optional[Subscriber] = None
+        self._command_publisher: Optional[Publisher] = None
 
-        self._state_subscriber = None
-        self._state_publisher = None
+        self._state_subscriber: Optional[Subscriber] = None
+        self._state_publisher: Optional[Publisher] = None
 
     def run(self):
         rospy.init_node(self._node_name)
@@ -73,14 +84,14 @@ class SteeringControllerNode:
 
         rospy.spin()
 
-    def callback_reconfigure(self, dynamic_reconfigure, level):
+    def callback_reconfigure(self, dynamic_reconfigure: DynamicReconfigureDict, level: int) -> DynamicReconfigureDict:
         if level == -1:
             return self._config.to_dynamic_reconfigure()
 
         self._config = SteeringControllerConfig().from_dynamic_reconfigure(dynamic_reconfigure)
         return self._config.to_dynamic_reconfigure()
 
-    def callback_command(self, message_in):
+    def callback_command(self, message_in: JointsIWS) -> NoReturn:
         if message_in.type_steering == "cmd_position":
             message_out = Joints()
 
@@ -102,7 +113,7 @@ class SteeringControllerNode:
         else:
             rospy.logerr('%s: steering type %s not supported', self._node_name, message_in.type_steering)
 
-    def callback_state(self, message_in):
+    def callback_state(self, message_in: Joints) -> NoReturn:
         message_out = Joints(header=message_in.header, name=["left_steering", "right_steering"])
         message_out.position = [self.position_to_rad(position=position) for position in message_in.position]
         message_out.velocity = list(message_in.velocity)
@@ -125,7 +136,7 @@ class SteeringControllerNode:
 
         self._state_publisher.publish(message_out)
 
-    def rad_to_position(self, rad):
+    def rad_to_position(self, rad: float) -> int:
         position_range_minimum = 0
         position_range_maximum = 4095
         position_range = position_range_maximum - position_range_minimum + 1
@@ -140,7 +151,7 @@ class SteeringControllerNode:
 
         return position
 
-    def position_to_rad(self, position):
+    def position_to_rad(self, position: int) -> float:
         position_range_minimum = 0
         position_range_maximum = 4095
         position_range = position_range_maximum - position_range_minimum + 1

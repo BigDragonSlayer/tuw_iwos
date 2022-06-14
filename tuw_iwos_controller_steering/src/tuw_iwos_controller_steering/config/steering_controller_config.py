@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+from typing import Optional
+
 from tuw_iwos_controller_revolute.config.abstract_default_config import AbstractDefaultConfig
 from tuw_iwos_controller_revolute.config.abstract_dynamic_config import AbstractDynamicConfig
 from tuw_iwos_controller_revolute.config.config_file_reader import ConfigFileReader
@@ -8,10 +10,10 @@ from tuw_iwos_controller_revolute.config.config_file_reader import ConfigFileRea
 class SteeringControllerConfig(AbstractDefaultConfig, AbstractDynamicConfig):
 
     def __init__(self):
-        self.joint_offset = None
-        self.exchange_joints = None
-        self.reverse_left_joint = None
-        self.reverse_right_joint = None
+        self.joint_offset: Optional[int] = None
+        self.exchange_joints: Optional[bool] = None
+        self.reverse_left_joint: Optional[bool] = None
+        self.reverse_right_joint: Optional[bool] = None
 
     def from_file(self, config_file_path):
         config_content = ConfigFileReader.get_config_from_file(config_file_path=config_file_path)
