@@ -27,7 +27,7 @@ class RevoluteControllerNode:
     def __init__(self, wheel_diameter: float) -> None:
         self._node_name: str = 'IWOS_REVOLUTE_CONTROLLER'
 
-        self._wheel_circumference: float = wheel_diameter * math.pi
+        self._wheel_circumference: float = float(wheel_diameter) * math.pi
         self._config: Optional[RevoluteControllerConfig] = None
         self._reconfigure_server: Optional[Server] = None
 
