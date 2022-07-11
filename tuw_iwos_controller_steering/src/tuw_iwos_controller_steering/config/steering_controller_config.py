@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 
 from typing import Optional
-from typing import Self
+from typing import TypeVar
 
 from tuw_iwos_controller_revolute.config.abstract_default_config import AbstractDefaultConfig
 from tuw_iwos_controller_revolute.config.abstract_dynamic_config import AbstractDynamicConfig
 from tuw_iwos_controller_revolute.config.config_file_reader import ConfigFileReader
 from tuw_iwos_controller_steering.config.abstract_dynamic_config import DynamicReconfigureDict
+
+# workaround for return self typehint
+TypeSteeringControllerConfig = TypeVar("TypeSteeringControllerConfig", bound="SteeringControllerConfig")
 
 
 class SteeringControllerConfig(AbstractDefaultConfig, AbstractDynamicConfig):
@@ -28,14 +31,14 @@ class SteeringControllerConfig(AbstractDefaultConfig, AbstractDynamicConfig):
         return self
 
     def to_dynamic_reconfigure(self) -> DynamicReconfigureDict:
-        return {
+        return DynamicReconfigureDict({
             'joint_offset': self.joint_offset,
             'exchange_joints': self.exchange_joints,
             'reverse_left_joint': self.reverse_left_joint,
             'reverse_right_joint': self.reverse_right_joint
-        }
+        })
 
-    def from_dynamic_reconfigure(self, dynamic_config: DynamicReconfigureDict) -> Self:
+    def from_dynamic_reconfigure(self, dynamic_config: DynamicReconfigureDict) -> TypeSteeringControllerConfig:
         self.joint_offset = dynamic_config['joint_offset']
         self.exchange_joints = dynamic_config['exchange_joints']
         self.reverse_left_joint = dynamic_config['reverse_left_joint']
