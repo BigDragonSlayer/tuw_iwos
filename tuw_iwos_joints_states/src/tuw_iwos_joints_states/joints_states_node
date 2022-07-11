@@ -16,7 +16,7 @@ from tuw_nav_msgs.msg import Joints
 
 class JointsStatesNode:
 
-    def __init__(self, states_topics: List[str]):
+    def __init__(self, states_topics: List[str]) -> None:
         self._node_name = 'IWOS_JOINTS_STATES'
 
         self._states_topics: List[str] = states_topics
