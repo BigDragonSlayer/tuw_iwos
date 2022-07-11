@@ -90,9 +90,7 @@ class RevoluteControllerNode:
         return self._config.to_dynamic_reconfigure()
 
     def callback_command(self, message_in: JointsIWS) -> None:
-        assert(len(message_in.position) == 2)
-        assert(len(message_in.velocity) == 2)
-        assert(len(message_in.torque) == 2)
+        assert(len(message_in.revolute) == 2)
 
         if message_in.type_revolute == "cmd_velocity":
             message_out = Joints()
