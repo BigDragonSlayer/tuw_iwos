@@ -90,6 +90,10 @@ class RevoluteControllerNode:
         return self._config.to_dynamic_reconfigure()
 
     def callback_command(self, message_in: JointsIWS) -> None:
+        assert(len(message_in.position) == 2)
+        assert(len(message_in.velocity) == 2)
+        assert(len(message_in.torque) == 2)
+
         if message_in.type_revolute == "cmd_velocity":
             message_out = Joints()
 
@@ -112,6 +116,10 @@ class RevoluteControllerNode:
             rospy.logerr('%s: revolute type %s not supported', self._node_name, message_in.type_revolute)
 
     def callback_state(self, message_in: Joints) -> None:
+        assert(len(message_in.position) == 2)
+        assert(len(message_in.velocity) == 2)
+        assert(len(message_in.torque) == 2)
+
         message_out = Joints(header=message_in.header, name=["left_revolute", "right_revolute"])
         message_out.position = [self.steps_to_rad(steps=int(steps)) for steps in list(message_in.position)]
         message_out.velocity = [self.rpm_to_mps(rpm=float(rpm)) for rpm in list(message_in.velocity)]
