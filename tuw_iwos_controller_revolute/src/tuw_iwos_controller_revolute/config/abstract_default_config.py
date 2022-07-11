@@ -3,13 +3,16 @@
 from abc import ABC
 from abc import abstractmethod
 
-from typing import Self
+from typing import TypeVar
+
+# workaround for return self typehint
+TypeAbstractDefaultConfig = TypeVar("TypeAbstractDefaultConfig", bound="AbstractDefaultConfig")
 
 
 class AbstractDefaultConfig(ABC):
 
     @abstractmethod
-    def from_file(self, config_file_path: str) -> Self:
+    def from_file(self, config_file_path: str) -> TypeAbstractDefaultConfig:
         """
         set all config values based on config file (yaml)
         :param config_file_path: path to config file (yaml)
