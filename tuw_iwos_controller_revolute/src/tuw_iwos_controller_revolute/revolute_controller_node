@@ -34,7 +34,7 @@ class RevoluteControllerNode:
         self._command_subscriber_topic: str = 'iwos_cmd'
         self._command_publisher_topic: str = 'iwos_cmd_revolute'
 
-        self._state_subscriber_topic: str = 'iwos_data_revolute'
+        self._state_subscriber_topic: str = 'iwos_state_revolute_raw'
         self._state_publisher_topic: str = 'iwos_state_revolute_tuw'
 
         self._command_subscriber: Optional[Subscriber] = None

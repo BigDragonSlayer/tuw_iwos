@@ -1,15 +1,22 @@
 <launch>
 
   <arg name="wheel_diameter" default="0.1016"/>
-  <arg name="trinamic_cmd_remap" default="iwos_cmd_revolute"/>
+
+  <arg name="command_subscriber" default="iwos_cmd"/>
+  <arg name="command_publisher" default="iwos_cmd_revolute"/>
+  <arg name="state_subscriber" default="iwos_state_revolute_raw"/>
+  <arg name="state_publisher" default="iwos_state_revolute_tuw"/>
+
   <arg name="trinamic_state_remap" default="iwos_state_revolute_raw"/>
 
   <param name="iwos_controller_revolute_config" value="$(find tuw_iwos_controller_revolute)/cfg/revolute_controller.yaml"/>
 
   <node name="IWOS_REVOLUTE_CONTROLLER" pkg="tuw_iwos_controller_revolute" type="revolute_controller_node"
         required="true" output="screen" args="$(arg wheel_diameter)">
-    <remap from="trinamic_cmd" to="$(arg trinamic_cmd_remap)"/>
-    <remap from="trinamic_state" to="$(arg trinamic_state_remap)"/>
+    <remap from="iwos_cmd" to="$(arg command_subscriber)"/>
+    <remap from="iwos_cmd_revolute" to="$(arg command_publisher)"/>
+    <remap from="iwos_state_revolute_raw" to="$(arg state_subscriber)"/>
+    <remap from="iwos_state_revolute_tuw" to="$(arg state_publisher)"/>
   </node>
 
 </launch>

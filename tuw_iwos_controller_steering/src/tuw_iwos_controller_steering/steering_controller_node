@@ -32,7 +32,7 @@ class SteeringControllerNode:
         self._command_subscriber_topic: str = 'iwos_cmd'
         self._command_publisher_topic: str = 'iwos_cmd_steering'
 
-        self._state_subscriber_topic: str = 'iwos_data_steering'
+        self._state_subscriber_topic: str = 'iwos_state_steering_raw'
         self._state_publisher_topic: str = 'iwos_state_steering_tuw'
 
         self._command_subscriber: Optional[Subscriber] = None
