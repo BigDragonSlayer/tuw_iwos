@@ -2,7 +2,7 @@
 
   <arg name="wheel_diameter" default="0.1016"/>
   <arg name="trinamic_cmd_remap" default="iwos_cmd_revolute"/>
-  <arg name="trinamic_state_remap" default="iwos_state_revolute"/>
+  <arg name="trinamic_state_remap" default="iwos_state_revolute_raw"/>
 
   <param name="iwos_controller_revolute_config" value="$(find tuw_iwos_controller_revolute)/cfg/revolute_controller.yaml"/>
 

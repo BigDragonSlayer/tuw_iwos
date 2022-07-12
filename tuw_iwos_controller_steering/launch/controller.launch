@@ -1,7 +1,7 @@
 <launch>
 
   <arg name="dynamixel_cmd_remap" default="iwos_cmd_steering"/>
-  <arg name="dynamixel_state_remap" default="iwos_state_steering"/>
+  <arg name="dynamixel_state_remap" default="iwos_state_steering_raw"/>
 
   <param name="iwos_controller_steering_config" value="$(find tuw_iwos_controller_steering)/cfg/steering_controller.yaml"/>
 
