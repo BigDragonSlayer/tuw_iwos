@@ -12,8 +12,7 @@ catkin_python_setup()
 
 catkin_package()
 
-
 catkin_install_python(PROGRAMS
-  src/tuw_iwos_joints_states/joints_states_node
+  src/tuw_iwos_joints_states/joints_states_node.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
