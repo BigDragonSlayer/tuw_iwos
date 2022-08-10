@@ -2,6 +2,10 @@
   
   <include file="$(find tuw_iwos_launches)/launch/iwos_robot.launch"/>
   
-  <include file="$(find tuw_gamepad)/launch/iwos_diffdrive.launch"/>
+  <include file="$(find tuw_gamepad_python)/launch/gamepad.launch">
+    <arg name="device" value="LogitechF710"/>
+    <arg name="converter" value="IWOSOrientation"/>
+    <arg name="target_topic" value="iwos_cmd_twist"/>
+  </include>
   
 </launch>
