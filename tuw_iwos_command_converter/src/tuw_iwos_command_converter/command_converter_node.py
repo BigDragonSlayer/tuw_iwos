@@ -24,9 +24,9 @@ class CommandConverterNode:
         self.WHEEL_DISPLACEMENT: Optional[float] = None
         self.TARGET_REACHED_DISTANCE = 0.01
 
-        self.command_subscriber_topic: str = "/cmd"
-        self.state_subscriber_topic: str = "/iwos_state"
-        self.publisher_topic: str = "/iwos_cmd"
+        self.state_subscriber_topic: str = "/iwos_state_joints_tuw"
+        self.command_subscriber_topic: str = "/iwos_cmd_twist"
+        self.command_publisher_topic: str = "/iwos_cmd_joints"
         self.command_subscriber: Optional[Subscriber] = None
         self.state_subscriber: Optional[Subscriber] = None
         self.subscribers: List[Optional[Subscriber]] = [self.command_subscriber, self.state_subscriber]
@@ -56,7 +56,7 @@ class CommandConverterNode:
         self.time_synchronizer = ApproximateTimeSynchronizer(self.subscribers, 10, slop=0.1)
         self.time_synchronizer.registerCallback(self.callback)
 
-        self.publisher = Publisher(name=self.publisher_topic, data_class=JointsIWS, queue_size=10)
+        self.publisher = Publisher(name=self.command_publisher_topic, data_class=JointsIWS, queue_size=10)
 
         rospy.spin()
 
