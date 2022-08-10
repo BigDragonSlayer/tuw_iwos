@@ -15,6 +15,6 @@ catkin_package()
 include_directories()
 
 catkin_install_python(PROGRAMS
-  src/tuw_iwos_command_converter/command_converter_node
+  src/tuw_iwos_command_converter/command_converter_node.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
