@@ -11,7 +11,7 @@
 
   <param name="iwos_controller_revolute_config" value="$(find tuw_iwos_controller_revolute)/cfg/revolute_controller.yaml"/>
 
-  <node name="IWOS_REVOLUTE_CONTROLLER" pkg="tuw_iwos_controller_revolute" type="revolute_controller_node"
+  <node name="IWOS_REVOLUTE_CONTROLLER" pkg="tuw_iwos_controller_revolute" type="revolute_controller_node.py"
         required="true" output="screen" args="$(arg wheel_diameter)">
     <remap from="iwos_cmd" to="$(arg command_subscriber)"/>
     <remap from="iwos_cmd_revolute" to="$(arg command_publisher)"/>

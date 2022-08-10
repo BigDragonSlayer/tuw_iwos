@@ -3,7 +3,7 @@
   <arg name="revolute_topic" default="iwos_state_revolute_tuw"/>
   <arg name="steering_topic" default="iwos_state_steering_tuw"/>
 
-  <node name="IWOS_JOINTS_STATES" pkg="tuw_iwos_joints_states" type="joints_states_node"
+  <node name="IWOS_JOINTS_STATES" pkg="tuw_iwos_joints_states" type="joints_states_node.py"
     required="true" output="screen" args="$(arg revolute_topic) $(arg steering_topic)">
   </node>
 

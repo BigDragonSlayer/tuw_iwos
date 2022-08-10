@@ -7,7 +7,7 @@
 
   <param name="iwos_controller_steering_config" value="$(find tuw_iwos_controller_steering)/cfg/steering_controller.yaml"/>
 
-  <node name="IWOS_STEERING_CONTROLLER" pkg="tuw_iwos_controller_steering" type="steering_controller_node"
+  <node name="IWOS_STEERING_CONTROLLER" pkg="tuw_iwos_controller_steering" type="steering_controller_node.py"
         required="true" output="screen" args="">
     <remap from="iwos_cmd" to="$(arg command_subscriber)"/>
     <remap from="iwos_cmd_steering" to="$(arg command_publisher)"/>
