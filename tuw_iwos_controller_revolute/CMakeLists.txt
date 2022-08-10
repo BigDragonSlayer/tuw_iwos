@@ -20,6 +20,6 @@ catkin_package()
 include_directories()
 
 catkin_install_python(PROGRAMS
-  src/tuw_iwos_controller_revolute/revolute_controller_node
+  src/tuw_iwos_controller_revolute/revolute_controller_node.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
