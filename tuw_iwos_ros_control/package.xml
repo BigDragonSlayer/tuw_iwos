@@ -14,12 +14,16 @@
 
   <build_depend>roscpp</build_depend>
   <build_depend>rospy</build_depend>
+  <build_depend>combined_robot_hw</build_depend>
 
   <build_export_depend>roscpp</build_export_depend>
   <build_export_depend>rospy</build_export_depend>
+  <build_export_depend>combined_robot_hw</build_export_depend>
 
   <exec_depend>roscpp</exec_depend>
   <exec_depend>rospy</exec_depend>
+  <exec_depend>combined_robot_hw</exec_depend>
+  <exec_depend>tuw_trinamic_ros_control</exec_depend>
 
   <export>
     <!-- nothing to export -->

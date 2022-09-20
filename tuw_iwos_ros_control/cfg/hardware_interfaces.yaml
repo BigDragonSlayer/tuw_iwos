@@ -1,0 +1,8 @@
+robot_hardware:
+  - tuw_trinamic_ros_control_interface
+
+tuw_trinamic_ros_control_interface:
+  type: tuw_trinamic_ros_control/TrinamicControlInterface
+  joints:
+    - left_revolute
+#    - right_revolute

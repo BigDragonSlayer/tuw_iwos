@@ -1,0 +1,33 @@
+IWOS_Robot:
+  revolute:
+    hardware_interface:
+      joints:
+        - left_revolute
+#        - right_revolute
+#  steering:
+#    hardware_interface:
+#      joints:
+#        - left_steering
+#        - right_steering
+  controller:
+    revolute_state_controller:
+      type: joint_state_controller/JointStateController
+      publish_rate: 300
+#    steering_state:
+#      type: joint_state_controller/JointStateController
+#      publish_rate: 300
+
+    revolute_velocity_controller:
+      type: velocity_controllers/JointGroupVelocityController
+      joints:
+        - left_revolute
+#        - right_revolute
+      gains:
+        left_revolute:
+          p: 1000
+          i: 10
+          d: 10
+#        right_revolute:
+#          p: 1000.0
+#          i: 1000.0
+#          d: 1000.0

@@ -4,6 +4,8 @@ project(tuw_iwos_ros_control)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   roslint
+  combined_robot_hw
+  tuw_trinamic_ros_control
 )
 
 catkin_package(
@@ -19,3 +21,9 @@ include_directories(
 )
 
 roslint_cpp()
+
+add_executable(tuw_iwos_ros_control_node
+  src/tuw_iwos_ros_control_node.cpp
+)
+
+target_link_libraries(tuw_iwos_ros_control_node ${catkin_LIBRARIES})
