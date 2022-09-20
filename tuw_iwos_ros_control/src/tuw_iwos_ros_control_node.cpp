@@ -1,11 +1,15 @@
 // Copyright 2022 Eugen Kaltenegger
 
+#include <algorithm>
+#include <functional>
 #include <iostream>
+#include <string>
 #include <ros/ros.h>
 #include <combined_robot_hw/combined_robot_hw.h>
 #include <controller_manager/controller_manager.h>
 
-int main(int argc, char** argv){
+int main(int argc, char** argv)
+{
   ros::init(argc, argv, "tuw_iwos_ros_control");
   std::string node_name = ros::this_node::getNamespace() + ros::this_node::getName();
   node_name.erase(0, std::min(node_name.find_first_not_of('/'), node_name.size() - 1));
@@ -20,7 +24,7 @@ int main(int argc, char** argv){
   spinner.start();
 
   combined_robot_hw::CombinedRobotHW combined_robot_hardware;
-  if (combined_robot_hardware.init(node_handle,node_handle))
+  if (combined_robot_hardware.init(node_handle, node_handle))
   {
     ROS_INFO("%s: succeeded to initialize", node_name.c_str());
     ROS_INFO("%s: will operate at %d hz", node_name.c_str(), control_loop_hz);
@@ -40,7 +44,8 @@ int main(int argc, char** argv){
   ros::Time last_write = ros::Time::now();
   ros::Duration duration;
   ROS_INFO("%s: control loop started", node_name.c_str());
-  while(ros::ok()){
+  while (ros::ok())
+  {
     now = ros::Time::now();
     duration = now - last_read;
     last_read = now;
