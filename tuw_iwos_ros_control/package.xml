@@ -14,10 +14,12 @@
 
   <build_depend>roscpp</build_depend>
   <build_depend>rospy</build_depend>
+  <build_depend>controller_manager</build_depend>
   <build_depend>combined_robot_hw</build_depend>
 
   <build_export_depend>roscpp</build_export_depend>
   <build_export_depend>rospy</build_export_depend>
+  <build_export_depend>controller_manager</build_export_depend>
   <build_export_depend>combined_robot_hw</build_export_depend>
 
   <exec_depend>roscpp</exec_depend>

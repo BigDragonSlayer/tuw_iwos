@@ -5,8 +5,8 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   roslint
   combined_robot_hw
-  tuw_trinamic_ros_control
-)
+  controller_manager
+  )
 
 catkin_package(
   INCLUDE_DIRS
