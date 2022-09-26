@@ -38,29 +38,20 @@ int main(int argc, char** argv)
 
   controller_manager::ControllerManager controller_manager(&combined_robot_hardware, node_handle);
 
-  ros::Time now;
-  ros::Time last_read = ros::Time::now();
-  ros::Time last_update = ros::Time::now();
-  ros::Time last_write = ros::Time::now();
+  ros::Time update_time;
+  ros::Time last_update_time = ros::Time::now();
   ros::Duration duration;
   ROS_INFO("%s: control loop started", node_name.c_str());
   while (ros::ok())
   {
-    now = ros::Time::now();
-    duration = now - last_read;
-    last_read = now;
-    combined_robot_hardware.read(now, duration);
+    update_time = ros::Time::now();
+    duration = update_time - last_update_time;
 
-    now = ros::Time::now();
-    duration = now - last_update;
-    last_update = now;
-    controller_manager.update(now, duration);
+    combined_robot_hardware.read(update_time, duration);
+    controller_manager.update(update_time, duration);
+    combined_robot_hardware.write(update_time, duration);
 
-    now = ros::Time::now();
-    duration = now - last_write;
-    last_write = now;
-    combined_robot_hardware.write(now, duration);
-
+    last_update_time = update_time;
     rate.sleep();
   }
 
