@@ -26,6 +26,7 @@ catkin_package(
   controller_manager_msgs
   std_msgs
   std_srvs
+  tuw_dynamixel_ros_control
   tuw_trinamic_ros_control
 )
 
@@ -36,8 +37,22 @@ include_directories(
 
 roslint_cpp()
 
+add_library(
+  tuw_iwos_ros_control
+  src/${PROJECT_NAME}/control_loop.cpp
+)
+
 add_executable(tuw_iwos_ros_control_node
   src/tuw_iwos_ros_control_node.cpp
 )
 
-target_link_libraries(tuw_iwos_ros_control_node ${catkin_LIBRARIES})
+add_dependencies(
+  tuw_iwos_ros_control_node
+  tuw_iwos_ros_control
+)
+
+target_link_libraries(
+  tuw_iwos_ros_control_node
+  tuw_iwos_ros_control
+  ${catkin_LIBRARIES}
+)

@@ -32,6 +32,7 @@
   <exec_depend>controller_manager</exec_depend>
   <exec_depend>combined_robot_hw</exec_depend>
   <exec_depend>hardware_interface</exec_depend>
+  <exec_depend>tuw_dynamixel_ros_control</exec_depend>
   <exec_depend>tuw_trinamic_ros_control</exec_depend>
 
   <depend>controller_manager_msgs</depend>
