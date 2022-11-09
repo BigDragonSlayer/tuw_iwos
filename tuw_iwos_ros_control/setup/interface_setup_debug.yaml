@@ -1,0 +1,11 @@
+connection:
+  port: "/dev/ttyUSB0"
+  baud: 57600
+  protocol: 2.0
+
+joints:
+  - name: "left_steering"
+    id: 0
+    converter: {position: 4095, velocity: 0.20, effort: 0.1}
+    device_file: {ros_package: "tuw_dynamixel_ros_control", relative_path: "/cfg/device/MX-106.yaml"}
+    config_file: {ros_package: "tuw_dynamixel_ros_control", relative_path: "/cfg/config/MX-106.yaml"}
