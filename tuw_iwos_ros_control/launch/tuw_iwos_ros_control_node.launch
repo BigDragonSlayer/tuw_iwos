@@ -1,28 +1,23 @@
 <launch>
   <!-- load robot description -->
-  <arg name="model" default="$(find tuw_iwos_robot_description)/urdf/iwos.xml"/>
+  <arg name="robot_description" default="$(find tuw_iwos_robot_description)/urdf/iwos.xml"/>
   <param name="robot_description" command="$(find xacro)/xacro $(arg model)"/>
 
   <rosparam file="$(find tuw_iwos_ros_control)/cfg/controllers.yaml"          command="load"/>
   <rosparam file="$(find tuw_iwos_ros_control)/cfg/hardware_interfaces.yaml"  command="load"/>
 
-
-  <arg name="hardware_info_param_arg"   value="hardware_info_param"/>
-  <arg name="node_param_arg"            value="node_param"/>
-  <rosparam file="$(find tuw_trinamic_ros_control)/cfg/rosparam/$(arg hardware_info_param_arg).yaml" command="load"/>
-  <rosparam file="$(find tuw_trinamic_ros_control)/cfg/rosparam/$(arg node_param_arg).yaml"          command="load"/>
-
-
+  <param name="trinamic_ros_control/setup">"$(find tuw_iwos_ros_control)/config/setup/trinamic.yaml"</param>
+  <param name="dynamixel_ros_control/setup">"$(find tuw_iwos_ros_control)/config/setup/dynamixel.yaml"</param>
   <node name="tuw_iwos_ros_control_node" pkg="tuw_iwos_ros_control" type="tuw_iwos_ros_control_node" output="screen"/>
 
-  <!-- set spawn_controllers flag -->
-  <arg name="spawn_controllers" default="true"/>
-  <!-- spawn controllers depending on spawn_controller flag -->
-  <node if="$(arg spawn_controllers)"
-        name="controller_spawner"
+  <node name="controller_spawner"
         pkg="controller_manager"
         type="spawner"
         output="screen"
-        args="/IWOS_Robot/controller/revolute_state_controller
-              /IWOS_Robot/controller/revolute_velocity_controller "/>
+        args="/IWOS/controller/state_controller
+              /IWOS/controller/left_revolute_controller
+              /IWOS/controller/right_revolute_controller
+              /IWOS/controller/left_steering_controller
+              /IWOS/controller/right_steering_controller
+              "/>
 </launch>

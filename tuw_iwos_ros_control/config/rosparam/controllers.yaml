@@ -1,0 +1,32 @@
+IWOS:
+  revolute:
+    hardware_interface:
+      joints:
+        - left_revolute
+        - right_revolute
+  steering:
+    hardware_interface:
+      joints:
+        - left_steering
+        - right_steering
+
+  controller:
+    state_controller:
+      type: joint_state_controller/JointStateController
+      publish_rate: 300
+
+    left_steering_controller:
+      type: position_controllers/JointPositionController
+      joint: left_steering
+
+    right_steering_controller:
+      type: position_controllers/JointPositionController
+      joint: left_steering
+
+    left_revolute_controller:
+      type: velocity_controllers/JointVelocityController
+      joint: left_revolute
+
+    right_revolute_controller:
+      type: velocity_controllers/JointVelocityController
+      joint: left_revolute
