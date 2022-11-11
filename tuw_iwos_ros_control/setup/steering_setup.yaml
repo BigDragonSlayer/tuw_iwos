@@ -1,0 +1,13 @@
+joints:
+  - name: "left_steering"
+    id: 0
+    connection:           { port: "/dev/ttyUSB0", baudrate: 57600, protocol: 2.0}
+    converter:            { position: 4095, velocity: 0.20, effort: 0.1 }
+    parameter_file:       {ros_package: "tuw_dynamixel_ros_control", relative_path: "/config/parameter/MX-106.yaml"}
+    initial_config_file:  {ros_package: "tuw_dynamixel_ros_control", relative_path: "/config/initial_config/MX-106.yaml"}
+#  - name: "right_steering"
+#    id: 1
+#    connection: { port: "/dev/ttyUSB0", baudrate: 57600, protocol: 2.0}
+#    converter: {position: 4095, velocity: 0.20, effort: 0.1}
+#    parameter_file: {ros_package: "tuw_dynamixel_ros_control", relative_path: "/hardware/parameter/MX-106.yaml"}
+#    config_file:    {ros_package: "tuw_dynamixel_ros_control", relative_path: "/hardware/config/MX-106.yaml"}
