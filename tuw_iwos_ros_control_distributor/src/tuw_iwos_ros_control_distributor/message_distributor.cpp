@@ -20,7 +20,7 @@ void tuw_iwos_ros_control_distributor::MessageDistributor::callback()
 
   this->output_target_revolute_[LEFT ] = this->input_target_revolute_[0];
   this->output_target_revolute_[RIGHT] = this->input_target_revolute_[1];
-  
+
   this->output_target_steering_[LEFT ] = this->input_target_steering_[0];
   this->output_target_steering_[RIGHT] = this->input_target_steering_[1];
 

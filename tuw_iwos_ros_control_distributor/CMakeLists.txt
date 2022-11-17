@@ -18,7 +18,6 @@ catkin_package(
   rospy
   roslint
   std_msgs
-  std_srvs
   tuw_nav_msgs
 )
 

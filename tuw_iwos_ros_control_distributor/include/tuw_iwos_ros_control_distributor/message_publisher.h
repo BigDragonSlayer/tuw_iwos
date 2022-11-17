@@ -1,10 +1,13 @@
 // Copyright 2022 Eugen Kaltenegger
 
-#ifndef DIP_WS_MESSAGE_PUBLISHER_H
-#define DIP_WS_MESSAGE_PUBLISHER_H
+#ifndef TUW_IWOS_ROS_CONTROL_DISTRIBUTOR_MESSAGE_PUBLISHER_H
+#define TUW_IWOS_ROS_CONTROL_DISTRIBUTOR_MESSAGE_PUBLISHER_H
 
 // STD
+#include <map>
 #include <memory>
+#include <utility>
+#include <vector>
 // ROS
 #include <ros/ros.h>
 // LOCAL
@@ -28,6 +31,6 @@ private:
   std::map<Side, ros::Publisher*> assigned_revolute_publisher_;
   std::map<Side, ros::Publisher*> assigned_steering_publisher_;
 };
-}  // tuw_iwos_ros_control_distributor
+}  // namespace tuw_iwos_ros_control_distributor
 
-#endif //DIP_WS_MESSAGE_PUBLISHER_H
+#endif  // TUW_IWOS_ROS_CONTROL_DISTRIBUTOR_MESSAGE_PUBLISHER_H

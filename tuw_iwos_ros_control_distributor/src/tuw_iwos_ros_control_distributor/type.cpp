@@ -1,7 +1,10 @@
 // Copyright 2022 Eugen Kaltenegger
 
-#include <tuw_iwos_ros_control_distributor/type.h>
+// STD
+#include <string>
 #include <stdexcept>
+// LOCAL
+#include <tuw_iwos_ros_control_distributor/type.h>
 
 using tuw_iwos_ros_control_distributor::Type;
 using tuw_iwos_ros_control_distributor::TypeConverter;
