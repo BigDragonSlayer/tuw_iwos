@@ -23,28 +23,31 @@ catkin_package(
 )
 
 include_directories(
- ./include/
+ ./include
  ${catkin_INCLUDE_DIRS}
 )
 
 roslint_cpp()
 
-#add_library(
-#  tuw_iwos_ros_control_distributor
-#  src/${PROJECT_NAME}/.cpp
-#)
+add_library(
+  tuw_iwos_ros_control_distributor
+  src/${PROJECT_NAME}/message_distributor.cpp
+  src/${PROJECT_NAME}/message_publisher.cpp
+  src/${PROJECT_NAME}/message_subscriber.cpp
+  src/${PROJECT_NAME}/type.cpp
+)
 
 add_executable(tuw_iwos_ros_control_distributor_node
   src/tuw_iwos_ros_control_distributor_node.cpp
 )
 
-#add_dependencies(
-#  tuw_iwos_ros_control_distributor_node
-#  tuw_iwos_ros_control_distributor
-#)
+add_dependencies(
+  tuw_iwos_ros_control_distributor_node
+  tuw_iwos_ros_control_distributor
+)
 
-#target_link_libraries(
-#  tuw_iwos_ros_control_distributor_node
-#  tuw_iwos_ros_control_distributor
-#  ${catkin_LIBRARIES}
-#)
+target_link_libraries(
+  tuw_iwos_ros_control_distributor_node
+  tuw_iwos_ros_control_distributor
+  ${catkin_LIBRARIES}
+)
