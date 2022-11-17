@@ -17,10 +17,12 @@
   <build_depend>roscpp</build_depend>
   <build_depend>rospy</build_depend>
   <build_depend>roslint</build_depend>
+  <build_depend>dynamic_reconfigure</build_depend>
 
   <build_export_depend>roscpp</build_export_depend>
   <build_export_depend>rospy</build_export_depend>
   <build_export_depend>roslint</build_export_depend>
+  <build_export_depend>dynamic_reconfigure</build_export_depend>
 
   <depend>std_msgs</depend>
   <depend>tuw_nav_msgs</depend>

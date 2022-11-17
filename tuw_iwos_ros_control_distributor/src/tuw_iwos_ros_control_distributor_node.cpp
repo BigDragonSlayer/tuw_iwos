@@ -1,9 +1,10 @@
 // Copyright 2022 Eugen Kaltenegger
 
+// ROS
 #include <ros/ros.h>
-
-#include "tuw_iwos_ros_control_distributor/tool/logging_tool.h"
-#include "tuw_iwos_ros_control_distributor/message_distributor.h"
+// LOCAL
+#include <tuw_iwos_ros_control_distributor/tool/logging_tool.h>
+#include <tuw_iwos_ros_control_distributor/message_distributor.h>
 
 using tuw_iwos_ros_control_distributor::MessageDistributor;
 

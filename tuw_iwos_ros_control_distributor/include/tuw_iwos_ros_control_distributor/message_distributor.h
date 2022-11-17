@@ -11,10 +11,12 @@
 #include <ros/ros.h>
 #include <tuw_nav_msgs/JointsIWS.h>
 // LOCAL
-#include "tuw_iwos_ros_control_distributor/enum/side.h"
-#include "tuw_iwos_ros_control_distributor/enum/type.h"
-#include "tuw_iwos_ros_control_distributor/message_subscriber.h"
-#include "tuw_iwos_ros_control_distributor/message_publisher.h"
+#include <tuw_iwos_ros_control_distributor/DistributorConfig.h>
+#include <tuw_iwos_ros_control_distributor/enum/side.h>
+#include <tuw_iwos_ros_control_distributor/enum/type.h>
+#include <tuw_iwos_ros_control_distributor/message_subscriber.h>
+#include <tuw_iwos_ros_control_distributor/message_publisher.h>
+#include <dynamic_reconfigure/server.h>
 
 namespace tuw_iwos_ros_control_distributor
 {
@@ -22,12 +24,16 @@ class MessageDistributor
 {
 public:
   explicit MessageDistributor(ros::NodeHandle node_handle);
-  void callback();
+  void messageCallback();
+  void configCallback(tuw_iwos_ros_control_distributor::DistributorConfig& config, uint32_t level);
 private:
   void publishRevolute();
   void publishSteering();
   void swapRevolute();
   void swapSteering();
+  DistributorConfig config_;
+  dynamic_reconfigure::Server<DistributorConfig> reconfigure_server_;
+  dynamic_reconfigure::Server<DistributorConfig>::CallbackType callback_type_;
   MessageSubscriber message_subscriber_;
   MessagePublisher message_publisher_;
   Type type_revolute_;

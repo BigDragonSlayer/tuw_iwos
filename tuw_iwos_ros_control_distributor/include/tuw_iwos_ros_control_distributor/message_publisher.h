@@ -6,12 +6,13 @@
 // STD
 #include <map>
 #include <memory>
+#include <string>
 #include <utility>
 #include <vector>
 // ROS
 #include <ros/ros.h>
 // LOCAL
-#include "tuw_iwos_ros_control_distributor/enum/side.h"
+#include <tuw_iwos_ros_control_distributor/enum/side.h>
 
 namespace tuw_iwos_ros_control_distributor
 {
@@ -24,7 +25,9 @@ public:
   void swapRevolute();
   void swapSteering();
 private:
-  static void publish(std::map<Side, double>* command, std::map<Side, ros::Publisher*>* assigned_publisher);
+  static void publish(std::map<Side, double>* command_map,
+                      std::map<Side, ros::Publisher*>* publisher_map,
+                      std::string kind);
   static void swap(std::map<Side, ros::Publisher*>* assigned_publisher);
   std::vector<ros::Publisher> revolute_publisher_;
   std::vector<ros::Publisher> steering_publisher_;

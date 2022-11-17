@@ -4,7 +4,8 @@
 #include <string>
 #include <vector>
 // LOCAL
-#include "tuw_iwos_ros_control_distributor/message_distributor.h"
+#include <tuw_iwos_ros_control_distributor/tool/logging_tool.h>
+#include <tuw_iwos_ros_control_distributor/message_distributor.h>
 #include <tuw_iwos_ros_control_distributor/message_subscriber.h>
 
 using tuw_iwos_ros_control_distributor::MessageSubscriber;
@@ -27,6 +28,8 @@ MessageSubscriber::MessageSubscriber(ros::NodeHandle node_handle,
 
 void MessageSubscriber::callback(const tuw_nav_msgs::JointsIWSConstPtr &message)
 {
+  ROS_DEBUG("%s: receiving message", LOGGING_PREFIX);
+
   if (message->revolute.size() != 2)
   {
     ROS_WARN("invalid number of revolute commands for IWOS");
@@ -48,5 +51,5 @@ void MessageSubscriber::callback(const tuw_nav_msgs::JointsIWSConstPtr &message)
   *this->type_revolute_ = message->type_revolute;
   *this->type_steering_ = message->type_steering;
 
-  this->message_splitter_->callback();
+  this->message_splitter_->messageCallback();
 }

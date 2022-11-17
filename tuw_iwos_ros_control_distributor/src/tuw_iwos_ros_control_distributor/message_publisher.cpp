@@ -2,10 +2,12 @@
 
 // STD
 #include <map>
+#include <string>
 #include <utility>
 // ROS
 #include <std_msgs/Float64.h>
 // LOCAL
+#include <tuw_iwos_ros_control_distributor/tool/logging_tool.h>
 #include <tuw_iwos_ros_control_distributor/message_publisher.h>
 
 using tuw_iwos_ros_control_distributor::MessagePublisher;
@@ -28,21 +30,24 @@ MessagePublisher::MessagePublisher(ros::NodeHandle node_handle)
 
 void MessagePublisher::publishRevolute(std::map<Side, double> revolute_command)
 {
-  MessagePublisher::publish(&revolute_command, &this->assigned_revolute_publisher_);
+  MessagePublisher::publish(&revolute_command, &this->assigned_revolute_publisher_, "revolute");
 }
 
 void MessagePublisher::publishSteering(std::map<Side, double> steering_command)
 {
-  MessagePublisher::publish(&steering_command, &this->assigned_steering_publisher_);
+  MessagePublisher::publish(&steering_command, &this->assigned_steering_publisher_, "steering");
 }
 
-void MessagePublisher::publish(std::map<Side, double> *command, std::map<Side, ros::Publisher *> *assigned_publisher)
+void MessagePublisher::publish(std::map<Side, double>* command_map,
+                               std::map<Side, ros::Publisher*>* publisher_map,
+                               std::string kind)
 {
   for (Side side : {LEFT, RIGHT})
   {
+    ROS_DEBUG("%s: publishing message for %s %s", LOGGING_PREFIX, SideConverter::toString(side).LOG, kind.LOG);
     std_msgs::Float64 message;
-    message.data = command->at(side);
-    assigned_publisher->at(side)->publish(message);
+    message.data = command_map->at(side);
+    publisher_map->at(side)->publish(message);
   }
 }
 

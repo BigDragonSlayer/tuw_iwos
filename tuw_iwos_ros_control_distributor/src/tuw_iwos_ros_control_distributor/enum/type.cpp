@@ -4,7 +4,7 @@
 #include <string>
 #include <stdexcept>
 // LOCAL
-#include "tuw_iwos_ros_control_distributor/enum/type.h"
+#include <tuw_iwos_ros_control_distributor/enum/type.h>
 
 using tuw_iwos_ros_control_distributor::Type;
 using tuw_iwos_ros_control_distributor::TypeConverter;

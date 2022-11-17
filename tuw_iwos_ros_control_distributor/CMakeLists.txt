@@ -8,6 +8,11 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   std_srvs
   tuw_nav_msgs
+  dynamic_reconfigure
+)
+
+generate_dynamic_reconfigure_options(
+  config/distributor_node.cfg
 )
 
 catkin_package(
@@ -19,6 +24,7 @@ catkin_package(
   roslint
   std_msgs
   tuw_nav_msgs
+  dynamic_reconfigure
 )
 
 include_directories(
@@ -45,6 +51,7 @@ add_executable(tuw_iwos_ros_control_distributor_node
 add_dependencies(
   tuw_iwos_ros_control_distributor_node
   tuw_iwos_ros_control_distributor
+  ${PROJECT_NAME}_gencfg
 )
 
 target_link_libraries(
