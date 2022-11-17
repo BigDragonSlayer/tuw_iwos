@@ -21,7 +21,7 @@ enum Type
 class TypeConverter
 {
 public:
-  static Type fromString(std::string string);
+  static Type fromString(const std::string& string);
 };
 }  // namespace tuw_iwos_ros_control_distributor
 

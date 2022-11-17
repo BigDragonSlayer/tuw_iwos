@@ -4,12 +4,12 @@
 #include <string>
 #include <stdexcept>
 // LOCAL
-#include <tuw_iwos_ros_control_distributor/type.h>
+#include "tuw_iwos_ros_control_distributor/enum/type.h"
 
 using tuw_iwos_ros_control_distributor::Type;
 using tuw_iwos_ros_control_distributor::TypeConverter;
 
-Type TypeConverter::fromString(std::string string)
+Type TypeConverter::fromString(const std::string& string)
 {
   if      ("cmd_position"          == string) return Type::CMD_POSITION;
   else if ("cmd_velocity"          == string) return Type::CMD_VELOCITY;

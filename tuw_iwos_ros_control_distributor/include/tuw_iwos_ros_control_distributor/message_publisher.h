@@ -11,7 +11,7 @@
 // ROS
 #include <ros/ros.h>
 // LOCAL
-#include <tuw_iwos_ros_control_distributor/side.h>
+#include "tuw_iwos_ros_control_distributor/enum/side.h"
 
 namespace tuw_iwos_ros_control_distributor
 {

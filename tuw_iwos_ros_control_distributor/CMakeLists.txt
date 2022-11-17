@@ -30,10 +30,12 @@ roslint_cpp()
 
 add_library(
   tuw_iwos_ros_control_distributor
+  src/${PROJECT_NAME}/enum/side.cpp
+  src/${PROJECT_NAME}/enum/type.cpp
+  src/${PROJECT_NAME}/tool/logging_tool.cpp
   src/${PROJECT_NAME}/message_distributor.cpp
   src/${PROJECT_NAME}/message_publisher.cpp
   src/${PROJECT_NAME}/message_subscriber.cpp
-  src/${PROJECT_NAME}/type.cpp
 )
 
 add_executable(tuw_iwos_ros_control_distributor_node

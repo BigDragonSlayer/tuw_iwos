@@ -11,10 +11,10 @@
 #include <ros/ros.h>
 #include <tuw_nav_msgs/JointsIWS.h>
 // LOCAL
-#include <tuw_iwos_ros_control_distributor/side.h>
-#include <tuw_iwos_ros_control_distributor/type.h>
-#include <tuw_iwos_ros_control_distributor/message_subscriber.h>
-#include <tuw_iwos_ros_control_distributor/message_publisher.h>
+#include "tuw_iwos_ros_control_distributor/enum/side.h"
+#include "tuw_iwos_ros_control_distributor/enum/type.h"
+#include "tuw_iwos_ros_control_distributor/message_subscriber.h"
+#include "tuw_iwos_ros_control_distributor/message_publisher.h"
 
 namespace tuw_iwos_ros_control_distributor
 {
