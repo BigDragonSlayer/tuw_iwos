@@ -1,7 +1,7 @@
 // Copyright 2022 Eugen Kaltenegger
 
-#ifndef TUW_IWOS_ROS_CONTROL_DISTRIBUTOR_TYPE_H
-#define TUW_IWOS_ROS_CONTROL_DISTRIBUTOR_TYPE_H
+#ifndef TUW_IWOS_ROS_CONTROL_DISTRIBUTOR_ENUM_TYPE_H
+#define TUW_IWOS_ROS_CONTROL_DISTRIBUTOR_ENUM_TYPE_H
 
 #include <string>
 
@@ -25,4 +25,4 @@ public:
 };
 }  // namespace tuw_iwos_ros_control_distributor
 
-#endif  // TUW_IWOS_ROS_CONTROL_DISTRIBUTOR_TYPE_H
+#endif  // TUW_IWOS_ROS_CONTROL_DISTRIBUTOR_ENUM_TYPE_H

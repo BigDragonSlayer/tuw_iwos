@@ -1,6 +1,8 @@
 // Copyright 2022 Eugen Kaltenegger
 
 // STD
+#include <algorithm>
+#include <functional>
 #include <string>
 // ROS
 #include <ros/ros.h>
