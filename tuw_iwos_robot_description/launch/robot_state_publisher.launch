@@ -8,7 +8,7 @@
 
   <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
     <remap from="joint_states" to="iwos_state_joints"/>
-    <param name="publish_frequency" type="double" value="30.0"/>
+    <param name="publish_frequency" type="double" value="300.0"/>
   </node>
 
 </launch>

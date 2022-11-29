@@ -1,6 +1,0 @@
-Sensor_Steps: 60
-Max_Velocity: 1.0
-Velocity_Scale: 1.0
-Reverse_Left_Wheel: True
-Reverse_Right_Wheel: True
-Exchange_Wheels: True
