@@ -9,7 +9,7 @@ robot_hardware:
 #    - right_revolute
 
 tuw_dynamixel_ros_control_interface:
-  type: tuw_dynamixel_ros_control/RobotHardware
+  type: tuw_dynamixel_ros_control/RobotHardwareInterface
   joints:
     - left_steering
     - right_steering
