@@ -55,15 +55,5 @@ void ControlLoop::update()
   this->controller_manager_->update(this->current_update_time_, duration);
   this->combined_robot_hardware_->write(this->current_update_time_, duration);
 
-
   this->previous_update_time_ = this->current_update_time_;
 }
-
-void tuw_iwos_ros_control::ControlLoop::fetch_name()
-{
-  std::string node_name = ros::this_node::getNamespace() + ros::this_node::getName();
-  node_name.erase(0, std::min(node_name.find_first_not_of('/'), node_name.size() - 1));
-  std::transform(node_name.begin(), node_name.end(), node_name.begin(), std::ptr_fun<int, int>(std::toupper));
-  this->node_name_ = std::move(node_name);
-}
-

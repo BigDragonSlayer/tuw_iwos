@@ -1,0 +1,15 @@
+robot_hardware:
+  - revolute_hardware
+  - steering_hardware
+
+revolute_hardware:
+  type: tuw_hardware_interface_trinamic/TrinamicHardwareInterface
+  joints:
+    - left_revolute
+    - right_revolute
+
+steering_hardware:
+  type: tuw_hardware_interface_dynamixel/DynamixelHardwareInterface
+  joints:
+    - left_steering
+    - right_steering

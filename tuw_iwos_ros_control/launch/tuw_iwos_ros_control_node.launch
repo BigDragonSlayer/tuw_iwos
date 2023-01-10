@@ -1,37 +1,41 @@
 <launch>
+  <!-- set spawn_controllers flag (true / false) -->
+  <arg name="spawn_controllers" default="true"/>
+
+  <!-- set debug flag (true / false) -->
+  <arg name="debug" default="false"/>
+
   <!-- load robot description -->
   <arg name="robot_description_file" default="$(find tuw_iwos_robot_description)/urdf/iwos.xml"/>
   <param name="robot_description" command="$(find xacro)/xacro $(arg robot_description_file)"/>
 
-  <rosparam file="$(find tuw_iwos_ros_control)/config/controllers.yaml"          command="load"/>
-  <rosparam file="$(find tuw_iwos_ros_control)/config/hardware_interfaces.yaml"  command="load"/>
+  <!-- load hardware interface param -->
+  <rosparam file="$(find tuw_iwos_ros_control)/config/interface/hardware_interface.yaml" command="load"/>
+  <!-- load controller description param -->
+  <rosparam file="$(find tuw_iwos_ros_control)/config/controller/controller.yaml" command="load"/>
 
-  <rosparam param="tuw_trinamic_ros_control/setup" subst_value="True">
-    "$(find tuw_iwos_ros_control)/setup/revolute_setup.yaml"
+  load revolute (trinamic) setup description param
+  <rosparam param="trinamic_hardware_interface_setup" subst_value="True">
+    "$(find tuw_iwos_ros_control)/config/setup/revolute_setup.yaml"
   </rosparam>
 
-  <rosparam param="tuw_dynamixel_ros_control/setup" subst_value="True">
-    "$(find tuw_iwos_ros_control)/setup/steering_setup.yaml"
+  load steering (dynamixel) setup description param
+  <rosparam param="dynamixel_hardware_interface_setup" subst_value="True">
+    "$(find tuw_iwos_ros_control)/config/setup/steering_setup.yaml"
   </rosparam>
 
-  <node name="tuw_iwos_ros_control_node" pkg="tuw_iwos_ros_control" type="tuw_iwos_ros_control_node" output="screen"/>
+  <node name="tuw_iwos_ros_control_node"
+         pkg="tuw_iwos_ros_control"
+         type="tuw_iwos_ros_control_node"
+         output="screen"/>
 
-  <node name="controller_spawner"
-        pkg="controller_manager"
-        type="spawner"
-        output="screen"
-        args="/IWOS/controller/state_controller
-              /IWOS/controller/left_steering_controller
-              "/>
-
-<!--  <node name="controller_spawner"-->
-<!--        pkg="controller_manager"-->
-<!--        type="spawner"-->
-<!--        output="screen"-->
-<!--        args="/IWOS/controller/state_controller-->
-<!--              /IWOS/controller/left_revolute_controller-->
-<!--              /IWOS/controller/right_revolute_controller-->
-<!--              /IWOS/controller/left_steering_controller-->
-<!--              /IWOS/controller/right_steering_controller-->
-<!--              "/>-->
+ <node name="controller_starter"
+       pkg="controller_manager"
+       type="spawner"
+       output="screen"
+       args="/controller/joint_state_controller
+             /controller/left_revolute_controller
+             /controller/right_revolute_controller
+             /controller/left_steering_controller
+             /controller/right_steering_controller"/>
 </launch>

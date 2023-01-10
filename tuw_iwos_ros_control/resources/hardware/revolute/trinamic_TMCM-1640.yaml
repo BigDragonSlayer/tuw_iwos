@@ -1,0 +1,89 @@
+name: "TMCM-1640"
+
+resolution:
+  position: 1.0   #
+  velocity: 1.0   # rpm
+  effort:   0.001 # A
+
+target_state_parameters:
+  - identifier: target_position
+    parameter: 0
+    range: { min: -2147483648, max: 2147483647 }
+  - identifier: target_velocity
+    parameter: 2
+    range: { min: -200000, max: 200000 }
+  - identifier: target_effort
+    parameter: 155
+    range: {min: -20000, max: 20000 }
+
+actual_state_parameters:
+  - identifier: actual_position
+    parameter: 1
+  - identifier: actual_velocity
+    parameter: 3
+  - identifier: actual_effort
+    parameter: 150
+
+config_parameters:
+  - identifier: driver_switch
+    description: "Enable or disable driver"
+    parameter: 255
+    enum: { "Disable driver": 0,
+            "Enable driver": 1 }
+  - identifier: overvoltage_protection
+    description: "Enable or disable overvoltage protection"
+    parameter: 245
+    enum: { "Disable overvoltage protection": 0,
+            "Enable overvoltage protection": 1 }
+  - identifier: communication_mode
+    description: "Communication Mode"
+    parameter: 159
+    enum: { "Block based on hall sensor": 0,
+            "FOC based on hall sensor": 6,
+            "FOC based on encoder": 7,
+            "FOC controlled (velocity mode only)": 8 }
+  - identifier: motor_poles
+    description: "Number of Motor Poles"
+    parameter: 253
+    range: { min: 2, max: 254 }
+  - identifier: ramp_switch
+    description: "Enable or disable velocity ramp"
+    parameter: 146
+    enum: { "Disabled ramp": 0,
+            "Enabled ramp": 1 }
+  - identifier: target_reached_distance
+    description: "Maximum distance at which the position end flag is set"
+    parameter: 10
+    range: { min: 0, max: 100000 }
+  - identifier: target_reached_velocity
+    description: "Maximum velocity at which end position flag can be set"
+    parameter: 7
+    range: { min: 0, max: 200000 }
+  - identifier: motor_halted_velocity
+    description: "If the actual speed is below this value the motor halted flag will be set"
+    parameter: 9
+    range: { min: 0, max: 200000 }
+  - identifier: maximum_current
+    description: "Maximum current"
+    parameter: 6
+    range: { min: 0, max: 20000 }
+  - identifier: position_p_parameter
+    description: "P parameter of position PID regulator"
+    parameter: 230
+    range: { min: 0, max: 65535 }
+  - identifier: velocity_p_parameter
+    description: "P parameter of velocity PID regulator"
+    parameter: 234
+    range: { min: 0, max: 65535 }
+  - identifier: velocity_i_parameter
+    description: "I parameter of velocity PID regulator"
+    parameter: 235
+    range: { min: 0, max: 65535 }
+  - identifier: current_p_parameter
+    description: "P parameter of current PID regulator"
+    parameter: 172
+    range: { min: 0, max: 65535 }
+  - identifier: current_i_parameter
+    description: "I parameter of current PID regulator"
+    parameter: 173
+    range: { min: 0, max: 65535 }

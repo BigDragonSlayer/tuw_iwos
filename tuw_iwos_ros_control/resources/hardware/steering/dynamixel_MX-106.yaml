@@ -1,0 +1,122 @@
+name: "MX-106"
+
+resolution:
+#  position: 0.08800 # deg
+  position: 0.0015358897418 # rad
+  velocity: 0.22900 # rpm
+  effort:   0.00336 # A
+
+target_state_parameters:
+  - identifier: target_position
+    address: 116
+    length: 4
+    range: { min: -1048575, max: 1048575 }
+  - identifier: target_velocity
+    address: 104
+    length: 4
+    range: { min: -1023, max: 1023 }
+  - identifier: target_effort
+    address: 102
+    length: 2
+    range: {min: -2047, max: 2047}
+
+actual_state_parameters:
+  - identifier: actual_position
+    address: 132
+    length: 4
+  - identifier: actual_velocity
+    address: 128
+    length: 4
+  - identifier: actual_effort
+    address: 126
+    length: 2
+
+config_parameters:
+  - identifier: drive_mode
+    description: "Drive Mode"
+    address: 10
+    length: 1
+    enum: { "normal": 0, "reverse": 1 }
+    range: null
+  - identifier: operating_mode
+    description: "Operating Mode"
+    address: 11
+    length: 1
+    enum: { "Current Control Mode": 0,
+            "Velocity Control Mode": 1,
+            "Position Control Mode": 3,
+            "Extended Position Control Mode(Multi-turn)": 4,
+            "Current-based Position Control Mode": 5}
+    range: null
+  - identifier: current_limit
+    description: "Current Limit"
+    address: 38
+    length: 2
+    enum: null
+    range: { min: 0, max: 2047}
+  - identifier: max_position_limit
+    description: "Max Position Limit"
+    address: 48
+    length: 4
+    enum: null
+    range: { min: 0, max: 4095 }
+  - identifier: min_position_limit
+    description: "Min Position Limit"
+    address: 52
+    length: 4
+    enum: null
+    range: { min: 0, max: 4095 }
+  - identifier: torque_switch
+    description: "Torque Switch"
+    address: 64
+    length: 1
+    enum: {"off": 0, "on": 1}
+    range: null
+  - identifier: led_switch
+    description: "LED Switch"
+    address: 65
+    length: 1
+    enum: {"off": 0, "on": 1}
+    range: null
+  - identifier: position_p_gain
+    description: "P Gain for Position Control"
+    address: 84
+    length: 2
+    enum: null
+    range: { min: 0, max: 16383 }
+  - identifier: position_i_gain
+    description: "I Gain for Position Control"
+    address: 82
+    length: 2
+    enum: null
+    range: { min: 0, max: 16383 }
+  - identifier: position_d_gain
+    description: "D Gain for Position Control"
+    address: 80
+    length: 2
+    enum: null
+    range: { min: 0, max: 16383 }
+  - identifier: velocity_p_gain
+    description: "P Gain for Velocity Control"
+    address: 78
+    length: 2
+    enum: null
+    range: { min: 0, max: 16383 }
+  - identifier: velocity_i_gain
+    description: "I Gain for Velocity Control"
+    address: 76
+    length: 2
+    enum: null
+    range: { min: 0, max: 16383 }
+  - identifier: feedforward_1st_gain
+    description: "1st Feedforward for Position Control"
+    address: 90
+    length: 2
+    enum: null
+    range: { min: 0, max: 16383 }
+  - identifier: feedforward_2nd_gain
+    description: "1st Feedforward for Position Control"
+    address: 88
+    length: 2
+    enum: null
+    range: { min: 0, max: 16383 }

@@ -7,10 +7,6 @@ find_package(catkin REQUIRED COMPONENTS
   roslint
   combined_robot_hw
   controller_manager
-  hardware_interface
-  controller_manager_msgs
-  std_msgs
-  std_srvs
 )
 
 catkin_package(
@@ -22,12 +18,8 @@ catkin_package(
   roslint
   combined_robot_hw
   controller_manager
-  hardware_interface
-  controller_manager_msgs
-  std_msgs
-  std_srvs
-  tuw_dynamixel_ros_control
-  tuw_trinamic_ros_control
+  tuw_hardware_interface_trinamic
+  tuw_hardware_interface_dynamixel
 )
 
 include_directories(
