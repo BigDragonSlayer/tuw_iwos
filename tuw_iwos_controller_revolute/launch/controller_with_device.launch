@@ -1,6 +1,0 @@
-<launch>
-
-  <include file="$(find tuw_iwos_controller_revolute)/launch/controller.launch"/>
-  <include file="$(find tuw_trinamic_controller)/launch/iwos_controller.launch"/>
-
-</launch>

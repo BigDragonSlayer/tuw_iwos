@@ -1,6 +1,0 @@
-<launch>
-
-  <include file="$(find tuw_iwos_controller_steering)/launch/controller.launch"/>
-  <include file="$(find tuw_dynamixel_controller)/launch/iwos_controller.launch"/>
-
-</launch>
