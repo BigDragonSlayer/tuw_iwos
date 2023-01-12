@@ -6,7 +6,7 @@
 #include <controller_manager/controller_manager.h>
 #include <combined_robot_hw/combined_robot_hw.h>
 
-namespace tuw_iwos_ros_control
+namespace tuw_iwos_hardware
 {
 class ControlLoop
 {

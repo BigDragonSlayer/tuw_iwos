@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(tuw_iwos_ros_control)
+project(tuw_iwos_hardware)
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
@@ -30,21 +30,21 @@ include_directories(
 roslint_cpp()
 
 add_library(
-  tuw_iwos_ros_control
+  ${PROJECT_NAME}
   src/${PROJECT_NAME}/control_loop.cpp
 )
 
-add_executable(tuw_iwos_ros_control_node
-  src/tuw_iwos_ros_control_node.cpp
+add_executable(${PROJECT_NAME}_node
+  src/tuw_iwos_hardware_node.cpp
 )
 
 add_dependencies(
-  tuw_iwos_ros_control_node
-  tuw_iwos_ros_control
+  ${PROJECT_NAME}_node
+  ${PROJECT_NAME}
 )
 
 target_link_libraries(
-  tuw_iwos_ros_control_node
-  tuw_iwos_ros_control
+  ${PROJECT_NAME}_node
+  ${PROJECT_NAME}
   ${catkin_LIBRARIES}
 )

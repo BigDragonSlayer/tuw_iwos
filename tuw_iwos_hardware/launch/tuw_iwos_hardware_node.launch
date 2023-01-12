@@ -10,29 +10,29 @@
   <param name="robot_description" command="$(find xacro)/xacro $(arg robot_description_file)"/>
 
   <!-- load hardware interface param -->
-  <rosparam file="$(find tuw_iwos_ros_control)/config/interface/hardware_interface.yaml" command="load"/>
+  <rosparam file="$(find tuw_iwos_hardware)/config/interface/hardware_interface.yaml" command="load"/>
   <!-- load controller description param -->
-  <rosparam file="$(find tuw_iwos_ros_control)/config/controller/controller.yaml" command="load"/>
+  <rosparam file="$(find tuw_iwos_hardware)/config/controller/controller.yaml" command="load"/>
 
   load revolute (trinamic) setup description param
   <rosparam param="trinamic_hardware_interface_setup" subst_value="True">
-    "$(find tuw_iwos_ros_control)/config/setup/revolute_setup.yaml"
+    "$(find tuw_iwos_hardware)/config/setup/revolute_setup.yaml"
   </rosparam>
 
   load steering (dynamixel) setup description param
   <rosparam param="dynamixel_hardware_interface_setup" subst_value="True">
-    "$(find tuw_iwos_ros_control)/config/setup/steering_setup.yaml"
+    "$(find tuw_iwos_hardware)/config/setup/steering_setup.yaml"
   </rosparam>
 
-  <node name="tuw_iwos_ros_control_node"
-         pkg="tuw_iwos_ros_control"
-         type="tuw_iwos_ros_control_node"
+  <node name="tuw_iwos_hardware_node"
+         pkg="tuw_iwos_hardware"
+         type="tuw_iwos_hardware_node"
          output="screen"/>
 
   <!-- set logging level to debug if flag is set -->
   <group if="$(arg debug)" >
-    <node pkg="rosservice" type="rosservice" name="set_logger_level_ros" args="call /tuw_iwos_ros_control_node/set_logger_level '{logger: 'ros', level: 'DEBUG'}'"/>
-    <node pkg="rosservice" type="rosservice" name="set_logger_level_rosout" args="call /tuw_iwos_ros_control_node/set_logger_level '{logger: 'rosout', level: 'DEBUG'}'"/>
+    <node pkg="rosservice" type="rosservice" name="set_logger_level_ros" args="call /tuw_iwos_hardware_node/set_logger_level '{logger: 'ros', level: 'DEBUG'}'"/>
+    <node pkg="rosservice" type="rosservice" name="set_logger_level_rosout" args="call /tuw_iwos_hardware_node/set_logger_level '{logger: 'rosout', level: 'DEBUG'}'"/>
   </group>
 
  <node name="controller_starter"

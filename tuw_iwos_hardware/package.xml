@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>tuw_iwos_ros_control</name>
+  <name>tuw_iwos_hardware</name>
   <version>0.0.0</version>
-  <description>Package combining hardware interfaces for IWOS</description>
+  <description>Package to operate IWOS hardware</description>
 
   <maintainer email="eugen.kaltenegger@gmail.com">Eugen Kaltenegger</maintainer>
 

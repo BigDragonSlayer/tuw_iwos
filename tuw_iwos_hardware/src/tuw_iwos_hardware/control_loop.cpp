@@ -1,10 +1,10 @@
 // Copyright 2022 Eugen Kaltenegger
 
-#include "../../include/tuw_iwos_ros_control/control_loop.h"
+#include <tuw_iwos_hardware/control_loop.h>
 
 #include <utility>
 
-using tuw_iwos_ros_control::ControlLoop;
+using tuw_iwos_hardware::ControlLoop;
 
 ControlLoop::ControlLoop()
 {
@@ -32,7 +32,7 @@ ControlLoop::ControlLoop()
   this->controller_manager_ = std::make_shared<controller_manager::ControllerManager>(this->combined_robot_hardware_.get(), this->controller_node_handle_);
 }
 
-tuw_iwos_ros_control::ControlLoop::~ControlLoop()
+ControlLoop::~ControlLoop()
 {
   this->spinner_->stop();
 }

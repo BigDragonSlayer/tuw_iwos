@@ -1,0 +1,12 @@
+setup: dynamixel
+joints:
+  - name: "left_steering"
+    id: 0
+    connection: { port: "/dev/ttyUSB0", baudrate: 57600, protocol: 2.0 }
+    hardware:   { package: "tuw_iwos_hardware", path: "resources/hardware/steering/dynamixel_MX-106.yaml" }
+    config:     { package: "tuw_iwos_hardware", path: "resources/config/steering/dynamixel_MX-106.yaml" }
+  - name: "right_steering"
+    id: 1
+    connection: { port: "/dev/ttyUSB0", baudrate: 57600, protocol: 2.0 }
+    hardware:   { package: "tuw_iwos_hardware", path: "resources/hardware/steering/dynamixel_MX-106.yaml" }
+    config:     { package: "tuw_iwos_hardware", path: "resources/config/steering/dynamixel_MX-106.yaml" }
