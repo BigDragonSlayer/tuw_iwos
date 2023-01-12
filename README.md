@@ -23,7 +23,7 @@ Package to combine the RobotHW interface of `ros_control` for the revolute joint
 
 For more details check [`tuw_iwos_ros_control/README.md`](./tuw_iwos_ros_control/README.md).
 
-## `tuw_iwos_ros_control_distributor`
+## `tuw_iwos_hardware_broker`
 Package to distribute the joint specific command element of a [tuw_nav_msgs/JointsIWS](https://github.com/tuw-robotics/tuw_msgs/blob/master/tuw_nav_msgs/msg/JointsIWS.msg) message to the according topic for the `ros_controller` of the `ros_control` operating joint.
 
-For more details check [`tuw_iwos_ros_control_distributor/README.md`](./tuw_iwos_ros_control_distributor/README.md).
+For more details check [`tuw_iwos_hardware_broker/README.md`](./tuw_iwos_hardware_broker/README.md).

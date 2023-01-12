@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>tuw_iwos_ros_control_distributor</name>
+  <name>tuw_iwos_hardware_broker</name>
   <version>0.0.0</version>
   <description>Package distributing commands to the hardware interfaces for IWOS</description>
 

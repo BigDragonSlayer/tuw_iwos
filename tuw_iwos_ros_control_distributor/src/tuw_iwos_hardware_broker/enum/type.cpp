@@ -4,10 +4,10 @@
 #include <string>
 #include <stdexcept>
 // LOCAL
-#include <tuw_iwos_ros_control_distributor/enum/type.h>
+#include <tuw_iwos_hardware_broker/enum/type.h>
 
-using tuw_iwos_ros_control_distributor::Type;
-using tuw_iwos_ros_control_distributor::TypeConverter;
+using tuw_iwos_hardware_broker::Type;
+using tuw_iwos_hardware_broker::TypeConverter;
 
 Type TypeConverter::fromString(const std::string& string)
 {

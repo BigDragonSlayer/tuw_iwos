@@ -1,10 +1,10 @@
 // Copyright 2022 Eugen Kaltenegger
 
-#include <tuw_iwos_ros_control_distributor/tool/logging_tool.h>
-#include <tuw_iwos_ros_control_distributor/message_distributor.h>
+#include <tuw_iwos_hardware_broker/tool/logging_tool.h>
+#include <tuw_iwos_hardware_broker/message_distributor.h>
 
-using tuw_iwos_ros_control_distributor::DistributorConfig;
-using tuw_iwos_ros_control_distributor::MessageDistributor;
+using tuw_iwos_hardware_broker::DistributorConfig;
+using tuw_iwos_hardware_broker::MessageDistributor;
 
 MessageDistributor::MessageDistributor(ros::NodeHandle node_handle):
         message_subscriber_(node_handle, this,
@@ -16,7 +16,7 @@ MessageDistributor::MessageDistributor(ros::NodeHandle node_handle):
   this->reconfigure_server_.setCallback(this->callback_type_);
 }
 
-void tuw_iwos_ros_control_distributor::MessageDistributor::messageCallback()
+void tuw_iwos_hardware_broker::MessageDistributor::messageCallback()
 {
   this->type_revolute_ = TypeConverter::fromString(this->type_string_revolute_);
   this->type_steering_ = TypeConverter::fromString(this->type_string_steering_);

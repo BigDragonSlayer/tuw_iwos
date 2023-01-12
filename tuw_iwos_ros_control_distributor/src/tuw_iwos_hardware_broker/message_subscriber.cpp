@@ -4,11 +4,11 @@
 #include <string>
 #include <vector>
 // LOCAL
-#include <tuw_iwos_ros_control_distributor/tool/logging_tool.h>
-#include <tuw_iwos_ros_control_distributor/message_distributor.h>
-#include <tuw_iwos_ros_control_distributor/message_subscriber.h>
+#include <tuw_iwos_hardware_broker/tool/logging_tool.h>
+#include <tuw_iwos_hardware_broker/message_distributor.h>
+#include <tuw_iwos_hardware_broker/message_subscriber.h>
 
-using tuw_iwos_ros_control_distributor::MessageSubscriber;
+using tuw_iwos_hardware_broker::MessageSubscriber;
 
 MessageSubscriber::MessageSubscriber(ros::NodeHandle node_handle,
                                      MessageDistributor* message_splitter,

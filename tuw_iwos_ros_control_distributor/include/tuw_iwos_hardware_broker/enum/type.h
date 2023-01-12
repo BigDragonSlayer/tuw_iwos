@@ -5,7 +5,7 @@
 
 #include <string>
 
-namespace tuw_iwos_ros_control_distributor
+namespace tuw_iwos_hardware_broker
 {
 enum Type
 {

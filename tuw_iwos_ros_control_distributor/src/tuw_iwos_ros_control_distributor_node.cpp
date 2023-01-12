@@ -3,10 +3,10 @@
 // ROS
 #include <ros/ros.h>
 // LOCAL
-#include <tuw_iwos_ros_control_distributor/tool/logging_tool.h>
-#include <tuw_iwos_ros_control_distributor/message_distributor.h>
+#include <tuw_iwos_hardware_broker/tool/logging_tool.h>
+#include <tuw_iwos_hardware_broker/message_distributor.h>
 
-using tuw_iwos_ros_control_distributor::MessageDistributor;
+using tuw_iwos_hardware_broker::MessageDistributor;
 
 int main(int argc, char** argv)
 {

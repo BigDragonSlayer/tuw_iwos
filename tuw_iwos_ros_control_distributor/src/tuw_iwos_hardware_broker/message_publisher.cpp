@@ -7,10 +7,10 @@
 // ROS
 #include <std_msgs/Float64.h>
 // LOCAL
-#include <tuw_iwos_ros_control_distributor/tool/logging_tool.h>
-#include <tuw_iwos_ros_control_distributor/message_publisher.h>
+#include <tuw_iwos_hardware_broker/tool/logging_tool.h>
+#include <tuw_iwos_hardware_broker/message_publisher.h>
 
-using tuw_iwos_ros_control_distributor::MessagePublisher;
+using tuw_iwos_hardware_broker::MessagePublisher;
 
 MessagePublisher::MessagePublisher(ros::NodeHandle node_handle)
 {

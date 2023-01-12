@@ -4,9 +4,9 @@
 #include <string>
 #include <stdexcept>
 // LOCAL
-#include <tuw_iwos_ros_control_distributor/enum/side.h>
+#include <tuw_iwos_hardware_broker/enum/side.h>
 
-using tuw_iwos_ros_control_distributor::SideConverter;
+using tuw_iwos_hardware_broker::SideConverter;
 
 std::string SideConverter::toString(Side side)
 {

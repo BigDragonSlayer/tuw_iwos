@@ -10,9 +10,9 @@
 #include <ros/ros.h>
 #include <tuw_nav_msgs/JointsIWS.h>
 // LOCAL
-#include <tuw_iwos_ros_control_distributor/enum/side.h>
+#include <tuw_iwos_hardware_broker/enum/side.h>
 
-namespace tuw_iwos_ros_control_distributor
+namespace tuw_iwos_hardware_broker
 {
 class MessageDistributor;
 class MessageSubscriber

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(tuw_iwos_ros_control_distributor)
+project(tuw_iwos_hardware_broker)
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp

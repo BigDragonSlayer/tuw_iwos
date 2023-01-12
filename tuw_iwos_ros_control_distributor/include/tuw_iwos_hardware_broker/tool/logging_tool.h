@@ -8,11 +8,11 @@
 #include <string>
 
 #define LOG c_str()
-#define NODE_NAME_LOWER tuw_iwos_ros_control_distributor::LoggingTool::getNodeNameLower()
-#define NODE_NAME_UPPER tuw_iwos_ros_control_distributor::LoggingTool::getNodeNameUpper()
+#define NODE_NAME_LOWER tuw_iwos_hardware_broker::LoggingTool::getNodeNameLower()
+#define NODE_NAME_UPPER tuw_iwos_hardware_broker::LoggingTool::getNodeNameUpper()
 #define LOGGING_PREFIX NODE_NAME_UPPER.LOG
 
-namespace tuw_iwos_ros_control_distributor
+namespace tuw_iwos_hardware_broker
 {
 class LoggingTool
 {
