@@ -15,7 +15,7 @@
     </visual>
   </link>
   
-  <joint name="left_steering" type="revolute">
+  <joint name="steering_left" type="revolute">
     <parent link="base_link"/>
     <child link="left_fork_link"/>
     <axis xyz="0 0 1"/>
@@ -32,7 +32,7 @@
     </visual>
   </link>
 
-  <joint name="left_revolute" type="continuous">
+  <joint name="revolute_left" type="continuous">
     <parent link="left_fork_link"/>
     <child link="left_wheel_link"/>
     <axis xyz="0 1 0"/>
@@ -50,7 +50,7 @@
     </visual>
   </link>
   
-  <joint name="right_steering" type="revolute">
+  <joint name="steering_right" type="revolute">
     <parent link="base_link"/>
     <child link="right_fork_link"/>
     <axis xyz="0 0 1"/>
@@ -67,7 +67,7 @@
     </visual>
   </link>
 
-  <joint name="right_revolute" type="continuous">
+  <joint name="revolute_right" type="continuous">
     <parent link="right_fork_link"/>
     <child link="right_wheel_link"/>
     <axis xyz="0 1 0"/>

@@ -40,9 +40,9 @@
        type="spawner"
        output="screen"
        args="/controller/joint_state_controller
-             /controller/left_revolute_controller
-             /controller/right_revolute_controller
-             /controller/left_steering_controller
-             /controller/right_steering_controller"/>
+             /controller/revolute_left_controller
+             /controller/revolute_right_controller
+             /controller/steering_left_controller
+             /controller/steering_right_controller"/>
 
 </launch>

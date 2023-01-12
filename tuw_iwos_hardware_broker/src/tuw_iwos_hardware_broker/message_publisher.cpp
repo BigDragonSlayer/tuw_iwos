@@ -17,13 +17,13 @@ MessagePublisher::MessagePublisher(ros::NodeHandle node_handle)
   this->revolute_publisher_.resize(2);
   this->steering_publisher_.resize(2);
 
-  this->revolute_publisher_[0] = node_handle.advertise<std_msgs::Float64>("left_revolute_command", 100);
-  this->revolute_publisher_[1] = node_handle.advertise<std_msgs::Float64>("right_revolute_command", 100);
+  this->revolute_publisher_[0] = node_handle.advertise<std_msgs::Float64>("/hardware_command/revolute_command_left", 100);
+  this->revolute_publisher_[1] = node_handle.advertise<std_msgs::Float64>("/hardware_command/revolute_command_right", 100);
   this->assigned_revolute_publisher_[Side::LEFT ] = &this->revolute_publisher_[0];
   this->assigned_revolute_publisher_[Side::RIGHT] = &this->revolute_publisher_[1];
 
-  this->steering_publisher_[0] = node_handle.advertise<std_msgs::Float64>("left_steering_command", 100);
-  this->steering_publisher_[1] = node_handle.advertise<std_msgs::Float64>("right_steering_command", 100);
+  this->steering_publisher_[0] = node_handle.advertise<std_msgs::Float64>("/hardware_command/steering_command_left", 100);
+  this->steering_publisher_[1] = node_handle.advertise<std_msgs::Float64>("/hardware_command/steering_command_right", 100);
   this->assigned_steering_publisher_[Side::LEFT ] = &this->steering_publisher_[0];
   this->assigned_steering_publisher_[Side::RIGHT] = &this->steering_publisher_[1];
 }

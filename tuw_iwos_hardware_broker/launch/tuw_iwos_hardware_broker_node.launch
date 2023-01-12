@@ -1,0 +1,13 @@
+<launch>
+
+  <remap from="/hardware_command/revolute_command_left"  to="/controller/revolute_left_controller/command" />
+  <remap from="/hardware_command/revolute_command_right" to="/controller/revolute_right_controller/command"/>
+  <remap from="/hardware_command/steering_command_left"  to="/controller/steering_left_controller/command" />
+  <remap from="/hardware_command/steering_command_right" to="/controller/steering_right_controller/command"/>
+
+  <node name="tuw_iwos_hardware_broker_node"
+         pkg="tuw_iwos_hardware_broker"
+         type="tuw_iwos_hardware_broker_node"
+         output="screen"/>
+
+</launch>
