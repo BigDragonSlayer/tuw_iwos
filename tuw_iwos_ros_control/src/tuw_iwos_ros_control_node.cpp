@@ -17,7 +17,7 @@ int main(int argc, char** argv)
 
   ros::NodeHandle node_handle;
   int control_loop_hz;
-  node_handle.param("tuw_iwos_control_loop_hz", control_loop_hz, 300);
+  node_handle.param("tuw_iwos_control_loop_hz", control_loop_hz, 60);
   ros::Rate rate(control_loop_hz);
 
   ros::AsyncSpinner spinner(1);

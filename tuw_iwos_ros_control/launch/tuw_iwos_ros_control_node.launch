@@ -29,6 +29,12 @@
          type="tuw_iwos_ros_control_node"
          output="screen"/>
 
+  <!-- set logging level to debug if flag is set -->
+  <group if="$(arg debug)" >
+    <node pkg="rosservice" type="rosservice" name="set_logger_level_ros" args="call /tuw_iwos_ros_control_node/set_logger_level '{logger: 'ros', level: 'DEBUG'}'"/>
+    <node pkg="rosservice" type="rosservice" name="set_logger_level_rosout" args="call /tuw_iwos_ros_control_node/set_logger_level '{logger: 'rosout', level: 'DEBUG'}'"/>
+  </group>
+
  <node name="controller_starter"
        pkg="controller_manager"
        type="spawner"
@@ -38,4 +44,5 @@
              /controller/right_revolute_controller
              /controller/left_steering_controller
              /controller/right_steering_controller"/>
+
 </launch>
