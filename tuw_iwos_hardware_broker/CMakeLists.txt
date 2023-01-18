@@ -18,8 +18,6 @@ generate_dynamic_reconfigure_options(
 catkin_package(
   INCLUDE_DIRS
     include
-  LIBRARIES
-    tuw_nav_msgs
   CATKIN_DEPENDS
     roscpp
     rospy
