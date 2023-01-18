@@ -15,15 +15,8 @@
 
   <build_depend>roslaunch</build_depend>
 
-
   <!-- has to be installed manually from github: https://github.com/tuw-robotics/tuw_teleop -->
   <exec_depend>tuw_teleop</exec_depend>
-  <!-- has to be installed manually from github: https://github.com/ek-robotics/tuw_iwos -->
-  <exec_depend>tuw_iwos_revolute_and_steering_plugin</exec_depend>
-  <!-- has to be installed manually from github: https://github.com/ek-robotics/tuw_dynamixel -->
-  <exec_depend>tuw_dynamixel_iwos_steering_controller</exec_depend>
-  <!-- has to be installed manually from github: https://github.com/ek-robotics/tuw_trinamic -->
-  <exec_depend>tuw_trinamic_iwos_revolute_controller</exec_depend>
 
   <export>
     <!-- nothing to export -->
