@@ -17,14 +17,16 @@ generate_dynamic_reconfigure_options(
 
 catkin_package(
   INCLUDE_DIRS
-  include
+    include
+  LIBRARIES
+    tuw_nav_msgs
   CATKIN_DEPENDS
-  roscpp
-  rospy
-  roslint
-  std_msgs
-  tuw_nav_msgs
-  dynamic_reconfigure
+    roscpp
+    rospy
+    roslint
+    std_msgs
+    tuw_nav_msgs
+    dynamic_reconfigure
 )
 
 include_directories(
