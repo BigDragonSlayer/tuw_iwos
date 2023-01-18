@@ -9,7 +9,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_srvs
   tuw_nav_msgs
   dynamic_reconfigure
-)
+  )
 
 generate_dynamic_reconfigure_options(
   config/distributor_node.cfg
@@ -17,17 +17,14 @@ generate_dynamic_reconfigure_options(
 
 catkin_package(
   INCLUDE_DIRS
-    include
+  include
   CATKIN_DEPENDS
-    roscpp
-    rospy
-    roslint
-    dynamic_reconfigure
+  tuw_nav_msgs
 )
 
 include_directories(
- ./include
- ${catkin_INCLUDE_DIRS}
+  ./include
+  ${catkin_INCLUDE_DIRS}
 )
 
 roslint_cpp()
@@ -42,6 +39,11 @@ add_library(
   src/${PROJECT_NAME}/message_subscriber.cpp
 )
 
+add_dependencies(
+  ${PROJECT_NAME}
+  ${catkin_EXPORTED_TARGETS}
+)
+
 add_executable(
   ${PROJECT_NAME}_node
   src/tuw_iwos_hardware_broker_node.cpp
@@ -51,6 +53,7 @@ add_dependencies(
   ${PROJECT_NAME}_node
   ${PROJECT_NAME}
   ${PROJECT_NAME}_gencfg
+  ${catkin_EXPORTED_TARGETS}
 )
 
 target_link_libraries(
