@@ -27,7 +27,6 @@
   <build_export_depend>tuw_nav_msgs</build_export_depend>
 
   <depend>std_msgs</depend>
-  <depend>tuw_nav_msgs</depend>
 
   <export>
     <!-- nothing to export -->
