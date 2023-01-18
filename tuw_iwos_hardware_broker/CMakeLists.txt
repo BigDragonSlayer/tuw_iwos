@@ -22,8 +22,6 @@ catkin_package(
     roscpp
     rospy
     roslint
-    std_msgs
-    tuw_nav_msgs
     dynamic_reconfigure
 )
 
