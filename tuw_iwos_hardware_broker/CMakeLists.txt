@@ -1,25 +1,25 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(tuw_iwos_hardware_broker)
 
-find_package(catkin REQUIRED COMPONENTS
-  roscpp
-  rospy
-  roslint
-  std_msgs
-  std_srvs
-  tuw_nav_msgs
-  dynamic_reconfigure
-  )
+find_package(
+    catkin
+  REQUIRED COMPONENTS
+    roscpp
+    rospy
+    roslint
+    tuw_nav_msgs
+    dynamic_reconfigure
+)
 
 generate_dynamic_reconfigure_options(
-  config/distributor_node.cfg
+  config/broker_node.cfg
 )
 
 catkin_package(
   INCLUDE_DIRS
-  include
+    include
   CATKIN_DEPENDS
-  tuw_nav_msgs
+    tuw_nav_msgs
 )
 
 include_directories(
@@ -46,7 +46,7 @@ add_dependencies(
 
 add_executable(
   ${PROJECT_NAME}_node
-  src/tuw_iwos_hardware_broker_node.cpp
+  src/${PROJECT_NAME}_node.cpp
 )
 
 add_dependencies(

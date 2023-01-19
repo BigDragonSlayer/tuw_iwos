@@ -2,7 +2,7 @@
 <package format="2">
   <name>tuw_iwos_hardware_broker</name>
   <version>0.0.0</version>
-  <description>Package distributing commands to the hardware interfaces for IWOS</description>
+  <description>Package distributing commands to the hardware interfaces for IWOS robot</description>
 
   <maintainer email="eugen.kaltenegger@gmail.com">Eugen Kaltenegger</maintainer>
 
@@ -10,9 +10,7 @@
 
   <author email="eugen.kaltenegger@gmail.com">Eugen Kaltenegger</author>
 
-
   <buildtool_depend>catkin</buildtool_depend>
-
 
   <build_depend>roscpp</build_depend>
   <build_depend>rospy</build_depend>
@@ -25,8 +23,6 @@
   <build_export_depend>roslint</build_export_depend>
   <build_export_depend>dynamic_reconfigure</build_export_depend>
   <build_export_depend>tuw_nav_msgs</build_export_depend>
-
-  <depend>std_msgs</depend>
 
   <export>
     <!-- nothing to export -->
