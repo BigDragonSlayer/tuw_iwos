@@ -5,13 +5,13 @@
 #include <vector>
 // LOCAL
 #include <tuw_iwos_hardware_broker/tool/logging_tool.h>
-#include <tuw_iwos_hardware_broker/message_distributor.h>
+#include <tuw_iwos_hardware_broker/message_broker.h>
 #include <tuw_iwos_hardware_broker/message_subscriber.h>
 
 using tuw_iwos_hardware_broker::MessageSubscriber;
 
 MessageSubscriber::MessageSubscriber(ros::NodeHandle node_handle,
-                                     MessageDistributor* message_splitter,
+                                     MessageBroker* message_splitter,
                                      std::string* type_revolute,
                                      std::string* type_steering,
                                      std::vector<double>* input_target_revolute,

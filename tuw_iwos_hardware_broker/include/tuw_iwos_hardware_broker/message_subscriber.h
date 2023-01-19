@@ -14,12 +14,12 @@
 
 namespace tuw_iwos_hardware_broker
 {
-class MessageDistributor;
+class MessageBroker;
 class MessageSubscriber
 {
 public:
   MessageSubscriber(ros::NodeHandle node_handle,
-                    MessageDistributor* message_splitter,
+                    MessageBroker* message_splitter,
                     std::string* type_revolute,
                     std::string* type_steering,
                     std::vector<double>* input_target_revolute,
@@ -27,7 +27,7 @@ public:
 private:
   void callback(const tuw_nav_msgs::JointsIWSConstPtr& message);
 
-  MessageDistributor* message_splitter_;
+  MessageBroker* message_splitter_;
   ros::Subscriber subscriber_;
   std::string* type_revolute_;
   std::string* type_steering_;

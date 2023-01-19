@@ -34,7 +34,7 @@ add_library(
   src/${PROJECT_NAME}/enum/side.cpp
   src/${PROJECT_NAME}/enum/type.cpp
   src/${PROJECT_NAME}/tool/logging_tool.cpp
-  src/${PROJECT_NAME}/message_distributor.cpp
+  src/${PROJECT_NAME}/message_broker.cpp
   src/${PROJECT_NAME}/message_publisher.cpp
   src/${PROJECT_NAME}/message_subscriber.cpp
 )

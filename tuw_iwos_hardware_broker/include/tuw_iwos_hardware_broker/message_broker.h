@@ -20,10 +20,10 @@
 
 namespace tuw_iwos_hardware_broker
 {
-class MessageDistributor
+class MessageBroker
 {
 public:
-  explicit MessageDistributor(ros::NodeHandle node_handle);
+  explicit MessageBroker(ros::NodeHandle node_handle);
   void messageCallback();
   void configCallback(tuw_iwos_hardware_broker::DistributorConfig& config, uint32_t level);
 private:
