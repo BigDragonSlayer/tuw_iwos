@@ -1,0 +1,8 @@
+<launch>
+
+    <node name="tuw_iwos_hardware_properties_node"
+          pkg="tuw_iwos_hardware_properties"
+          type="tuw_iwos_hardware_properties_node"
+          output="screen"/>
+
+</launch>
