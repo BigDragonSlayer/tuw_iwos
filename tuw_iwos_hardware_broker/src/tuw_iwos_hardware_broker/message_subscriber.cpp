@@ -23,7 +23,7 @@ MessageSubscriber::MessageSubscriber(ros::NodeHandle node_handle,
   this->input_target_revolute_ = input_target_revolute;
   this->input_target_steering_ = input_target_steering;
 
-  this->subscriber_ = node_handle.subscribe("iwos_command", 100, &MessageSubscriber::callback, this);
+  this->subscriber_ = node_handle.subscribe("iwos_command_hardware", 100, &MessageSubscriber::callback, this);
 }
 
 void MessageSubscriber::callback(const tuw_nav_msgs::JointsIWSConstPtr &message)
