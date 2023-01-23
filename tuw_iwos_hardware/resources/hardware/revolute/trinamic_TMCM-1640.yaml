@@ -1,9 +1,9 @@
 name: "TMCM-1640"
 
 resolution:
-  position: 1.0   #
-  velocity: 1.0   # rpm
-  effort:   0.001 # A
+  position: 1.000000 # steps (hardware resolution)
+  velocity: 0.104719 # rad per second
+  effort:   0.001000 # ampere
 
 target_state_parameters:
   - identifier: target_position
