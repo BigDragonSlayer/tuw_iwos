@@ -1,7 +1,0 @@
-<launch>
-
-  <include file="$(find tuw_iwos_launches)/launch/iwos_robot.launch"/>
-
-  <node name="tuw_iwos_revolute_and_steering_plugin" pkg="tuw_iwos_revolute_and_steering_plugin" type="tuw_iwos_revolute_and_steering_plugin"/>
-
-</launch>
