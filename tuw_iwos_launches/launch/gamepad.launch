@@ -1,16 +1,16 @@
 <launch>
 
-  <!-- joy node -->
-  <node pkg="joy" type="joy_node" name="joy_controller" >
-    <remap from="jopy" to="$(arg origin_topic)"/>
-    <param name="autorepeat_rate" value="5" />
-  </node>
-
   <!-- args for gamepad node -->
   <arg name="converter" default="IWOSOrientation" />
   <arg name="device" default="LogitechF710" />
   <arg name="origin_topic" default="joy" />
-  <arg name="target_topic" default="cmd" />
+  <arg name="target_topic" default="iwos_command_twist_with_orientation" />
+
+  <!-- joy node -->
+  <node pkg="joy" type="joy_node" name="joy_controller" >
+    <remap from="joy" to="$(arg origin_topic)"/>
+    <param name="autorepeat_rate" value="5" />
+  </node>
 
   <!-- gamepad node -->
   <node pkg="tuw_gamepad_python" type="gamepad_node" name="gamepad_node"  output="screen" >
