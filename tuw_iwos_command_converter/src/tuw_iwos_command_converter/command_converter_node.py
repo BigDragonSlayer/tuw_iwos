@@ -10,6 +10,7 @@ from message_filters import ApproximateTimeSynchronizer, TimeSynchronizer
 from rospy import Publisher
 from tuw_geometry_msgs.msg import TwistWithOrientation
 from tuw_nav_msgs.msg import Joints, JointsIWS
+from sensor_msgs.msg import JointState
 from typing import List
 from typing import Optional
 from typing import Union
@@ -24,9 +25,9 @@ class CommandConverterNode:
         self.WHEEL_DISPLACEMENT: Optional[float] = None
         self.TARGET_REACHED_DISTANCE = 0.01
 
-        self.state_subscriber_topic: str = "/iwos_state_joints_tuw"
-        self.command_subscriber_topic: str = "/iwos_cmd_twist"
-        self.command_publisher_topic: str = "/iwos_cmd_joints"
+        self.state_subscriber_topic: str = "/joint_state"
+        self.command_subscriber_topic: str = "/iwos_command_twist_with_orientation"
+        self.command_publisher_topic: str = "/iwos_command_hardware"
         self.command_subscriber: Optional[Subscriber] = None
         self.state_subscriber: Optional[Subscriber] = None
         self.subscribers: List[Optional[Subscriber]] = [self.command_subscriber, self.state_subscriber]
@@ -38,18 +39,22 @@ class CommandConverterNode:
 
         tf_listener = tf.TransformListener()
 
-        translation: [float] = None  # [x,y,z]
+        translation = {"left": None, "right": None}  # {[x,y,z]}
 
-        while translation is None:
-            try:
-                translation, _ = tf_listener.lookupTransform('base_link', 'left_wheel_link',  rospy.Time(0))
-            except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
-                continue
+        for side, value in translation.items():
+            while value is None:
+                target_link = "wheel_link_" + side
+                try:
+                    value, _ = tf_listener.lookupTransform('base_link', target_link,  rospy.Time(0))
+                    translation[side] = value
+                except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
+                    continue
 
-        self.WHEEL_DISPLACEMENT = 2 * translation[1]
+        self.WHEEL_DISPLACEMENT = translation["left"][1] - translation["right"][1]
+        rospy.loginfo("wheel displacement: %s", self.WHEEL_DISPLACEMENT)
 
         self.command_subscriber = Subscriber(self.command_subscriber_topic, TwistWithOrientation)
-        self.state_subscriber = Subscriber(self.state_subscriber_topic, Joints)
+        self.state_subscriber = Subscriber(self.state_subscriber_topic, JointState)
         self.subscribers: List[Optional[Subscriber]] = [self.command_subscriber, self.state_subscriber]
 
         # states are published with a frequency of 20hz and a maximum time between messages below 0.1 seconds (~0.09s)
@@ -68,8 +73,8 @@ class CommandConverterNode:
         target_angle_left = -orientation
         target_angle_right = -orientation
 
-        left_steering_index = state_message.name.index("left_steering")
-        right_steering_index = state_message.name.index("right_steering")
+        left_steering_index = state_message.name.index("steering_left")
+        right_steering_index = state_message.name.index("steering_right")
 
         current_angle_left = state_message.position[left_steering_index]
         current_angle_right = state_message.position[right_steering_index]
