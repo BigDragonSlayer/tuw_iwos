@@ -18,8 +18,8 @@ min_position_limit: 1764      #   2048 - round (25 * (4096 / 360))
 max_position_limit: 2332      # 2048 + round (25 * (4096 / 360))
 # Position Controller Parameters
 position_p_gain: 100
-position_i_gain: 1
-position_d_gain: 1
+position_i_gain: 100
+position_d_gain: 100
 # Velocity Controller Parameters
 velocity_p_gain: 0
 velocity_i_gain: 0
