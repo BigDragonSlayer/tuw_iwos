@@ -24,7 +24,7 @@ class CommandConverterNode:
         self.ORIENTATION_THRESHOLD = 0.01
         self.ORIENTATION_CHANGING_SPEED = 0.5  # (rad/s)
         self.TARGET_REACHED_DISTANCE = 0.01
-        self.wheel_displacement: Optional[float] = None
+        self.wheel_displacement: Optional[float] = 0.4
 
         self.state_subscriber_topic: str = "/joint_state"
         self.command_subscriber_topic: str = "/iwos_command_twist_with_orientation"
@@ -119,13 +119,16 @@ class CommandConverterNode:
         translation = {"left": None, "right": None}  # {[x,y,z]}
 
         for side, value in translation.items():
-            while value is None:
-                target_link = "wheel_link_" + side
-                try:
-                    value, _ = tf_listener.lookupTransform('base_link', target_link,  rospy.Time(0))
+            target_link = "wheel_link_" + side
+            try:
+                value, _ = tf_listener.lookupTransform('base_link', target_link,  rospy.Time(0))
+                if value is not None:
                     translation[side] = value
-                except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
-                    continue
+                if value is None:
+                    rospy.log_debug("failed to fetch current wheel displacement")
+            except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
+                rospy.log_debug("failed to fetch current wheel displacement")
+                continue
 
         return translation["left"][1] - translation["right"][1]
 
