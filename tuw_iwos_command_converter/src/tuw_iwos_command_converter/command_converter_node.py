@@ -112,8 +112,7 @@ class CommandConverterNode:
 
         self.publisher.publish(output_message)
 
-    @staticmethod
-    def lookup_wheel_displacement() -> float:
+    def lookup_wheel_displacement(self) -> float:
         tf_listener = tf.TransformListener()
 
         translation = {"left": None, "right": None}  # {[x,y,z]}
@@ -127,10 +126,13 @@ class CommandConverterNode:
                 if value is None:
                     rospy.log_debug("failed to fetch current wheel displacement")
             except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
-                rospy.log_debug("failed to fetch current wheel displacement")
+                rospy.logdebug("failed to fetch current wheel displacement")
                 continue
 
-        return translation["left"][1] - translation["right"][1]
+        if translation["left"] is not None and translation["right"] is not None:
+            return translation["left"][1] - translation["right"][1]
+        else:
+            return self.wheel_displacement
 
     @staticmethod
     def signum(number: Union[int, float]) -> int:
