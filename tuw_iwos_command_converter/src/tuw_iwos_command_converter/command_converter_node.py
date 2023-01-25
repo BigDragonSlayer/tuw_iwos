@@ -11,6 +11,7 @@ from rospy import Publisher
 from tuw_geometry_msgs.msg import TwistWithOrientation
 from tuw_nav_msgs.msg import Joints, JointsIWS
 from sensor_msgs.msg import JointState
+from std_msgs.msg import Header
 from typing import List
 from typing import Optional
 from typing import Union
@@ -22,8 +23,8 @@ class CommandConverterNode:
         self.ANGULAR_VELOCITY_THRESHOLD = 0.01
         self.ORIENTATION_THRESHOLD = 0.01
         self.ORIENTATION_CHANGING_SPEED = 0.5  # (rad/s)
-        self.WHEEL_DISPLACEMENT: Optional[float] = None
         self.TARGET_REACHED_DISTANCE = 0.01
+        self.wheel_displacement: Optional[float] = None
 
         self.state_subscriber_topic: str = "/joint_state"
         self.command_subscriber_topic: str = "/iwos_command_twist_with_orientation"
@@ -36,22 +37,6 @@ class CommandConverterNode:
 
     def run(self):
         rospy.init_node("TUW_IWOS_COMMAND_CONVERTER")
-
-        tf_listener = tf.TransformListener()
-
-        translation = {"left": None, "right": None}  # {[x,y,z]}
-
-        for side, value in translation.items():
-            while value is None:
-                target_link = "wheel_link_" + side
-                try:
-                    value, _ = tf_listener.lookupTransform('base_link', target_link,  rospy.Time(0))
-                    translation[side] = value
-                except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
-                    continue
-
-        self.WHEEL_DISPLACEMENT = translation["left"][1] - translation["right"][1]
-        rospy.loginfo("wheel displacement: %s", self.WHEEL_DISPLACEMENT)
 
         self.command_subscriber = Subscriber(self.command_subscriber_topic, TwistWithOrientation)
         self.state_subscriber = Subscriber(self.state_subscriber_topic, JointState)
@@ -66,6 +51,7 @@ class CommandConverterNode:
         rospy.spin()
 
     def callback(self, command_message: TwistWithOrientation, state_message: Joints):
+        self.wheel_displacement = self.lookup_wheel_displacement()
         linear_velocity = command_message.twist.linear.x
         angular_velocity = command_message.twist.angular.z
         orientation = command_message.orientation
@@ -89,14 +75,14 @@ class CommandConverterNode:
         if not abs(angular_velocity) < self.ANGULAR_VELOCITY_THRESHOLD:
             v = linear_velocity
             w = angular_velocity
-            d = self.WHEEL_DISPLACEMENT
+            d = self.wheel_displacement
 
             target_velocity_left: float = w * ((v / w) - d / 2.0)
             target_velocity_right: float = w * ((v / w) + d / 2.0)
 
         if abs(current_angle_left - target_angle_left) > self.ORIENTATION_THRESHOLD:
-            left_target_distance = sin(target_angle_left) * self.WHEEL_DISPLACEMENT / 2.0
-            left_current_distance = sin(current_angle_left) * self.WHEEL_DISPLACEMENT / 2.0
+            left_target_distance = sin(target_angle_left) * self.wheel_displacement / 2.0
+            left_current_distance = sin(current_angle_left) * self.wheel_displacement / 2.0
             left_distance_to_go = left_target_distance - left_current_distance
 
             if abs(left_distance_to_go) > self.TARGET_REACHED_DISTANCE:
@@ -104,21 +90,44 @@ class CommandConverterNode:
                 target_velocity_left += left_velocity_change
 
         if abs(current_angle_right - target_angle_right) > self.ORIENTATION_THRESHOLD:
-            right_target_distance = sin(target_angle_right + pi) * self.WHEEL_DISPLACEMENT / 2.0
-            right_current_distance = sin(current_angle_right + pi) * self.WHEEL_DISPLACEMENT / 2.0
+            right_target_distance = sin(target_angle_right + pi) * self.wheel_displacement / 2.0
+            right_current_distance = sin(current_angle_right + pi) * self.wheel_displacement / 2.0
             right_distance_to_go = right_target_distance - right_current_distance
 
             if abs(right_distance_to_go) > self.TARGET_REACHED_DISTANCE:
                 right_velocity_change = self.signum(right_distance_to_go) * 0.1
                 target_velocity_right += right_velocity_change
 
+        output_message_header = Header()
+        output_message_header.seq = command_message.header.seq
+        output_message_header.stamp = command_message.header.stamp
+        output_message_header.frame_id = "base_link"
+
         output_message = JointsIWS()
+        output_message.header = output_message_header
         output_message.type_revolute = "cmd_velocity"
         output_message.type_steering = "cmd_position"
         output_message.revolute = [target_velocity_left, target_velocity_right]
         output_message.steering = [target_angle_left, target_angle_right]
 
         self.publisher.publish(output_message)
+
+    @staticmethod
+    def lookup_wheel_displacement() -> float:
+        tf_listener = tf.TransformListener()
+
+        translation = {"left": None, "right": None}  # {[x,y,z]}
+
+        for side, value in translation.items():
+            while value is None:
+                target_link = "wheel_link_" + side
+                try:
+                    value, _ = tf_listener.lookupTransform('base_link', target_link,  rospy.Time(0))
+                    translation[side] = value
+                except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
+                    continue
+
+        return translation["left"][1] - translation["right"][1]
 
     @staticmethod
     def signum(number: Union[int, float]) -> int:
