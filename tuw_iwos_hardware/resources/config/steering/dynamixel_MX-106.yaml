@@ -1,28 +1,48 @@
-# Drive Mode (0: normal operation, 1: inverted operation)
-drive_mode: 1
-# Operating Modes:
-# 0: Current Control Mode
-# 1: Velocity Control Mode
-# 3: Position Control Mode
-# 4: Extended Position Control Mode(Multi-turn)
-# 5: Current-based Position Control Mode
-operating_mode: 5
-current_limit: 200
-# Torque (0: off, 1: on)
-torque_switch: 1
-# LED (0: off, 1: on)
-led_switch: 1
-# Minimum Position Limit (0-4095)
-min_position_limit: 1764      #   2048 - round (25 * (4096 / 360))
-# Maximum Position Limit (0-4095)
-max_position_limit: 2332      # 2048 + round (25 * (4096 / 360))
-# Position Controller Parameters
-position_p_gain: 100
-position_i_gain: 100
-position_d_gain: 100
-# Velocity Controller Parameters
-velocity_p_gain: 0
-velocity_i_gain: 0
-# Feedforward Parameters
-feedforward_1st_gain: 100
-feedforward_2nd_gain: 100
+config:
+  # Torque (0: off, 1: on)
+  - identifier: torque_switch
+    value: 0
+  # Drive Mode (0: normal operation, 1: inverted operation)
+  - identifier: drive_mode
+    value: 1
+  # Operating Modes:
+  # 0: Current Control Mode
+  # 1: Velocity Control Mode
+  # 3: Position Control Mode
+  # 4: Extended Position Control Mode(Multi-turn)
+  # 5: Current-based Position Control Mode
+  - identifier: operating_mode
+    value: 5
+  - identifier: current_limit
+    value: 200
+  # Homing offset (0-4095)
+  - identifier: homing_offset
+    value: 2048
+  # Minimum Position Limit (0-4095)
+  - identifier: min_position_limit
+    value: 1764      #   2048 - identifier: round (25 * (4096 / 360))
+  # Maximum Position Limit (0-4095)
+  - identifier: max_position_limit
+    value: 2332      # 2048 + round (25 * (4096 / 360))
+  # Position Controller Parameters
+  - identifier: position_p_gain
+    value: 100
+  - identifier: position_i_gain
+    value: 100
+  - identifier: position_d_gain
+    value: 100
+  # Velocity Controller Parameters
+  - identifier: velocity_p_gain
+    value: 0
+  - identifier: velocity_i_gain
+    value: 0
+  # Feedforward Parameters
+  - identifier: feedforward_1st_gain
+    value: 100
+  - identifier: feedforward_2nd_gain
+    value: 100
+  # LED (0: off, 1: on)
+  - identifier: led_switch
+    value: 1
+  - identifier: torque_switch
+    value: 1

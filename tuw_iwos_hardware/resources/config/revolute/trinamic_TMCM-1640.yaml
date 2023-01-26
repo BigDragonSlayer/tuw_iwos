@@ -1,14 +1,29 @@
-motor_poles:            10
-overvoltage_protection:  0
-driver_switch:           1
-ramp_switch:             0
-communication_mode:      8
-target_reached_distance: 5
-target_reached_velocity: 5
-motor_halted_velocity:   5
-maximum_current:      1000
-position_p_parameter:    0
-velocity_p_parameter: 1000
-velocity_i_parameter:  500
-current_p_parameter:   100
-current_i_parameter:   100
+config:
+  - identifier: motor_poles
+    value: 10
+  - identifier: overvoltage_protection
+    value: 0
+  - identifier: driver_switch
+    value: 1
+  - identifier: ramp_switch
+    value: 0
+  - identifier: communication_mode
+    value: 6
+  - identifier: target_reached_distance
+    value: 5
+  - identifier: target_reached_velocity
+    value: 5
+  - identifier: motor_halted_velocity
+    value: 5
+  - identifier: maximum_current
+    value: 2000
+  - identifier: position_p_parameter
+    value: 0
+  - identifier: velocity_p_parameter
+    value: 1500
+  - identifier: velocity_i_parameter
+    value: 1500
+  - identifier: current_p_parameter
+    value: 1500
+  - identifier: current_i_parameter
+    value: 2000
