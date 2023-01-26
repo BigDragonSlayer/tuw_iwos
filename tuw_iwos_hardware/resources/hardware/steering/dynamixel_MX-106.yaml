@@ -1,7 +1,6 @@
 name: "MX-106"
 
 resolution:
-#  position: 0.08800 # deg
   position: 0.0015358897418 # rad
   velocity: 0.22900 # rpm
   effort:   0.00336 # A
@@ -48,6 +47,12 @@ config_parameters:
             "Extended Position Control Mode(Multi-turn)": 4,
             "Current-based Position Control Mode": 5}
     range: null
+  - identifier: homing_offset
+    description: "Home Position Offset"
+    address: 20
+    length: 4
+    enum: null
+    range: { min: -1044479, max: 1044479 }
   - identifier: current_limit
     description: "Current Limit"
     address: 38
