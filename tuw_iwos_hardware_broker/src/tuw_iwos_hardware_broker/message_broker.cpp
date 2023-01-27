@@ -45,6 +45,11 @@ void tuw_iwos_hardware_broker::MessageBroker::messageCallback()
 
 void MessageBroker::configCallback(DistributorConfig &config, uint32_t level)
 {
+  if (static_cast<int>(level) == -1)
+  {
+    if (config.swap_revolute) this->swapRevolute();
+    if (config.swap_steering) this->swapSteering();
+  }
   if (static_cast<int>(level) != -1)
   {
     if (this->config_.swap_revolute != config.swap_revolute) this->swapRevolute();
