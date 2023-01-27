@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import math
 import rospy
 import tf
 
@@ -20,10 +21,10 @@ from typing import Union
 class CommandConverterNode:
 
     def __init__(self):
-        self.ANGULAR_VELOCITY_THRESHOLD = 0.01
-        self.ORIENTATION_THRESHOLD = 0.01
+        self.ANGULAR_VELOCITY_THRESHOLD = 0.1
+        self.ORIENTATION_THRESHOLD = 0.05
+        self.TARGET_REACHED_DISTANCE = 0.05
         self.ORIENTATION_CHANGING_SPEED = 0.5  # (rad/s)
-        self.TARGET_REACHED_DISTANCE = 0.01
         self.wheel_displacement: Optional[float] = 0.4
 
         self.state_subscriber_topic: str = "/joint_state"
@@ -74,11 +75,11 @@ class CommandConverterNode:
 
         if not abs(angular_velocity) < self.ANGULAR_VELOCITY_THRESHOLD:
             v = linear_velocity
-            w = angular_velocity
-            d = self.wheel_displacement
+            w = angular_velocity * 2.5
+            b = self.wheel_displacement
 
-            target_velocity_left: float = w * ((v / w) - d / 2.0)
-            target_velocity_right: float = w * ((v / w) + d / 2.0)
+            target_velocity_left: float = w * ((v / w) - b / 2.0)
+            target_velocity_right: float = w * ((v / w) + b / 2.0)
 
         if abs(current_angle_left - target_angle_left) > self.ORIENTATION_THRESHOLD:
             left_target_distance = sin(target_angle_left) * self.wheel_displacement / 2.0
@@ -97,6 +98,11 @@ class CommandConverterNode:
             if abs(right_distance_to_go) > self.TARGET_REACHED_DISTANCE:
                 right_velocity_change = self.signum(right_distance_to_go) * 0.1
                 target_velocity_right += right_velocity_change
+
+        if abs(target_velocity_left) > 1.0 or abs(target_velocity_right) > 1.0:
+            maximum = max(abs(target_velocity_left), abs(target_velocity_right))
+            target_velocity_left = target_velocity_left/abs(maximum)
+            target_velocity_right = target_velocity_right/abs(maximum)
 
         output_message_header = Header()
         output_message_header.seq = command_message.header.seq
@@ -117,17 +123,17 @@ class CommandConverterNode:
 
         translation = {"left": None, "right": None}  # {[x,y,z]}
 
-        for side, value in translation.items():
-            target_link = "wheel_link_" + side
-            try:
-                value, _ = tf_listener.lookupTransform('base_link', target_link,  rospy.Time(0))
-                if value is not None:
-                    translation[side] = value
-                if value is None:
-                    rospy.log_debug("failed to fetch current wheel displacement")
-            except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
-                rospy.logdebug("failed to fetch current wheel displacement")
-                continue
+        # for side, value in translation.items():
+        #     target_link = "wheel_link_" + side
+        #     try:
+        #         value, _ = tf_listener.lookupTransform('base_link', target_link,  rospy.Time(0))
+        #         if value is not None:
+        #             translation[side] = value
+        #         if value is None:
+        #             rospy.log_debug("failed to fetch current wheel displacement")
+        #     except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
+        #         rospy.logdebug("failed to fetch current wheel displacement")
+        #         continue
 
         if translation["left"] is not None and translation["right"] is not None:
             return translation["left"][1] - translation["right"][1]
