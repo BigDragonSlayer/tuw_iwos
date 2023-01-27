@@ -21,11 +21,23 @@ void tuw_iwos_hardware_broker::MessageBroker::messageCallback()
   this->type_revolute_ = TypeConverter::fromString(this->type_string_revolute_);
   this->type_steering_ = TypeConverter::fromString(this->type_string_steering_);
 
-  this->output_target_revolute_[LEFT ] = this->input_target_revolute_[0];
-  this->output_target_revolute_[RIGHT] = this->input_target_revolute_[1];
+  std::map<Side, double> revolute_direction = {{LEFT, 1.0}, {RIGHT, 1.0}};
+  if (this->config_.invert_revolute_left)
+    revolute_direction[LEFT]  = -1.0;
+  if (this->config_.invert_revolute_right)
+    revolute_direction[RIGHT] = -1.0;
 
-  this->output_target_steering_[LEFT ] = this->input_target_steering_[0];
-  this->output_target_steering_[RIGHT] = this->input_target_steering_[1];
+  this->output_target_revolute_[LEFT ] = revolute_direction[LEFT ] * this->input_target_revolute_[0];
+  this->output_target_revolute_[RIGHT] = revolute_direction[RIGHT] * this->input_target_revolute_[1];
+
+  std::map<Side, double> steering_direction = {{LEFT, 1.0}, {RIGHT, 1.0}};
+  if (this->config_.invert_steering_left)
+    revolute_direction[LEFT]  = -1.0;
+  if (this->config_.invert_steering_right)
+    revolute_direction[RIGHT] = -1.0;
+
+  this->output_target_steering_[LEFT ] = steering_direction[LEFT ] * this->input_target_steering_[0];
+  this->output_target_steering_[RIGHT] = steering_direction[RIGHT] * this->input_target_steering_[1];
 
   this->publishRevolute();
   this->publishSteering();
