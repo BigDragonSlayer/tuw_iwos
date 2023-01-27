@@ -123,17 +123,17 @@ class CommandConverterNode:
 
         translation = {"left": None, "right": None}  # {[x,y,z]}
 
-        # for side, value in translation.items():
-        #     target_link = "wheel_link_" + side
-        #     try:
-        #         value, _ = tf_listener.lookupTransform('base_link', target_link,  rospy.Time(0))
-        #         if value is not None:
-        #             translation[side] = value
-        #         if value is None:
-        #             rospy.log_debug("failed to fetch current wheel displacement")
-        #     except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
-        #         rospy.logdebug("failed to fetch current wheel displacement")
-        #         continue
+        for side, value in translation.items():
+            target_link = "wheel_link_" + side
+            try:
+                value, _ = tf_listener.lookupTransform('base_link', target_link,  rospy.Time(0))
+                if value is not None:
+                    translation[side] = value
+                if value is None:
+                    rospy.log_debug("failed to fetch current wheel displacement")
+            except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
+                rospy.logdebug("failed to fetch current wheel displacement")
+                continue
 
         if translation["left"] is not None and translation["right"] is not None:
             return translation["left"][1] - translation["right"][1]
