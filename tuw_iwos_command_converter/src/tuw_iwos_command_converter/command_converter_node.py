@@ -75,7 +75,7 @@ class CommandConverterNode:
 
         if not abs(angular_velocity) < self.ANGULAR_VELOCITY_THRESHOLD:
             v = linear_velocity
-            w = angular_velocity * 2.5
+            w = angular_velocity
             b = self.wheel_displacement
 
             target_velocity_left: float = w * ((v / w) - b / 2.0)
