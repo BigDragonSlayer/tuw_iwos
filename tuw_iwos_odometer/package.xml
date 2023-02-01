@@ -2,7 +2,7 @@
 <package format="2">
   <name>tuw_iwos_odometer</name>
   <version>0.0.0</version>
-  <description>The tuw_iwos_odometry package</description>
+  <description>Package to manage odometer information for the IWOS robot</description>
 
   <maintainer email="eugen.kaltenegger@gmail.com">Eugen Kaltenegger</maintainer>
 
