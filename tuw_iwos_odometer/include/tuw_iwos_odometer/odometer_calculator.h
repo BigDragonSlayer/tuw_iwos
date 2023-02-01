@@ -26,8 +26,8 @@ public:
   ~OdometerCalculator() = default;
   std::vector<double> update(ros::Duration dt,
                              std::vector<double> position,
-                             const std::map<Side, double>& revolute_velocity,
-                             const std::map<Side, double>& steering_velocity);
+                             std::map<Side, double> revolute_velocity,
+                             std::map<Side, double> steering_velocity);
 private:
   double wheelbase_;
 };
