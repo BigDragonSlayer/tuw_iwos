@@ -32,9 +32,9 @@ void tuw_iwos_hardware_broker::MessageBroker::messageCallback()
 
   std::map<Side, double> steering_direction = {{LEFT, 1.0}, {RIGHT, 1.0}};
   if (this->config_.invert_steering_left)
-    revolute_direction[LEFT]  = -1.0;
+    steering_direction[LEFT]  = -1.0;
   if (this->config_.invert_steering_right)
-    revolute_direction[RIGHT] = -1.0;
+    steering_direction[RIGHT] = -1.0;
 
   this->output_target_steering_[LEFT ] = steering_direction[LEFT ] * this->input_target_steering_[0];
   this->output_target_steering_[RIGHT] = steering_direction[RIGHT] * this->input_target_steering_[1];
