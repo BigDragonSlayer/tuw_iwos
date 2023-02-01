@@ -17,6 +17,7 @@
 
   <!-- has to be installed manually from github: https://github.com/tuw-robotics/tuw_teleop -->
   <exec_depend>tuw_teleop</exec_depend>
+  <exec_depend>urg_node</exec_depend>
 
   <export>
     <!-- nothing to export -->
