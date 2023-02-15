@@ -11,6 +11,7 @@ find_package(
   rospy
   roslib
   roslint
+  tuw_geometry
 )
 
 catkin_package(

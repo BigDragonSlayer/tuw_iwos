@@ -10,16 +10,16 @@ OdometerCalculator::OdometerCalculator(double wheelbase, double wheeloffset)
   this->wheeloffset_ = wheeloffset;
 }
 
-std::vector<double> OdometerCalculator::update(ros::Duration duration,
-                                               std::vector<double> position,
+tuw::Pose2D OdometerCalculator::update(ros::Duration duration,
+                                               tuw::Pose2D position,
                                                std::map<Side, double> revolute_velocity,
                                                std::map<Side, double> steering_velocity)
 {
   double dt = duration.toSec();
 
-  double x = position[0];
-  double y = position[1];
-  double th = position[2];
+  double x = position.x();
+  double y = position.y();
+  double th = position.theta();
 
   double l = this->wheelbase_;
   double v_l = revolute_velocity[Side::LEFT];
@@ -44,5 +44,5 @@ std::vector<double> OdometerCalculator::update(ros::Duration duration,
     if (th > 0) th -= 2 * M_PI;
   }
 
-  return std::vector<double> {x, y, th};
+  return {x, y, th};
 }
