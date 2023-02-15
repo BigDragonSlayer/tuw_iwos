@@ -11,38 +11,37 @@ OdometerCalculator::OdometerCalculator(double wheelbase, double wheeloffset)
 }
 
 tuw::Pose2D OdometerCalculator::update(ros::Duration duration,
-                                               tuw::Pose2D position,
-                                               std::map<Side, double> revolute_velocity,
-                                               std::map<Side, double> steering_velocity)
+                                       tuw::Pose2D position,
+                                       std::map<Side, double> revolute_velocity,
+                                       std::map<Side, double> steering_velocity)
 {
   double dt = duration.toSec();
-
-  double x = position.x();
-  double y = position.y();
-  double th = position.theta();
-
-  double l = this->wheelbase_;
   double v_l = revolute_velocity[Side::LEFT];
   double v_r = revolute_velocity[Side::RIGHT];
 
-  double R = (l / 2.0) * ( (v_l + v_r) / (-v_l + v_r) );
-  double w = (-v_l + v_r) / l;
+  double R;
+  if (abs(-v_l + v_r) < FLT_MIN)
+    R = DBL_MAX;
+  else
+    R = (this->wheelbase_ / 2.0) * ((v_l + v_r) / (-v_l + v_r));
 
-  std::vector<double> ICC {x - R * sin(th), y + R * cos(th)};
+  double w = (-v_l + v_r) / this->wheelbase_;
 
-  double x_prime = cos(w*dt) * (x - ICC[0]) - sin(w*dt) * (y - ICC[1]) + ICC[0];
-  double y_prime = sin(w*dt) * (x - ICC[0]) + cos(w*dt) * (y - ICC[1]) + ICC[1];
-  double th_prime = th + w*dt;
+  tuw::Point2D ICC = tuw::Point2D(position.x() - R * sin(position.theta()),
+                                  position.y() + R * cos(position.theta()),
+                                  0.0);
+  cv::Matx<double, 3, 3> matrix = cv::Matx<double, 3, 3>(cos(w * dt), -sin(w * dt), 0,
+                                                         sin(w * dt),  cos(w * dt), 0,
+                                                         0          ,  0          , 1);
+  cv::Vec<double, 3> multiplier = cv::Vec<double, 3>(position.x() - ICC.x(),
+                                                     position.y() - ICC.y(),
+                                                     position.theta());
+  cv::Vec<double, 3> offset = cv::Vec<double, 3>(ICC.x(),
+                                                 ICC.y(),
+                                                 w*dt);
 
-  x = x_prime;
-  y = y_prime;
-  th = th_prime;
+  tuw::Pose2D odom = matrix * multiplier + offset;
+  odom.normalizeOrientation();
 
-  while (abs(th) >= 2 * M_PI)
-  {
-    if (th < 0) th += 2 * M_PI;
-    if (th > 0) th -= 2 * M_PI;
-  }
-
-  return {x, y, th};
+  return odom;
 }
