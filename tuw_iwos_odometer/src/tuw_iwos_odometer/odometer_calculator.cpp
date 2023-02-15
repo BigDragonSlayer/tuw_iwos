@@ -15,30 +15,28 @@ std::vector<double> OdometerCalculator::update(ros::Duration duration,
                                                std::map<Side, double> revolute_velocity,
                                                std::map<Side, double> steering_velocity)
 {
+  double dt = duration.toSec();
+
   double x = position[0];
   double y = position[1];
   double th = position[2];
 
-  double dt = duration.toSec();
+  double l = this->wheelbase_;
+  double v_l = revolute_velocity[Side::LEFT];
+  double v_r = revolute_velocity[Side::RIGHT];
 
-  // differential drive model
-  double dx_dd = (revolute_velocity[Side::LEFT] * dt + revolute_velocity[Side::RIGHT] * dt) / 2;
-  double dy_dd = 0.0;
-  double dth_dd = (-revolute_velocity[Side::LEFT] * dt + revolute_velocity[Side::RIGHT] * dt) / this->wheelbase_;
+  double R = (l / 2.0) * ( (v_l + v_r) / (-v_l + v_r) );
+  double w = (-v_l + v_r) / l;
 
-  // simplified iwos model: assert steering_velocity[Side::LEFT] == steering_velocity[Side::RIGHT]
-  double alpha = steering_velocity[Side::LEFT];
-  double dx_iwos = 0.0;  // (-1 + cos(alpha)) * this->wheeloffset_;
-  double dy_iwos = 0.0;  //       sin(alpha)  * this->wheeloffset_;
-  double dth_iwos = alpha * dt;
+  std::vector<double> ICC {x - R * sin(th), y + R * cos(th)};
 
-  double dx = dx_dd + dx_iwos;
-  double dy = dy_dd + dy_iwos;
-  double dth = dth_dd + dth_iwos;
+  double x_prime = cos(w*dt) * (x - ICC[0]) - sin(w*dt) * (y - ICC[1]) + ICC[0];
+  double y_prime = sin(w*dt) * (x - ICC[0]) + cos(w*dt) * (y - ICC[1]) + ICC[1];
+  double th_prime = th + w*dt;
 
-  x += dx;
-  y += dy;
-  th += dth;
+  x = x_prime;
+  y = y_prime;
+  th = th_prime;
 
   while (abs(th) >= 2 * M_PI)
   {
