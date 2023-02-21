@@ -1,6 +1,6 @@
 // Copyright 2023 Eugen Kaltenegger
 
-#include "../../include/tuw_iwos_odometer/odometer_calculator.h"
+#include <tuw_iwos_odometer/odometer_calculator.h>
 
 using tuw_iwos_odometer::OdometerCalculator;
 
@@ -17,10 +17,6 @@ tuw::Pose2D OdometerCalculator::update(ros::Duration duration,
 {
   double dt = duration.toSec();
 
-  double x = position.x();
-  double y = position.y();
-  double th = position.theta();
-
   double l = this->wheelbase_;
   double v_l = revolute_velocity[Side::LEFT];
   double v_r = revolute_velocity[Side::RIGHT];
@@ -30,9 +26,9 @@ tuw::Pose2D OdometerCalculator::update(ros::Duration duration,
   if (-v_l + v_r < std::numeric_limits<double>::min())
     R = std::numeric_limits<double>::max();
   else
-    R = (this->wheelbase_ / 2.0) * ((v_l + v_r) / (-v_l + v_r));
+    R = (l / 2.0) * ((v_l + v_r) / (-v_l + v_r));
 
-  tuw::Point2D ICC(x - R * sin(position.theta()), y + R * cos(position.theta()));
+  tuw::Point2D ICC(position.x() - R * sin(position.theta()), position.y() + R * cos(position.theta()));
 
   cv::Matx<double, 3, 3> matrix(cos(w * dt), -sin(w * dt), 0,
                                 sin(w * dt),  cos(w * dt), 0,
