@@ -17,27 +17,32 @@ tuw::Pose2D OdometerCalculator::update(ros::Duration duration,
 {
   double dt = duration.toSec();
 
-  double l = this->wheelbase_;
   double v_l = revolute_velocity[Side::LEFT];
   double v_r = revolute_velocity[Side::RIGHT];
 
-  double w = (-v_l + v_r) / l;
   double R;
-  if (-v_l + v_r < std::numeric_limits<double>::min())
+  if (abs(-v_l + v_r) < FLT_MIN)
     R = std::numeric_limits<double>::max();
   else
-    R = (l / 2.0) * ((v_l + v_r) / (-v_l + v_r));
+    R = (this->wheelbase_ / 2.0) * ((v_l + v_r) / (-v_l + v_r));
 
-  tuw::Point2D ICC(position.x() - R * sin(position.theta()), position.y() + R * cos(position.theta()));
+  double w = (-v_l + v_r) / this->wheelbase_;
 
-  cv::Matx<double, 3, 3> matrix(cos(w * dt), -sin(w * dt), 0,
-                                sin(w * dt),  cos(w * dt), 0,
-                                          0,            0, 1);
-  tuw::Pose2D multiplier(position.x() - ICC.x(), position.y() - ICC.y(), position.theta());
-  tuw::Pose2D offset(ICC.x(), ICC.y(), w * dt);
+  tuw::Point2D ICC = tuw::Point2D(position.x() - R * sin(position.theta()),
+                                  position.y() + R * cos(position.theta()),
+                                  0.0);
+  cv::Matx<double, 3, 3> matrix = cv::Matx<double, 3, 3>(cos(w * dt), -sin(w * dt), 0,
+                                                         sin(w * dt),  cos(w * dt), 0,
+                                                         0          ,  0          , 1);
+  cv::Vec<double, 3> multiplier = cv::Vec<double, 3>(position.x() - ICC.x(),
+                                                     position.y() - ICC.y(),
+                                                     position.theta());
+  cv::Vec<double, 3> offset = cv::Vec<double, 3>(ICC.x(),
+                                                 ICC.y(),
+                                                 w*dt);
 
-  tuw::Pose2D position_prime = matrix * multiplier.state_vector() + offset.state_vector();
-  position_prime.normalizeOrientation();
+  tuw::Pose2D odom = matrix * multiplier + offset;
+  odom.normalizeOrientation();
 
-  return position_prime;
+  return odom;
 }
