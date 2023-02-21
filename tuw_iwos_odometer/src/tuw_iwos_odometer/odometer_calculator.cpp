@@ -39,7 +39,7 @@ tuw::Pose2D OdometerCalculator::update(ros::Duration duration,
                                                      position.theta());
   cv::Vec<double, 3> offset = cv::Vec<double, 3>(ICC.x(),
                                                  ICC.y(),
-                                                 w*dt);
+                                                 w * dt);
 
   tuw::Pose2D odom = matrix * multiplier + offset;
   odom.normalizeOrientation();
