@@ -11,9 +11,9 @@ OdometerCalculator::OdometerCalculator(double wheelbase, double wheeloffset)
 }
 
 tuw::Pose2D OdometerCalculator::update(ros::Duration duration,
-                                               tuw::Pose2D position,
-                                               std::map<Side, double> revolute_velocity,
-                                               std::map<Side, double> steering_velocity)
+                                       tuw::Pose2D position,
+                                       std::map<Side, double> revolute_velocity,
+                                       std::map<Side, double> steering_velocity)
 {
   double dt = duration.toSec();
 
@@ -25,24 +25,23 @@ tuw::Pose2D OdometerCalculator::update(ros::Duration duration,
   double v_l = revolute_velocity[Side::LEFT];
   double v_r = revolute_velocity[Side::RIGHT];
 
-  double R = (l / 2.0) * ( (v_l + v_r) / (-v_l + v_r) );
   double w = (-v_l + v_r) / l;
+  double R;
+  if (-v_l + v_r < std::numeric_limits<double>::min())
+    R = std::numeric_limits<double>::max();
+  else
+    R = (this->wheelbase_ / 2.0) * ((v_l + v_r) / (-v_l + v_r));
 
-  std::vector<double> ICC {x - R * sin(th), y + R * cos(th)};
+  tuw::Point2D ICC(x - R * sin(position.theta()), y + R * cos(position.theta()));
 
-  double x_prime = cos(w*dt) * (x - ICC[0]) - sin(w*dt) * (y - ICC[1]) + ICC[0];
-  double y_prime = sin(w*dt) * (x - ICC[0]) + cos(w*dt) * (y - ICC[1]) + ICC[1];
-  double th_prime = th + w*dt;
+  cv::Matx<double, 3, 3> matrix(cos(w * dt), -sin(w * dt), 0,
+                                sin(w * dt),  cos(w * dt), 0,
+                                          0,            0, 1);
+  tuw::Pose2D multiplier(position.x() - ICC.x(), position.y() - ICC.y(), position.theta());
+  tuw::Pose2D offset(ICC.x(), ICC.y(), w * dt);
 
-  x = x_prime;
-  y = y_prime;
-  th = th_prime;
+  tuw::Pose2D position_prime = matrix * multiplier.state_vector() + offset.state_vector();
+  position_prime.normalizeOrientation();
 
-  while (abs(th) >= 2 * M_PI)
-  {
-    if (th < 0) th += 2 * M_PI;
-    if (th > 0) th -= 2 * M_PI;
-  }
-
-  return {x, y, th};
+  return position_prime;
 }

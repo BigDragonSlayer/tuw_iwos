@@ -26,9 +26,10 @@ public:
   OdometerCalculator() = default;
   ~OdometerCalculator() = default;
   tuw::Pose2D update(ros::Duration duration,
-                             tuw::Pose2D position,
-                             std::map<Side, double> revolute_velocity,
-                             std::map<Side, double> steering_velocity);
+                     tuw::Pose2D position,
+                     std::map<Side, double> revolute_velocity,
+                     std::map<Side, double> steering_velocity);
+
 private:
   double wheelbase_;
   double wheeloffset_;
