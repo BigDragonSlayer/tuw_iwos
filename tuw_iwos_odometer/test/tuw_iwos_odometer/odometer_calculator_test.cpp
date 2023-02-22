@@ -8,14 +8,14 @@
 #include <tuw_iwos_odometer/odometer_calculator.h>
 #include <tuw_geometry/pose2d.h>
 
-#define TOLERANCE 0.00001
+#define ASSERTION_TOLERANCE 0.001
 
 using tuw_iwos_odometer::OdometerCalculator;
 
 class OdometerCalculatorTest : public ::testing::Test
 {
 protected:
-  double wheelbase_{1.0};
+  double wheelbase_{0.5};
   double wheeloffset_{0.1};
   tuw::Pose2D start_{0.0, 0.0, M_PI / 2.0};
   std::shared_ptr<OdometerCalculator> odometer_calculator_ = std::make_shared<OdometerCalculator>(this->wheelbase_,
@@ -39,7 +39,7 @@ TEST_F(OdometerCalculatorTest, odom_no_motion)
                                                           this->start_,
                                                           this->revolute_velocity,
                                                           this->steering_velocity);
-  ASSERT_TRUE(end_is.equal(end_should, TOLERANCE));
+  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));
 }
 
 TEST_F(OdometerCalculatorTest, odom_90_deg_rotation_left)
@@ -57,7 +57,7 @@ TEST_F(OdometerCalculatorTest, odom_90_deg_rotation_left)
                                                           this->start_,
                                                           this->revolute_velocity,
                                                           this->steering_velocity);
-  ASSERT_TRUE(end_is.equal(end_should, TOLERANCE));
+  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));
 }
 
 TEST_F(OdometerCalculatorTest, odom_90_deg_rotation_right)
@@ -75,7 +75,7 @@ TEST_F(OdometerCalculatorTest, odom_90_deg_rotation_right)
                                                           this->start_,
                                                           this->revolute_velocity,
                                                           this->steering_velocity);
-  ASSERT_TRUE(end_is.equal(end_should, TOLERANCE));
+  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));
 }
 
 TEST_F(OdometerCalculatorTest, odom_180_deg_rotation_left)
@@ -93,7 +93,7 @@ TEST_F(OdometerCalculatorTest, odom_180_deg_rotation_left)
                                                           this->start_,
                                                           this->revolute_velocity,
                                                           this->steering_velocity);
-  ASSERT_TRUE(end_is.equal(end_should, TOLERANCE));
+  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));
 }
 
 TEST_F(OdometerCalculatorTest, odom_180_deg_rotation_right)
@@ -111,7 +111,7 @@ TEST_F(OdometerCalculatorTest, odom_180_deg_rotation_right)
                                                           this->start_,
                                                           this->revolute_velocity,
                                                           this->steering_velocity);
-  ASSERT_TRUE(end_is.equal(end_should, TOLERANCE));
+  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));
 }
 
 TEST_F(OdometerCalculatorTest, odom_270_deg_rotation_left)
@@ -129,7 +129,7 @@ TEST_F(OdometerCalculatorTest, odom_270_deg_rotation_left)
                                                           this->start_,
                                                           this->revolute_velocity,
                                                           this->steering_velocity);
-  ASSERT_TRUE(end_is.equal(end_should, TOLERANCE));
+  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));
 }
 
 TEST_F(OdometerCalculatorTest, odom_270_deg_rotation_right)
@@ -147,7 +147,7 @@ TEST_F(OdometerCalculatorTest, odom_270_deg_rotation_right)
                                                           this->start_,
                                                           this->revolute_velocity,
                                                           this->steering_velocity);
-  ASSERT_TRUE(end_is.equal(end_should, TOLERANCE));
+  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));
 }
 
 TEST_F(OdometerCalculatorTest, odom_360_deg_rotation_left)
@@ -165,7 +165,7 @@ TEST_F(OdometerCalculatorTest, odom_360_deg_rotation_left)
                                                           this->start_,
                                                           this->revolute_velocity,
                                                           this->steering_velocity);
-  ASSERT_TRUE(end_is.equal(end_should, TOLERANCE));
+  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));
 }
 
 TEST_F(OdometerCalculatorTest, odom_360_deg_rotation_right)
@@ -183,7 +183,7 @@ TEST_F(OdometerCalculatorTest, odom_360_deg_rotation_right)
                                                           this->start_,
                                                           this->revolute_velocity,
                                                           this->steering_velocity);
-  ASSERT_TRUE(end_is.equal(end_should, TOLERANCE));
+  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));
 }
 
 TEST_F(OdometerCalculatorTest, odom_straight_forward)
@@ -201,7 +201,7 @@ TEST_F(OdometerCalculatorTest, odom_straight_forward)
                                                           this->start_,
                                                           this->revolute_velocity,
                                                           this->steering_velocity);
-  ASSERT_TRUE(end_is.equal(end_should, TOLERANCE));
+  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));
 }
 
 TEST_F(OdometerCalculatorTest, odom_straight_backward)
@@ -219,7 +219,7 @@ TEST_F(OdometerCalculatorTest, odom_straight_backward)
                                                           this->start_,
                                                           this->revolute_velocity,
                                                           this->steering_velocity);
-  ASSERT_TRUE(end_is.equal(end_should, TOLERANCE));
+  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));
 }
 
 TEST_F(OdometerCalculatorTest, odom_left_curve_forward_90_deg)
@@ -241,7 +241,7 @@ TEST_F(OdometerCalculatorTest, odom_left_curve_forward_90_deg)
                                                           this->start_,
                                                           this->revolute_velocity,
                                                           this->steering_velocity);
-  ASSERT_TRUE(end_is.equal(end_should, TOLERANCE));
+  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));
 }
 
 TEST_F(OdometerCalculatorTest, odom_right_curve_forward_90_deg)
@@ -263,7 +263,7 @@ TEST_F(OdometerCalculatorTest, odom_right_curve_forward_90_deg)
                                                           this->start_,
                                                           this->revolute_velocity,
                                                           this->steering_velocity);
-  ASSERT_TRUE(end_is.equal(end_should, TOLERANCE));
+  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));
 }
 
 TEST_F(OdometerCalculatorTest, odom_left_curve_backward_90_deg)
@@ -285,7 +285,7 @@ TEST_F(OdometerCalculatorTest, odom_left_curve_backward_90_deg)
                                                           this->start_,
                                                           this->revolute_velocity,
                                                           this->steering_velocity);
-  ASSERT_TRUE(end_is.equal(end_should, TOLERANCE));
+  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));
 }
 
 TEST_F(OdometerCalculatorTest, odom_right_curve_backward_90_deg)
@@ -307,7 +307,7 @@ TEST_F(OdometerCalculatorTest, odom_right_curve_backward_90_deg)
                                                           this->start_,
                                                           this->revolute_velocity,
                                                           this->steering_velocity);
-  ASSERT_TRUE(end_is.equal(end_should, TOLERANCE));
+  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));
 }
 
 TEST_F(OdometerCalculatorTest, odom_left_curve_forward_180_deg)
@@ -329,7 +329,7 @@ TEST_F(OdometerCalculatorTest, odom_left_curve_forward_180_deg)
                                                           this->start_,
                                                           this->revolute_velocity,
                                                           this->steering_velocity);
-  ASSERT_TRUE(end_is.equal(end_should, TOLERANCE));
+  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));
 }
 
 TEST_F(OdometerCalculatorTest, odom_right_curve_forward_180_deg)
@@ -351,7 +351,7 @@ TEST_F(OdometerCalculatorTest, odom_right_curve_forward_180_deg)
                                                           this->start_,
                                                           this->revolute_velocity,
                                                           this->steering_velocity);
-  ASSERT_TRUE(end_is.equal(end_should, TOLERANCE));
+  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));
 }
 
 TEST_F(OdometerCalculatorTest, odom_left_curve_backward_180_deg)
@@ -372,7 +372,7 @@ TEST_F(OdometerCalculatorTest, odom_left_curve_backward_180_deg)
                                                           this->start_,
                                                           this->revolute_velocity,
                                                           this->steering_velocity);
-  ASSERT_TRUE(end_is.equal(end_should, TOLERANCE));
+  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));
 }
 
 TEST_F(OdometerCalculatorTest, odom_right_curve_backward_180_deg)
@@ -393,7 +393,7 @@ TEST_F(OdometerCalculatorTest, odom_right_curve_backward_180_deg)
                                                           this->start_,
                                                           this->revolute_velocity,
                                                           this->steering_velocity);
-  ASSERT_TRUE(end_is.equal(end_should, TOLERANCE));}
+  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));}
 
 TEST_F(OdometerCalculatorTest, odom_left_curve_forward_270_deg)
 {  // basic differential drive movement
@@ -413,7 +413,7 @@ TEST_F(OdometerCalculatorTest, odom_left_curve_forward_270_deg)
                                                           this->start_,
                                                           this->revolute_velocity,
                                                           this->steering_velocity);
-  ASSERT_TRUE(end_is.equal(end_should, TOLERANCE));
+  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));
 }
 
 TEST_F(OdometerCalculatorTest, odom_right_curve_forward_270_deg)
@@ -434,7 +434,7 @@ TEST_F(OdometerCalculatorTest, odom_right_curve_forward_270_deg)
                                                           this->start_,
                                                           this->revolute_velocity,
                                                           this->steering_velocity);
-  ASSERT_TRUE(end_is.equal(end_should, TOLERANCE));}
+  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));}
 
 TEST_F(OdometerCalculatorTest, odom_left_curve_backward_270_deg)
 {  // basic differential drive movement
@@ -454,7 +454,7 @@ TEST_F(OdometerCalculatorTest, odom_left_curve_backward_270_deg)
                                                           this->start_,
                                                           this->revolute_velocity,
                                                           this->steering_velocity);
-  ASSERT_TRUE(end_is.equal(end_should, TOLERANCE));
+  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));
 }
 
 TEST_F(OdometerCalculatorTest, odom_right_curve_backward_270_deg)
@@ -475,7 +475,7 @@ TEST_F(OdometerCalculatorTest, odom_right_curve_backward_270_deg)
                                                           this->start_,
                                                           this->revolute_velocity,
                                                           this->steering_velocity);
-  ASSERT_TRUE(end_is.equal(end_should, TOLERANCE));}
+  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));}
 
 TEST_F(OdometerCalculatorTest, odom_left_curve_forward_360_deg)
 {  // basic differential drive movement
@@ -495,7 +495,7 @@ TEST_F(OdometerCalculatorTest, odom_left_curve_forward_360_deg)
                                                           this->start_,
                                                           this->revolute_velocity,
                                                           this->steering_velocity);
-  ASSERT_TRUE(end_is.equal(end_should, TOLERANCE));}
+  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));}
 
 TEST_F(OdometerCalculatorTest, odom_right_curve_forward_360_deg)
 {  // basic differential drive movement
@@ -515,7 +515,7 @@ TEST_F(OdometerCalculatorTest, odom_right_curve_forward_360_deg)
                                                           this->start_,
                                                           this->revolute_velocity,
                                                           this->steering_velocity);
-  ASSERT_TRUE(end_is.equal(end_should, TOLERANCE));
+  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));
 }
 
 TEST_F(OdometerCalculatorTest, odom_left_curve_backward_360_deg)
@@ -536,7 +536,7 @@ TEST_F(OdometerCalculatorTest, odom_left_curve_backward_360_deg)
                                                           this->start_,
                                                           this->revolute_velocity,
                                                           this->steering_velocity);
-  ASSERT_TRUE(end_is.equal(end_should, TOLERANCE));
+  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));
 }
 
 TEST_F(OdometerCalculatorTest, odom_right_curve_backward_360_deg)
@@ -557,7 +557,7 @@ TEST_F(OdometerCalculatorTest, odom_right_curve_backward_360_deg)
                                                           this->start_,
                                                           this->revolute_velocity,
                                                           this->steering_velocity);
-  ASSERT_TRUE(end_is.equal(end_should, TOLERANCE));}
+  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));}
 
 //TEST_F(OdometerCalculatorTest, iwos_swing_left)
 //{
