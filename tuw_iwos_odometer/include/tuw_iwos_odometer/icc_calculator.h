@@ -4,6 +4,7 @@
 #define DIP_WS_ICC_CALCULATOR_H
 
 #include <map>
+#include <vector>
 
 #include <tuw_geometry/line2d.h>
 #include <tuw_geometry/point2d.h>
@@ -33,6 +34,12 @@ public:
   tuw::Point2D calculate_icc(std::map<Side, double> steering_position,
                              const std::shared_ptr<tuw::Point2D>& b_l = NULL,
                              const std::shared_ptr<tuw::Point2D>& b_r = NULL);
+  // TODO:
+  /*
+   * calculate ICC in robot coordinates based in Pose2D for each wheel
+   */
+  //tuw::Point2D calculate_icc(std::vector<tuw::Pose2D> wheels);
+
 private:
   double wheelbase_;
   double wheeloffset_;
