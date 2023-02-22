@@ -36,6 +36,7 @@ tuw::Pose2D OdometerCalculator::update(ros::Duration duration,
   tuw::Point2D ICC = tuw::Point2D(position.x() - R * sin(position.theta()),
                                   position.y() + R * cos(position.theta()),
                                   0.0);
+  // robot to world
   cv::Matx<double, 3, 3> matrix = cv::Matx<double, 3, 3>(cos(w * dt), -sin(w * dt), 0,
                                                          sin(w * dt), cos(w * dt), 0,
                                                          0, 0, 1);
