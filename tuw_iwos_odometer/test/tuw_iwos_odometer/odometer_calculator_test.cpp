@@ -1,14 +1,12 @@
 // Copyright 2023 Eugen Kaltenegger
 
 #include <gtest/gtest.h>
-#include <gmock/gmock.h>
 
 #include <memory>
 
 #include <tuw_geometry/pose2d.h>
 
 #include <tuw_iwos_odometer/odometer_calculator.h>
-#include <tuw_iwos_odometer/side.h>
 
 #define ASSERTION_TOLERANCE 0.001
 
@@ -360,7 +358,8 @@ TEST_F(OdometerCalculatorTest, odom_right_curve_forward_180_deg)
 }
 
 TEST_F(OdometerCalculatorTest, odom_left_curve_backward_180_deg)
-{  // basic differential drive movement
+{
+  // basic differential drive movement
   double radius = 1.0;
   double angle = M_PI;
   double seconds = 2.0;
@@ -381,7 +380,8 @@ TEST_F(OdometerCalculatorTest, odom_left_curve_backward_180_deg)
 }
 
 TEST_F(OdometerCalculatorTest, odom_right_curve_backward_180_deg)
-{  // basic differential drive movement
+{
+  // basic differential drive movement
   double radius = 1.0;
   double angle = M_PI;
   double seconds = 2.0;
@@ -401,7 +401,8 @@ TEST_F(OdometerCalculatorTest, odom_right_curve_backward_180_deg)
   ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));}
 
 TEST_F(OdometerCalculatorTest, odom_left_curve_forward_270_deg)
-{  // basic differential drive movement
+{
+  // basic differential drive movement
   double radius = 1.0;
   double angle = M_PI * 3.0 / 2.0;
   double seconds = 2.0;
@@ -422,7 +423,8 @@ TEST_F(OdometerCalculatorTest, odom_left_curve_forward_270_deg)
 }
 
 TEST_F(OdometerCalculatorTest, odom_right_curve_forward_270_deg)
-{  // basic differential drive movement
+{
+  // basic differential drive movement
   double radius = 1.0;
   double angle = M_PI * 3.0 / 2.0;
   double seconds = 2.0;
@@ -442,7 +444,8 @@ TEST_F(OdometerCalculatorTest, odom_right_curve_forward_270_deg)
   ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));}
 
 TEST_F(OdometerCalculatorTest, odom_left_curve_backward_270_deg)
-{  // basic differential drive movement
+{
+  // basic differential drive movement
   double radius = 1.0;
   double angle = M_PI * 3.0 / 2.0;
   double seconds = 2.0;
@@ -463,7 +466,8 @@ TEST_F(OdometerCalculatorTest, odom_left_curve_backward_270_deg)
 }
 
 TEST_F(OdometerCalculatorTest, odom_right_curve_backward_270_deg)
-{  // basic differential drive movement
+{
+  // basic differential drive movement
   double radius = 1.0;
   double angle = M_PI * 3.0 / 2.0;
   double seconds = 2.0;
@@ -483,7 +487,8 @@ TEST_F(OdometerCalculatorTest, odom_right_curve_backward_270_deg)
   ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));}
 
 TEST_F(OdometerCalculatorTest, odom_left_curve_forward_360_deg)
-{  // basic differential drive movement
+{
+  // basic differential drive movement
   double radius = 1.0;
   double angle = M_PI * 2.0;
   double seconds = 2.0;
@@ -503,7 +508,8 @@ TEST_F(OdometerCalculatorTest, odom_left_curve_forward_360_deg)
   ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));}
 
 TEST_F(OdometerCalculatorTest, odom_right_curve_forward_360_deg)
-{  // basic differential drive movement
+{
+  // basic differential drive movement
   double radius = 1.0;
   double angle = M_PI * 2.0;
   double seconds = 2.0;
@@ -524,7 +530,8 @@ TEST_F(OdometerCalculatorTest, odom_right_curve_forward_360_deg)
 }
 
 TEST_F(OdometerCalculatorTest, odom_left_curve_backward_360_deg)
-{  // basic differential drive movement
+{
+  // basic differential drive movement
   double radius = 1.0;
   double angle = M_PI * 2.0;
   double seconds = 2.0;
@@ -545,7 +552,8 @@ TEST_F(OdometerCalculatorTest, odom_left_curve_backward_360_deg)
 }
 
 TEST_F(OdometerCalculatorTest, odom_right_curve_backward_360_deg)
-{  // basic differential drive movement
+{
+  // basic differential drive movement
   double radius = 1.0;
   double angle = M_PI * 2.0;
   double seconds = 2.0;
@@ -562,68 +570,5 @@ TEST_F(OdometerCalculatorTest, odom_right_curve_backward_360_deg)
                                                           this->start_,
                                                           this->revolute_velocity,
                                                           this->steering_velocity);
-  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));}
-
-//TEST_F(OdometerCalculatorTest, iwos_swing_left)
-//{
-//  // iwos movement
-//  ros::Duration dt{1.0};
-//  this->revolute_velocity[Side::LEFT ] = 0.0;
-//  this->revolute_velocity[Side::RIGHT] = 0.0;
-//  this->steering_velocity[Side::LEFT ] = 0.1;
-//  this->steering_velocity[Side::RIGHT] = 0.1;
-//  std::vector<double> end_should{-(1-cos(0.1))*this->wheeloffset_, sin(0.1)*this->wheeloffset_, 0.0};
-//  std::vector<double> end_is = this->odometer_calculator_->update(dt,
-//                                                                  this->start_,
-//                                                                  this->revolute_velocity,
-//                                                                  this->steering_velocity);
-//  ASSERT_EQ(end_is, end_should);
-//}
-
-//TEST_F(OdometerCalculatorTest, iwos_swing_right)
-//{
-//  // iwos movement
-//  ros::Duration dt{1.0};
-//  this->revolute_velocity[Side::LEFT ] = 0.0;
-//  this->revolute_velocity[Side::RIGHT] = 0.0;
-//  this->steering_velocity[Side::LEFT ] = -0.1;
-//  this->steering_velocity[Side::RIGHT] = -0.1;
-//  std::vector<double> end_should{-(1-cos(0.1))*this->wheeloffset_, sin(-0.1)*this->wheeloffset_, 0.0};
-//  std::vector<double> end_is = this->odometer_calculator_->update(dt,
-//                                                                  this->start_,
-//                                                                  this->revolute_velocity,
-//                                                                  this->steering_velocity);
-//  ASSERT_EQ(end_is, end_should);
-//}
-
-//TEST_F(OdometerCalculatorTest, iwos_swing_left_on_spot)
-//{
-//  // iwos movement
-//  ros::Duration dt{1.0};
-//  this->revolute_velocity[Side::LEFT ] = -cos(0.1) * this->wheelbase_;
-//  this->revolute_velocity[Side::RIGHT] = +cos(0.1) * this->wheelbase_;
-//  this->steering_velocity[Side::LEFT ] = +0.1;
-//  this->steering_velocity[Side::RIGHT] = +0.1;
-//  std::vector<double> end_should{0.0, 0.0, 0.1};
-//  std::vector<double> end_is = this->odometer_calculator_->update(dt,
-//                                                                  this->start_,
-//                                                                  this->revolute_velocity,
-//                                                                  this->steering_velocity);
-//  ASSERT_EQ(end_is, end_should);
-//}
-
-//TEST_F(OdometerCalculatorTest, iwos_swing_right_on_spot)
-//{
-//  // iwos movement
-//  ros::Duration dt{1.0};
-//  this->revolute_velocity[Side::LEFT ] = +cos(0.1) * this->wheelbase_;
-//  this->revolute_velocity[Side::RIGHT] = -cos(0.1) * this->wheelbase_;
-//  this->steering_velocity[Side::LEFT ] = -0.1;
-//  this->steering_velocity[Side::RIGHT] = -0.1;
-//  std::vector<double> end_should{0.0, 0.0, -0.1};
-//  std::vector<double> end_is = this->odometer_calculator_->update(dt,
-//                                                                  this->start_,
-//                                                                  this->revolute_velocity,
-//                                                                  this->steering_velocity);
-//  ASSERT_EQ(end_is, end_should);
-//}
+  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));
+}
