@@ -39,6 +39,7 @@ roslint_cpp()
 
 add_library(
   ${PROJECT_NAME}
+  src/${PROJECT_NAME}/icc_calculator.cpp
   src/${PROJECT_NAME}/odometer_calculator.cpp
 )
 
@@ -52,6 +53,7 @@ if (CATKIN_ENABLE_TESTING)
   catkin_add_gtest(
     ${PROJECT_NAME}_tests
     test/all_tests.cpp
+    test/${PROJECT_NAME}/icc_calculator_test.cpp
     test/${PROJECT_NAME}/odometer_calculator_test.cpp
   )
 
