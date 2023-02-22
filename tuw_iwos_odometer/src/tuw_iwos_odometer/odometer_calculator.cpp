@@ -1,13 +1,16 @@
 // Copyright 2023 Eugen Kaltenegger
 
+#include <tuw_iwos_odometer/icc_calculator.h>
 #include <tuw_iwos_odometer/odometer_calculator.h>
 
+using tuw_iwos_odometer::IccCalculator;
 using tuw_iwos_odometer::OdometerCalculator;
 
-OdometerCalculator::OdometerCalculator(double wheelbase, double wheeloffset)
+OdometerCalculator::OdometerCalculator(double wheelbase, double wheeloffset, double tolerance)
 {
   this->wheelbase_ = wheelbase;
   this->wheeloffset_ = wheeloffset;
+  this->tolerance_ = tolerance;
 }
 
 tuw::Pose2D OdometerCalculator::update(ros::Duration duration,
@@ -32,8 +35,8 @@ tuw::Pose2D OdometerCalculator::update(ros::Duration duration,
                                   position.y() + R * cos(position.theta()),
                                   0.0);
   cv::Matx<double, 3, 3> matrix = cv::Matx<double, 3, 3>(cos(w * dt), -sin(w * dt), 0,
-                                                         sin(w * dt),  cos(w * dt), 0,
-                                                         0          ,  0          , 1);
+                                                         sin(w * dt), cos(w * dt), 0,
+                                                         0, 0, 1);
   cv::Vec<double, 3> multiplier = cv::Vec<double, 3>(position.x() - ICC.x(),
                                                      position.y() - ICC.y(),
                                                      position.theta());
@@ -45,4 +48,10 @@ tuw::Pose2D OdometerCalculator::update(ros::Duration duration,
   odom.normalizeOrientation();
 
   return odom;
+}
+
+double OdometerCalculator::calculate_velocity(std::map<Side, double> revolute_velocity,
+                                              std::map<Side, double> steering_position)
+{
+//  tuw::Point2D ICC = IccCalculator(this->wheelbase_, this->wheeloffset_, this->tolerance_).calculate_icc();
 }
