@@ -25,7 +25,6 @@ protected:
   std::shared_ptr<IccCalculator> icc_calculator_ = std::make_shared<IccCalculator>(this->wheelbase_,
                                                                                    this->wheeloffset_,
                                                                                    this->tolerance_);
-
   std::map<Side, double> steering_position;
 };
 
@@ -125,4 +124,13 @@ TEST_F(IccCalculatorTest, mode_intersection)
   IccCalculator::Mode mode_should = IccCalculator::Mode::INTERSECTION;
   IccCalculator::Mode mode_is = this->icc_calculator_->get_icc_mode(this->steering_position);
   ASSERT_EQ(mode_should, mode_is);
+}
+
+TEST_F(IccCalculatorTest, icc)
+{
+  this->steering_position[Side::LEFT] = -M_PI / 4.0;
+  this->steering_position[Side::RIGHT] = +M_PI / 4.0;
+  tuw::Point2D icc_should{this->wheeloffset_ - sqrt(2) * this->wheeloffset_ - this->wheelbase_ / 2.0, 0.0};
+  tuw::Point2D icc_is = this->icc_calculator_->calculate_icc(this->steering_position);
+  ASSERT_TRUE(icc_is.equal(icc_should));
 }
