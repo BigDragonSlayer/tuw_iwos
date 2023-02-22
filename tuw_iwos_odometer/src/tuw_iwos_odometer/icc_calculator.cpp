@@ -32,9 +32,11 @@ IccCalculator::Mode IccCalculator::get_icc_mode(std::map<Side, double> steering_
     return IccCalculator::INTERSECTION;
 }
 
-tuw::Point2D IccCalculator::calculate_icc(std::map<Side, double> steering_position,
-                                          const std::shared_ptr<tuw::Point2D>& b_l_ptr,
-                                          const std::shared_ptr<tuw::Point2D>& b_r_ptr)
+tuw::Point2D IccCalculator::calculate_icc(std::map<Side, double> revolute_velocity,
+                                          std::map<Side, double> steering_position,
+                                          const std::shared_ptr<double>& r_l,
+                                          const std::shared_ptr<double>& r_r,
+                                          const std::shared_ptr<double>& r)
 {
   // write angles to variables (to shorten lines below)
   double alpha_l = steering_position[Side::LEFT];
@@ -48,11 +50,6 @@ tuw::Point2D IccCalculator::calculate_icc(std::map<Side, double> steering_positi
   tuw::Point2D b_l(a_l.x() - cos(alpha_l) * this->wheeloffset_, a_l.y() - sin(alpha_l) * this->wheeloffset_);
   tuw::Point2D b_r(a_r.x() - cos(alpha_r) * this->wheeloffset_, a_r.y() - sin(alpha_r) * this->wheeloffset_);
 
-  if (b_l_ptr != nullptr)
-    *b_l_ptr = b_l;
-  if (b_r_ptr != nullptr)
-    *b_r_ptr = b_r;
-
   // create vector pointing in wheel driving direction
   // tuw::Pose2D p_l(b_l, alpha_l);
   // tuw::Pose2D p_r(b_r, alpha_r);
@@ -65,7 +62,11 @@ tuw::Point2D IccCalculator::calculate_icc(std::map<Side, double> steering_positi
   tuw::Line2D l_r(b_r, n_r.point_ahead());
 
   // find intersection of the lines
-  tuw::Point2D ICC = l_l.intersection(l_r);
+  tuw::Point2D icc = l_l.intersection(l_r);
 
-  return ICC;
+  if (r_l != nullptr) *r_l = b_l.distanceTo(icc);
+  if (r_r != nullptr) *r_r = b_r.distanceTo(icc);
+  if (r   != nullptr) *r   = tuw::Point2D(0.0, 0.0).distanceTo(icc);
+
+  return icc;
 }

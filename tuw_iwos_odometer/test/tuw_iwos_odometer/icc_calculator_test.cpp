@@ -1,14 +1,12 @@
 // Copyright 2023 Eugen Kaltenegger
 
 #include <gtest/gtest.h>
-#include <gmock/gmock.h>
 
 #include <memory>
 
 #include <tuw_geometry/point2d.h>
 
 #include <tuw_iwos_odometer/icc_calculator.h>
-#include <tuw_iwos_odometer/side.h>
 
 #define ASSERTION_TOLERANCE 0.001
 
@@ -25,21 +23,21 @@ protected:
   std::shared_ptr<IccCalculator> icc_calculator_ = std::make_shared<IccCalculator>(this->wheelbase_,
                                                                                    this->wheeloffset_,
                                                                                    this->tolerance_);
-  std::map<Side, double> steering_position;
+
+  std::map<Side, double> revolute_velocity {{Side::LEFT, 0.0},{Side::RIGHT, 0.0}};
+  std::map<Side, double> steering_position {{Side::LEFT, 0.0},{Side::RIGHT, 0.0}};
 };
 
 TEST_F(IccCalculatorTest, pointer)
 {
-  std::shared_ptr<tuw::Point2D> b_l = std::make_shared<tuw::Point2D>(-10.0, -10.0);
-  std::shared_ptr<tuw::Point2D> b_r = std::make_shared<tuw::Point2D>(-10.0, -10.0);
+  std::shared_ptr<double> r_l = std::make_shared<double>(0.0);
+  std::shared_ptr<double> r_r = std::make_shared<double>(0.0);
+  std::shared_ptr<double> r = std::make_shared<double>(0.0);
 
   this->steering_position[Side::LEFT] = 0.0;
   this->steering_position[Side::RIGHT] = 0.0;
-  this->icc_calculator_->calculate_icc(this->steering_position, b_l, b_r);
-  ASSERT_EQ(b_l->x(),  0.0);
-  ASSERT_EQ(b_l->y(),  this->wheelbase_ / 2.0);
-  ASSERT_EQ(b_r->x(),  0.0);
-  ASSERT_EQ(b_r->y(), -this->wheelbase_ / 2.0);
+  this->icc_calculator_->calculate_icc(this->revolute_velocity, this->steering_position, r_l, r_r, r);
+  // TODO
 }
 
 TEST_F(IccCalculatorTest, mode_identical_with_no_tolerance)
@@ -131,6 +129,6 @@ TEST_F(IccCalculatorTest, icc)
   this->steering_position[Side::LEFT] = -M_PI / 4.0;
   this->steering_position[Side::RIGHT] = +M_PI / 4.0;
   tuw::Point2D icc_should{this->wheeloffset_ - sqrt(2) * this->wheeloffset_ - this->wheelbase_ / 2.0, 0.0};
-  tuw::Point2D icc_is = this->icc_calculator_->calculate_icc(this->steering_position);
+  tuw::Point2D icc_is = this->icc_calculator_->calculate_icc(this->revolute_velocity, this->steering_position);
   ASSERT_TRUE(icc_is.equal(icc_should));
 }

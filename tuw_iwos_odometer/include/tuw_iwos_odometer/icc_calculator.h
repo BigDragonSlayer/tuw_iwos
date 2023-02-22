@@ -27,13 +27,15 @@ public:
   /*
    * check how the lines orthogonal to the wheel relate
    */
-  Mode get_icc_mode(std::map<Side, double> steering_position);
+  IccCalculator::Mode get_icc_mode(std::map<Side, double> steering_position);
   /*
    * calculate ICC in robot coordinates
    */
-  tuw::Point2D calculate_icc(std::map<Side, double> steering_position,
-                             const std::shared_ptr<tuw::Point2D>& b_l = nullptr,
-                             const std::shared_ptr<tuw::Point2D>& b_r = nullptr);
+  tuw::Point2D calculate_icc(std::map<Side, double> revolute_velocity,
+                             std::map<Side, double> steering_position,
+                             const std::shared_ptr<double>& r_l = nullptr,
+                             const std::shared_ptr<double>& r_r = nullptr,
+                             const std::shared_ptr<double>& r = nullptr);
   // TODO:
   /*
    * calculate ICC in robot coordinates based in Pose2D for each wheel
