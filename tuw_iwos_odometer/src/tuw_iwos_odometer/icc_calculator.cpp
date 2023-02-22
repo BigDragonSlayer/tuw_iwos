@@ -64,7 +64,7 @@ tuw::Point2D IccCalculator::calculate_icc(std::map<Side, double> steering_positi
 
   // create (vector to) point on line to ICC
   cv::Vec<double, 2> v_c_l = b_l.vector() + n_l;
-  cv::Vec<double, 2> v_c_r = b_l.vector() + n_r;
+  cv::Vec<double, 2> v_c_r = b_r.vector() + n_r;
 
   // convert vector to point
   tuw::Point2D c_l(v_c_l[0],v_c_l[1]);
