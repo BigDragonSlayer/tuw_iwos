@@ -7,7 +7,10 @@
 #include <vector>
 
 #include <ros/ros.h>
+
 #include <tuw_geometry/pose2d.h>
+
+#include <tuw_iwos_odometer/side.h>
 
 namespace tuw_iwos_odometer
 {
@@ -15,12 +18,6 @@ class OdometerCalculator
 {
 
 public:
-
-  enum Side
-  {
-    LEFT,
-    RIGHT
-  };
 
   OdometerCalculator(double wheelbase, double wheeloffset);
   OdometerCalculator() = default;
