@@ -32,8 +32,8 @@ public:
    * calculate ICC in robot coordinates
    */
   tuw::Point2D calculate_icc(std::map<Side, double> steering_position,
-                             const std::shared_ptr<tuw::Point2D>& b_l = NULL,
-                             const std::shared_ptr<tuw::Point2D>& b_r = NULL);
+                             const std::shared_ptr<tuw::Point2D>& b_l = nullptr,
+                             const std::shared_ptr<tuw::Point2D>& b_r = nullptr);
   // TODO:
   /*
    * calculate ICC in robot coordinates based in Pose2D for each wheel
