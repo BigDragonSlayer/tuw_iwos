@@ -45,34 +45,24 @@ tuw::Point2D IccCalculator::calculate_icc(std::map<Side, double> steering_positi
   tuw::Point2D a_r(this->wheeloffset_, -this->wheelbase_ / 2.0);
 
   // calculate position of wheel contact point
-  tuw::Point2D b_l = a_l + tuw::Point2D(-cos(alpha_l) * this->wheeloffset_, -sin(alpha_l) * this->wheeloffset_);
-  tuw::Point2D b_r = a_r + tuw::Point2D(-cos(alpha_r) * this->wheeloffset_, -sin(alpha_r) * this->wheeloffset_);
+  tuw::Point2D b_l(a_l.x() - cos(alpha_l) * this->wheeloffset_, a_l.y() - sin(alpha_l) * this->wheeloffset_);
+  tuw::Point2D b_r(a_r.x() - cos(alpha_r) * this->wheeloffset_, a_r.y() - sin(alpha_r) * this->wheeloffset_);
 
   if (b_l_ptr != nullptr)
     *b_l_ptr = b_l;
   if (b_r_ptr != nullptr)
     *b_r_ptr = b_r;
 
-  // calculate vector pointing in wheel direction
-  cv::Vec<double, 2> p_l = a_l.vector() - b_l.vector();
-  cv::Vec<double, 2> p_r = a_r.vector() - b_r.vector();
+  // create vector pointing in wheel driving direction
+  // tuw::Pose2D p_l(b_l, alpha_l);
+  // tuw::Pose2D p_r(b_r, alpha_r);
 
-  // create vector on line to ICC (tilt pointing vector)
-  // to tilt the vector {x,y} -> {y,-x} or {x,y} -> {-y,x}
-  cv::Vec<double, 2> n_l {p_l[1], -p_l[0]};
-  cv::Vec<double, 2> n_r {p_r[1], -p_r[0]};
+  // create vector orthogonal to wheel driving direction
+  tuw::Pose2D n_l(b_l, alpha_l + M_PI / 2.0);
+  tuw::Pose2D n_r(b_r, alpha_r + M_PI / 2.0);
 
-  // create (vector to) point on line to ICC
-  cv::Vec<double, 2> v_c_l = b_l.vector() + n_l;
-  cv::Vec<double, 2> v_c_r = b_r.vector() + n_r;
-
-  // convert vector to point
-  tuw::Point2D c_l(v_c_l[0],v_c_l[1]);
-  tuw::Point2D c_r(v_c_r[0],v_c_r[1]);
-
-  // create line orthogonal to wheel
-  tuw::Line2D l_l(b_l,c_l);
-  tuw::Line2D l_r(b_r,c_r);
+  tuw::Line2D l_l(b_l, n_l.point_ahead());
+  tuw::Line2D l_r(b_r, n_r.point_ahead());
 
   // find intersection of the lines
   tuw::Point2D ICC = l_l.intersection(l_r);
