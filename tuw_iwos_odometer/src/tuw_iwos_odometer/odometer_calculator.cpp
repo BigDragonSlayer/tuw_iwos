@@ -3,6 +3,8 @@
 #include <tuw_iwos_odometer/icc_calculator.h>
 #include <tuw_iwos_odometer/odometer_calculator.h>
 
+#include <utility>
+
 using tuw_iwos_odometer::IccCalculator;
 using tuw_iwos_odometer::OdometerCalculator;
 
@@ -51,7 +53,27 @@ tuw::Pose2D OdometerCalculator::update(ros::Duration duration,
 }
 
 double OdometerCalculator::calculate_velocity(std::map<Side, double> revolute_velocity,
-                                              std::map<Side, double> steering_position)
+                                              std::map<Side, double> steering_position,
+                                              double velocity_difference_tolerance)
 {
-//  tuw::Point2D ICC = IccCalculator(this->wheelbase_, this->wheeloffset_, this->tolerance_).calculate_icc();
+  IccCalculator icc_calculator(this->wheelbase_,this->wheeloffset_, this->tolerance_);
+  std::shared_ptr<tuw::Point2D> b_l = std::make_shared<tuw::Point2D>();
+  std::shared_ptr<tuw::Point2D> b_r = std::make_shared<tuw::Point2D>();
+  tuw::Point2D icc = icc_calculator.calculate_icc(std::move(steering_position), b_l, b_r);
+
+  double r_l = b_l->distanceTo(icc);
+  double r_r = b_r->distanceTo(icc);
+
+  double w_l = revolute_velocity[Side::LEFT] / r_l;
+  double w_r = revolute_velocity[Side::RIGHT] / r_r;
+
+  if (abs(w_l - w_r) <= velocity_difference_tolerance)
+  {
+    double w = (w_l + w_r) / 2.0;
+    return w;
+  }
+  else
+  {
+    throw std::runtime_error("failed to calculate center velocity within tolerance");
+  }
 }
