@@ -22,9 +22,10 @@ public:
   OdometerCalculator(double wheelbase, double wheeloffset, double tolerance);
   OdometerCalculator() = default;
   ~OdometerCalculator() = default;
-  double calculate_velocity(std::map<Side, double> revolute_velocity,
-                            std::map<Side, double> steering_position,
-                            double velocity_difference_tolerance);
+  cv::Vec<double, 3> calculate_velocity(std::map<Side, double> revolute_velocity,
+                                        std::map<Side, double> steering_position,
+                                        double velocity_difference_tolerance);
+
   tuw::Pose2D update(ros::Duration duration,
                      tuw::Pose2D position,
                      std::map<Side, double> revolute_velocity,

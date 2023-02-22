@@ -52,28 +52,31 @@ tuw::Pose2D OdometerCalculator::update(ros::Duration duration,
   return odom;
 }
 
-double OdometerCalculator::calculate_velocity(std::map<Side, double> revolute_velocity,
-                                              std::map<Side, double> steering_position,
-                                              double velocity_difference_tolerance)
+cv::Vec<double, 3> OdometerCalculator::calculate_velocity(std::map<Side, double> revolute_velocity,
+                                                          std::map<Side, double> steering_position,
+                                                          double velocity_difference_tolerance)
 {
-  IccCalculator icc_calculator(this->wheelbase_,this->wheeloffset_, this->tolerance_);
-  std::shared_ptr<tuw::Point2D> b_l = std::make_shared<tuw::Point2D>();
-  std::shared_ptr<tuw::Point2D> b_r = std::make_shared<tuw::Point2D>();
+  double v;  // linear velocity
+  double w;  // angular velocity
+
+  IccCalculator icc_calculator(this->wheelbase_, this->wheeloffset_, this->tolerance_);
+  std::shared_ptr<tuw::Point2D> b_l = std::make_shared<tuw::Point2D>();  // left wheel floor contact point
+  std::shared_ptr<tuw::Point2D> b_r = std::make_shared<tuw::Point2D>();  // right wheel floor contact point
   tuw::Point2D icc = icc_calculator.calculate_icc(std::move(steering_position), b_l, b_r);
 
-  double r_l = b_l->distanceTo(icc);
-  double r_r = b_r->distanceTo(icc);
+  // calculate radius for the motion arc (distance of robot to ICC)
+  double r_l = b_l->distanceTo(icc);                   // left wheel
+  double r_r = b_r->distanceTo(icc);                   // right wheel
+  double r_c = tuw::Point2D(0.0, 0.0).distanceTo(icc); // base_link
 
+  // calculate angular velocity for the wheel motion arc
   double w_l = revolute_velocity[Side::LEFT] / r_l;
   double w_r = revolute_velocity[Side::RIGHT] / r_r;
 
-  if (abs(w_l - w_r) <= velocity_difference_tolerance)
-  {
-    double w = (w_l + w_r) / 2.0;
-    return w;
-  }
-  else
-  {
-    throw std::runtime_error("failed to calculate center velocity within tolerance");
-  }
+  if (abs(w_l - w_r) <= velocity_difference_tolerance) w = (w_l + w_r) / 2.0;
+  else throw std::runtime_error("failed to calculate center velocity within tolerance");
+
+  v = w * r_c;
+
+  return cv::Vec<double, 3>{v, 0.0, w};
 }
