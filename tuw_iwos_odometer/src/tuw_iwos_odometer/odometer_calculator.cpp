@@ -34,33 +34,44 @@ tuw::Pose2D OdometerCalculator::update(ros::Duration duration,
   {
     case IccCalculator::Mode::IDENTICAL:
     {
-      double R;
-      if (abs(-v_l + v_r) < FLT_MIN)
-        R = std::numeric_limits<double>::max();
-      else
-        R = (this->wheelbase_ / 2.0) * ((v_l + v_r) / (-v_l + v_r));
-
+      cv::Vec<double, 3> velocity = this->calculate_velocity(revolute_velocity,
+                                                             steering_position,
+                                                             0.01);
+      cv::Vec<double, 3> velocity_robot = velocity;
+      double v = (v_l + v_r) / 2.0;
       double w = (-v_l + v_r) / this->wheelbase_;
 
-      icc = tuw::Point2D(position.x() - R * sin(position.theta()),
-                         position.y() + R * cos(position.theta()),
-                         0.0);
-      // robot to world
-      cv::Matx<double, 3, 3> matrix = cv::Matx<double, 3, 3>(cos(w * dt), -sin(w * dt), 0,
-                                                             sin(w * dt), cos(w * dt), 0,
-                                                             0, 0, 1);
-      cv::Vec<double, 3> multiplier = cv::Vec<double, 3>(position.x() - icc.x(),
-                                                         position.y() - icc.y(),
-                                                         position.theta());
-      cv::Vec<double, 3> offset = cv::Vec<double, 3>(icc.x(),
-                                                     icc.y(),
-                                                     w * dt);
+      cv::Vec<double, 3> velocity_robot(v, 0.0, w);
+      cv::Vec<double, 3> position_iterator(position.x(), position.y(), position.theta());
+      cv::Matx<double, 3, 3> r_2_w;
+      int steps = 10000;   // TODO: change this
+      double dt_iterator = dt / static_cast<double>(steps);
 
-      odom = matrix * multiplier + offset;
+      for (int i = 0; i < steps; i++)
+      {
+
+        r_2_w = cv::Matx<double, 3, 3>(cos(position_iterator[2]), -sin(position_iterator[2]), 0,
+                                       sin(position_iterator[2]), cos(position_iterator[2]), 0,
+                                       0, 0, 1);
+
+        position_iterator += r_2_w * velocity_robot * dt_iterator;
+      }
+      odom = position_iterator;
       break;
     }
     case IccCalculator::Mode::INTERSECTION:
+    {
+      cv::Vec<double, 3> velocity = this->calculate_velocity(revolute_velocity,
+                                                             steering_position,
+                                                             0.01);
+      // robot to world
+      cv::Matx<double, 3, 3> r_2_w = cv::Matx<double, 3, 3>(cos(position.theta()), -sin(position.theta()), 0,
+                                                            sin(position.theta()), cos(position.theta()), 0,
+                                                            0, 0, 1);
+
+      odom = position.state_vector() + r_2_w * velocity * dt;
       break;
+    }
     case IccCalculator::Mode::PARALLEL:
       break;
   }
@@ -84,8 +95,8 @@ cv::Vec<double, 3> OdometerCalculator::calculate_velocity(std::map<Side, double>
   tuw::Point2D icc = icc_calculator.calculate_icc(revolute_velocity, steering_position, r_l, r_r, r);
 
   // calculate angular velocity for the wheel motion arc
-  double w_l = revolute_velocity[Side::LEFT] / *r_l;
-  double w_r = revolute_velocity[Side::RIGHT] / *r_r;
+  double w_l = abs(revolute_velocity[Side::LEFT] / *r_l);
+  double w_r = abs(revolute_velocity[Side::RIGHT] / *r_r);
 
   if (abs(w_l - w_r) <= velocity_difference_tolerance) w = (w_l + w_r) / 2.0;
   else throw std::runtime_error("failed to calculate center velocity within tolerance");

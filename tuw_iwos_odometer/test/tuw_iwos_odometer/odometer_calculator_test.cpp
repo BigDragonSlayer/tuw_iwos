@@ -6,10 +6,12 @@
 
 #include <tuw_geometry/pose2d.h>
 
+#include <tuw_iwos_odometer/icc_calculator.h>
 #include <tuw_iwos_odometer/odometer_calculator.h>
 
 #define ASSERTION_TOLERANCE 0.001
 
+using tuw_iwos_odometer::IccCalculator;
 using tuw_iwos_odometer::OdometerCalculator;
 using tuw_iwos_odometer::Side;
 
@@ -23,9 +25,9 @@ protected:
   std::shared_ptr<OdometerCalculator> odometer_calculator_ = std::make_shared<OdometerCalculator>(this->wheelbase_,
                                                                                                   this->wheeloffset_,
                                                                                                   this->tolerance_);
-  std::map<Side, double> revolute_velocity {{Side::LEFT, 0.0},{Side::RIGHT, 0.0}};
-  std::map<Side, double> steering_velocity {{Side::LEFT, 0.0},{Side::RIGHT, 0.0}};
-  std::map<Side, double> steering_position {{Side::LEFT, 0.0},{Side::RIGHT, 0.0}};
+  std::map<Side, double> revolute_velocity{{Side::LEFT,  0.0}, {Side::RIGHT, 0.0}};
+  std::map<Side, double> steering_velocity{{Side::LEFT,  0.0}, {Side::RIGHT, 0.0}};
+  std::map<Side, double> steering_position{{Side::LEFT,  0.0}, {Side::RIGHT, 0.0}};
 };
 
 TEST_F(OdometerCalculatorTest, odom_no_motion)
@@ -48,8 +50,8 @@ TEST_F(OdometerCalculatorTest, odom_90_deg_rotation_left)
 {
   // basic differential drive movement
   ros::Duration dt{2.0};
-  this->revolute_velocity[Side::LEFT] = -this->wheelbase_ * M_PI / 4 / 2;
-  this->revolute_velocity[Side::RIGHT] = this->wheelbase_ * M_PI / 4 / 2;
+  this->revolute_velocity[Side::LEFT] = -this->wheelbase_ * M_PI / 4.0 / 2.0;
+  this->revolute_velocity[Side::RIGHT] = this->wheelbase_ * M_PI / 4.0 / 2.0;
   this->steering_velocity[Side::LEFT] = 0.0;
   this->steering_velocity[Side::RIGHT] = 0.0;
   tuw::Pose2D end_should(this->start_.x() + 0.0,
@@ -64,8 +66,8 @@ TEST_F(OdometerCalculatorTest, odom_90_deg_rotation_right)
 {
   // basic differential drive movement
   ros::Duration dt{2.0};
-  this->revolute_velocity[Side::LEFT] = this->wheelbase_ * M_PI / 4 / 2;
-  this->revolute_velocity[Side::RIGHT] = -this->wheelbase_ * M_PI / 4 / 2;
+  this->revolute_velocity[Side::LEFT] = this->wheelbase_ * M_PI / 4.0 / 2.0;
+  this->revolute_velocity[Side::RIGHT] = -this->wheelbase_ * M_PI / 4.0 / 2.0;
   this->steering_velocity[Side::LEFT] = 0.0;
   this->steering_velocity[Side::RIGHT] = 0.0;
   tuw::Pose2D end_should(this->start_.x() + 0.0,
@@ -295,8 +297,8 @@ TEST_F(OdometerCalculatorTest, odom_left_curve_forward_180_deg)
   this->revolute_velocity[Side::RIGHT] = (radius + this->wheelbase_ / 2.0) * angle / seconds;
   this->steering_velocity[Side::LEFT] = 0.0;
   this->steering_velocity[Side::RIGHT] = 0.0;
-  tuw::Pose2D end_should(this->start_.x() - radius,
-                         this->start_.y() + radius,
+  tuw::Pose2D end_should(this->start_.x() - 2.0 * radius,
+                         this->start_.y(),
                          this->start_.theta() + angle);
   end_should.normalizeOrientation();
   tuw::Pose2D end_is = this->odometer_calculator_->update
@@ -315,8 +317,8 @@ TEST_F(OdometerCalculatorTest, odom_right_curve_forward_180_deg)
   this->revolute_velocity[Side::RIGHT] = (radius - this->wheelbase_ / 2.0) * angle / seconds;
   this->steering_velocity[Side::LEFT] = 0.0;
   this->steering_velocity[Side::RIGHT] = 0.0;
-  tuw::Pose2D end_should(this->start_.x() + radius,
-                         this->start_.y() + radius,
+  tuw::Pose2D end_should(this->start_.x() + 2.0 * radius,
+                         this->start_.y(),
                          this->start_.theta() - angle);
   end_should.normalizeOrientation();
   tuw::Pose2D end_is = this->odometer_calculator_->update
@@ -335,8 +337,8 @@ TEST_F(OdometerCalculatorTest, odom_left_curve_backward_180_deg)
   this->revolute_velocity[Side::RIGHT] = -(radius + this->wheelbase_ / 2.0) * angle / seconds;
   this->steering_velocity[Side::LEFT] = 0.0;
   this->steering_velocity[Side::RIGHT] = 0.0;
-  tuw::Pose2D end_should(this->start_.x() - radius,
-                         this->start_.y() - radius,
+  tuw::Pose2D end_should(this->start_.x() - 2.0 * radius,
+                         this->start_.y(),
                          this->start_.theta() - angle);
   end_should.normalizeOrientation();
   tuw::Pose2D end_is = this->odometer_calculator_->update
@@ -355,13 +357,14 @@ TEST_F(OdometerCalculatorTest, odom_right_curve_backward_180_deg)
   this->revolute_velocity[Side::RIGHT] = -(radius - this->wheelbase_ / 2.0) * angle / seconds;
   this->steering_velocity[Side::LEFT] = 0.0;
   this->steering_velocity[Side::RIGHT] = 0.0;
-  tuw::Pose2D end_should(this->start_.x() + radius,
-                         this->start_.y() - radius,
+  tuw::Pose2D end_should(this->start_.x() + 2.0 * radius,
+                         this->start_.y(),
                          this->start_.theta() + angle);
   end_should.normalizeOrientation();
   tuw::Pose2D end_is = this->odometer_calculator_->update
           (dt, this->start_, this->revolute_velocity, this->steering_velocity, this->steering_position);
-  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));}
+  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));
+}
 
 TEST_F(OdometerCalculatorTest, odom_left_curve_forward_270_deg)
 {
@@ -375,7 +378,7 @@ TEST_F(OdometerCalculatorTest, odom_left_curve_forward_270_deg)
   this->steering_velocity[Side::LEFT] = 0.0;
   this->steering_velocity[Side::RIGHT] = 0.0;
   tuw::Pose2D end_should(this->start_.x() - radius,
-                         this->start_.y() + radius,
+                         this->start_.y() - radius,
                          this->start_.theta() + angle);
   end_should.normalizeOrientation();
   tuw::Pose2D end_is = this->odometer_calculator_->update
@@ -395,12 +398,13 @@ TEST_F(OdometerCalculatorTest, odom_right_curve_forward_270_deg)
   this->steering_velocity[Side::LEFT] = 0.0;
   this->steering_velocity[Side::RIGHT] = 0.0;
   tuw::Pose2D end_should(this->start_.x() + radius,
-                         this->start_.y() + radius,
+                         this->start_.y() - radius,
                          this->start_.theta() - angle);
   end_should.normalizeOrientation();
   tuw::Pose2D end_is = this->odometer_calculator_->update
           (dt, this->start_, this->revolute_velocity, this->steering_velocity, this->steering_position);
-  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));}
+  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));
+}
 
 TEST_F(OdometerCalculatorTest, odom_left_curve_backward_270_deg)
 {
@@ -414,7 +418,7 @@ TEST_F(OdometerCalculatorTest, odom_left_curve_backward_270_deg)
   this->steering_velocity[Side::LEFT] = 0.0;
   this->steering_velocity[Side::RIGHT] = 0.0;
   tuw::Pose2D end_should(this->start_.x() - radius,
-                         this->start_.y() - radius,
+                         this->start_.y() + radius,
                          this->start_.theta() - angle);
   end_should.normalizeOrientation();
   tuw::Pose2D end_is = this->odometer_calculator_->update
@@ -434,12 +438,13 @@ TEST_F(OdometerCalculatorTest, odom_right_curve_backward_270_deg)
   this->steering_velocity[Side::LEFT] = 0.0;
   this->steering_velocity[Side::RIGHT] = 0.0;
   tuw::Pose2D end_should(this->start_.x() + radius,
-                         this->start_.y() - radius,
+                         this->start_.y() + radius,
                          this->start_.theta() + angle);
   end_should.normalizeOrientation();
   tuw::Pose2D end_is = this->odometer_calculator_->update
           (dt, this->start_, this->revolute_velocity, this->steering_velocity, this->steering_position);
-  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));}
+  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));
+}
 
 TEST_F(OdometerCalculatorTest, odom_left_curve_forward_360_deg)
 {
@@ -452,13 +457,14 @@ TEST_F(OdometerCalculatorTest, odom_left_curve_forward_360_deg)
   this->revolute_velocity[Side::RIGHT] = (radius + this->wheelbase_ / 2.0) * angle / seconds;
   this->steering_velocity[Side::LEFT] = 0.0;
   this->steering_velocity[Side::RIGHT] = 0.0;
-  tuw::Pose2D end_should(this->start_.x() - radius,
-                         this->start_.y() + radius,
+  tuw::Pose2D end_should(this->start_.x(),
+                         this->start_.y(),
                          this->start_.theta() + angle);
   end_should.normalizeOrientation();
   tuw::Pose2D end_is = this->odometer_calculator_->update
           (dt, this->start_, this->revolute_velocity, this->steering_velocity, this->steering_position);
-  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));}
+  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));
+}
 
 TEST_F(OdometerCalculatorTest, odom_right_curve_forward_360_deg)
 {
@@ -471,8 +477,8 @@ TEST_F(OdometerCalculatorTest, odom_right_curve_forward_360_deg)
   this->revolute_velocity[Side::RIGHT] = (radius - this->wheelbase_ / 2.0) * angle / seconds;
   this->steering_velocity[Side::LEFT] = 0.0;
   this->steering_velocity[Side::RIGHT] = 0.0;
-  tuw::Pose2D end_should(this->start_.x() + radius,
-                         this->start_.y() + radius,
+  tuw::Pose2D end_should(this->start_.x(),
+                         this->start_.y(),
                          this->start_.theta() - angle);
   end_should.normalizeOrientation();
   tuw::Pose2D end_is = this->odometer_calculator_->update
@@ -491,8 +497,8 @@ TEST_F(OdometerCalculatorTest, odom_left_curve_backward_360_deg)
   this->revolute_velocity[Side::RIGHT] = -(radius + this->wheelbase_ / 2.0) * angle / seconds;
   this->steering_velocity[Side::LEFT] = 0.0;
   this->steering_velocity[Side::RIGHT] = 0.0;
-  tuw::Pose2D end_should(this->start_.x() - radius,
-                         this->start_.y() - radius,
+  tuw::Pose2D end_should(this->start_.x(),
+                         this->start_.y(),
                          this->start_.theta() - angle);
   end_should.normalizeOrientation();
   tuw::Pose2D end_is = this->odometer_calculator_->update
@@ -511,11 +517,41 @@ TEST_F(OdometerCalculatorTest, odom_right_curve_backward_360_deg)
   this->revolute_velocity[Side::RIGHT] = -(radius - this->wheelbase_ / 2.0) * angle / seconds;
   this->steering_velocity[Side::LEFT] = 0.0;
   this->steering_velocity[Side::RIGHT] = 0.0;
-  tuw::Pose2D end_should(this->start_.x() + radius,
-                         this->start_.y() - radius,
+  tuw::Pose2D end_should(this->start_.x(),
+                         this->start_.y(),
                          this->start_.theta() + angle);
   end_should.normalizeOrientation();
   tuw::Pose2D end_is = this->odometer_calculator_->update
           (dt, this->start_, this->revolute_velocity, this->steering_velocity, this->steering_position);
   ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));
+}
+
+TEST_F(OdometerCalculatorTest, odom_left_iwos_rotation_on_spot)
+{
+//  double angle = M_PI / 2.0;
+//  double seconds = 2.0;
+//  ros::Duration dt{seconds};
+//
+//  this->steering_position[Side::LEFT] = -M_PI / 4.0;
+//  this->steering_position[Side::RIGHT] = +M_PI / 4.0;
+//  tuw::Point2D icc_should{this->wheeloffset_ - sqrt(2) * this->wheeloffset_ - this->wheelbase_ / 2.0, 0.0};
+//  IccCalculator icc_calculator(this->wheelbase_, this->wheeloffset_, this->tolerance_);
+//  std::shared_ptr<double> r_l = std::make_shared<double>(0.0);
+//  std::shared_ptr<double> r_r = std::make_shared<double>(0.0);
+//  std::shared_ptr<double> r = std::make_shared<double>(0.0);
+//
+//  tuw::Point2D icc_is = icc_calculator.calculate_icc(this->revolute_velocity, this->steering_position, r_l, r_r, r);
+//
+//  ASSERT_TRUE(icc_is.equal(icc_should));
+//
+//  this->revolute_velocity[Side::LEFT] = -(*r_l) * angle / seconds;
+//  this->revolute_velocity[Side::RIGHT] = +(*r_r) * angle / seconds;
+//
+//  tuw::Pose2D end_should(this->start_.x(),
+//                         this->start_.y(),
+//                         this->start_.theta() + angle);
+//  tuw::Pose2D end_is = this->odometer_calculator_->update
+//          (dt, this->start_, this->revolute_velocity, this->steering_velocity, this->steering_position);
+//
+//  ASSERT_TRUE(end_is.equal(end_should, ASSERTION_TOLERANCE));
 }
