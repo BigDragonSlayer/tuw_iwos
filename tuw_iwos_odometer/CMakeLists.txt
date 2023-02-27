@@ -11,7 +11,12 @@ find_package(
   rospy
   roslib
   roslint
+  dynamic_reconfigure
   tuw_geometry
+)
+
+generate_dynamic_reconfigure_options(
+  config/joint_state_odometer.cfg
 )
 
 catkin_package(
@@ -22,6 +27,8 @@ catkin_package(
   rospy
   roslib
   roslint
+  dynamic_reconfigure
+  tuw_geometry
 )
 
 if(CATKIN_ENABLE_TESTING AND ENABLE_COVERAGE_TESTING)
@@ -82,6 +89,7 @@ add_executable(
 add_dependencies(
   ${PROJECT_NAME}_node
   ${PROJECT_NAME}
+  ${PROJECT_NAME}_gencfg
 )
 
 target_link_libraries(
