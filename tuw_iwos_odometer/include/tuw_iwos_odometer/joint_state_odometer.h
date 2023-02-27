@@ -24,7 +24,6 @@ public:
   ~JointStateOdometer() = default;
   JointStateOdometer(double wheelbase, double wheeloffset, std::shared_ptr<JointStateOdometerConfig> config);
   bool update(sensor_msgs::JointState joint_state, const std::shared_ptr<ros::Duration>& duration = nullptr);
-  void set_config_pointer();
   std::shared_ptr<geometry_msgs::TransformStamped> get_transform_pointer();
   std::shared_ptr<nav_msgs::Odometry> get_message_pointer();
   cv::Vec<double, 3> get_velocity();
@@ -58,7 +57,6 @@ protected:
   cv::Vec<double, 3> velocity_{0.0, 0.0, 0.0};
   tuw::Point2D icc_{0.0, 0.0, 0.0};
   tuw::Pose2D pose_{0.0, 0.0, 0.0};
-friend class JointStateOdometerTest;
 };
 }
 
