@@ -37,11 +37,9 @@ tuw::Pose2D OdometerCalculator::update(ros::Duration duration,
       cv::Vec<double, 3> velocity = this->calculate_velocity(revolute_velocity,
                                                              steering_position,
                                                              0.01);
-      cv::Vec<double, 3> velocity_robot = velocity;
       double v = (v_l + v_r) / 2.0;
       double w = (-v_l + v_r) / this->wheelbase_;
 
-      cv::Vec<double, 3> velocity_robot(v, 0.0, w);
       cv::Vec<double, 3> position_iterator(position.x(), position.y(), position.theta());
       cv::Matx<double, 3, 3> r_2_w;
       int steps = 10000;   // TODO: change this
@@ -54,7 +52,7 @@ tuw::Pose2D OdometerCalculator::update(ros::Duration duration,
                                        sin(position_iterator[2]), cos(position_iterator[2]), 0,
                                        0, 0, 1);
 
-        position_iterator += r_2_w * velocity_robot * dt_iterator;
+        position_iterator += r_2_w * velocity * dt_iterator;
       }
       odom = position_iterator;
       break;

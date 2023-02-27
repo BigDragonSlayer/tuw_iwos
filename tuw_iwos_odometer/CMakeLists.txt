@@ -3,7 +3,6 @@ project(tuw_iwos_odometer)
 
 add_compile_options(-std=c++14)
 
-
 find_package(
   catkin
   REQUIRED
@@ -46,8 +45,7 @@ roslint_cpp()
 
 add_library(
   ${PROJECT_NAME}
-  src/${PROJECT_NAME}/icc_calculator.cpp
-  src/${PROJECT_NAME}/odometer_calculator.cpp
+  src/${PROJECT_NAME}/joint_state_odometer.cpp
 )
 
 target_link_libraries(
@@ -60,8 +58,7 @@ if (CATKIN_ENABLE_TESTING)
   catkin_add_gtest(
     ${PROJECT_NAME}_tests
     test/all_tests.cpp
-    test/${PROJECT_NAME}/icc_calculator_test.cpp
-    test/${PROJECT_NAME}/odometer_calculator_test.cpp
+    test/${PROJECT_NAME}/joint_state_odometer_test.cpp
   )
 
   target_link_libraries(
