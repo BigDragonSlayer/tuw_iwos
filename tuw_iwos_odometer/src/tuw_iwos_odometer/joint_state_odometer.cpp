@@ -51,6 +51,7 @@ bool JointStateOdometer::update(sensor_msgs::JointState joint_state, const std::
   {
     this->this_time_ = ros::Time::now();
     this->duration_ = this->this_time_ - this->last_time_;
+    this->last_time_ = this->this_time_;
   } else
   {
     this->duration_ = *duration;
