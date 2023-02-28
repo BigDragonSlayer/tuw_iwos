@@ -1,7 +1,7 @@
 // Copyright 2023 Eugen Kaltenegger
 
-#ifndef DIP_WS_JOINT_STATE_ODOMETER_H
-#define DIP_WS_JOINT_STATE_ODOMETER_H
+#ifndef DIP_WS_ENCODER_ODOMETER_H
+#define DIP_WS_ENCODER_ODOMETER_H
 
 #include <sensor_msgs/JointState.h>
 #include <nav_msgs/Odometry.h>
@@ -14,17 +14,17 @@
 #include <tuw_geometry/pose2d.h>
 
 #include <tuw_iwos_odometer/side.h>
-#include <tuw_iwos_odometer/JointStateOdometerConfig.h>
+#include <tuw_iwos_odometer/EncoderOdometerConfig.h>
 
 namespace tuw_iwos_odometer
 {
-class JointStateOdometer
+class EncoderOdometer
 {
 public:
-  JointStateOdometer() = default;
-  ~JointStateOdometer() = default;
-  JointStateOdometer(double wheelbase, double wheeloffset);
-  void jointStateOdometerConfigCallback(JointStateOdometerConfig& config, uint32_t level);
+  EncoderOdometer() = default;
+  ~EncoderOdometer() = default;
+  EncoderOdometer(double wheelbase, double wheeloffset);
+  void configCallback(EncoderOdometerConfig& config, uint32_t level);
   bool update(sensor_msgs::JointState joint_state, const std::shared_ptr<ros::Duration>& duration = nullptr);
   std::shared_ptr<geometry_msgs::TransformStamped> get_transform();
   std::shared_ptr<nav_msgs::Odometry> get_message();
@@ -36,9 +36,9 @@ protected:
   void calculate_velocity();
   void calculate_pose();
 
-  JointStateOdometerConfig config_;
-  dynamic_reconfigure::Server<JointStateOdometerConfig> reconfigure_server_;
-  dynamic_reconfigure::Server<JointStateOdometerConfig>::CallbackType callback_type_;
+  EncoderOdometerConfig config_;
+  dynamic_reconfigure::Server<EncoderOdometerConfig> reconfigure_server_;
+  dynamic_reconfigure::Server<EncoderOdometerConfig>::CallbackType callback_type_;
 
   geometry_msgs::Quaternion quaternion_;
   std::shared_ptr<nav_msgs::Odometry> message_;
@@ -63,4 +63,4 @@ protected:
 };
 }
 
-#endif //DIP_WS_JOINT_STATE_ODOMETER_H
+#endif //DIP_WS_ENCODER_ODOMETER_H

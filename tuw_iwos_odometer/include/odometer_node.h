@@ -6,7 +6,7 @@
 #include <ros/ros.h>
 #include <tf/transform_broadcaster.h>
 
-#include <tuw_iwos_odometer/joint_state_odometer.h>
+#include <tuw_iwos_odometer/encoder_odometer.h>
 
 namespace tuw_iwos_odometer
 {
@@ -21,7 +21,7 @@ private:
   ros::NodeHandle node_handle_;
   ros::Subscriber joint_state_subscriber_;
   ros::Publisher odometer_publisher_;
-  std::unique_ptr<JointStateOdometer> joint_state_odometer_;
+  std::unique_ptr<EncoderOdometer> encoder_odometer_;
 
   tf::TransformBroadcaster tf_broadcaster_;
 };

@@ -1,14 +1,14 @@
 // Copyright 2023 Eugen Kaltenegger
 
-#include <tuw_iwos_odometer/joint_state_odometer.h>
+#include <tuw_iwos_odometer/encoder_odometer.h>
 
 #include <tf/transform_datatypes.h>
 
 #include <utility>
 
-using tuw_iwos_odometer::JointStateOdometer;
+using tuw_iwos_odometer::EncoderOdometer;
 
-JointStateOdometer::JointStateOdometer(double wheelbase, double wheeloffset)
+EncoderOdometer::EncoderOdometer(double wheelbase, double wheeloffset)
 {
   this->wheelbase_ = wheelbase;
   this->wheeloffset_ = wheeloffset;
@@ -16,7 +16,7 @@ JointStateOdometer::JointStateOdometer(double wheelbase, double wheeloffset)
   this->message_ = std::make_shared<nav_msgs::Odometry>();
   this->transform_ = std::make_shared<geometry_msgs::TransformStamped>();
 
-  this->callback_type_ = boost::bind(&JointStateOdometer::jointStateOdometerConfigCallback, this, _1, _2);
+  this->callback_type_ = boost::bind(&EncoderOdometer::configCallback, this, _1, _2);
   this->reconfigure_server_.setCallback(this->callback_type_);
 
   this->this_time_ = ros::Time::now();
@@ -45,12 +45,12 @@ JointStateOdometer::JointStateOdometer(double wheelbase, double wheeloffset)
   this->transform_->transform.rotation = this->quaternion_;
 }
 
-void JointStateOdometer::jointStateOdometerConfigCallback(JointStateOdometerConfig &config, uint32_t level)
+void EncoderOdometer::configCallback(EncoderOdometerConfig &config, uint32_t level)
 {
   this->config_ = config;
 }
 
-bool JointStateOdometer::update(sensor_msgs::JointState joint_state, const std::shared_ptr<ros::Duration> &duration)
+bool EncoderOdometer::update(sensor_msgs::JointState joint_state, const std::shared_ptr<ros::Duration> &duration)
 {
   if (duration == nullptr)
   {
@@ -100,32 +100,32 @@ bool JointStateOdometer::update(sensor_msgs::JointState joint_state, const std::
   return true;
 }
 
-std::shared_ptr<nav_msgs::Odometry> JointStateOdometer::get_message()
+std::shared_ptr<nav_msgs::Odometry> EncoderOdometer::get_message()
 {
   return this->message_;
 }
 
-std::shared_ptr<geometry_msgs::TransformStamped> JointStateOdometer::get_transform()
+std::shared_ptr<geometry_msgs::TransformStamped> EncoderOdometer::get_transform()
 {
   return this->transform_;
 }
 
-cv::Vec<double, 3> tuw_iwos_odometer::JointStateOdometer::get_velocity()
+cv::Vec<double, 3> tuw_iwos_odometer::EncoderOdometer::get_velocity()
 {
   return this->velocity_;
 }
 
-tuw::Point2D tuw_iwos_odometer::JointStateOdometer::get_icc()
+tuw::Point2D tuw_iwos_odometer::EncoderOdometer::get_icc()
 {
   return this->icc_;
 }
 
-tuw::Pose2D tuw_iwos_odometer::JointStateOdometer::get_pose()
+tuw::Pose2D tuw_iwos_odometer::EncoderOdometer::get_pose()
 {
   return this->pose_;
 }
 
-void tuw_iwos_odometer::JointStateOdometer::calculate_icc()
+void tuw_iwos_odometer::EncoderOdometer::calculate_icc()
 {
   // write velocity to variables (to shorten lines below)
   double *v_l = &this->revolute_velocity_[Side::LEFT];
@@ -185,7 +185,7 @@ void tuw_iwos_odometer::JointStateOdometer::calculate_icc()
   this->radius_[Side::RIGHT] = b_r.distanceTo(this->icc_);
 }
 
-void JointStateOdometer::calculate_velocity()
+void EncoderOdometer::calculate_velocity()
 {
   double v;  // linear velocity
   double w;  // angular velocity
@@ -216,7 +216,7 @@ void JointStateOdometer::calculate_velocity()
   this->velocity_ = {v, 0.0, w};
 }
 
-void JointStateOdometer::calculate_pose()
+void EncoderOdometer::calculate_pose()
 {
   cv::Vec<double, 3> pose = this->pose_.state_vector();
   double dt = this->duration_.toSec() / this->config_.calculation_iterations;

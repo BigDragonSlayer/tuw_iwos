@@ -2,11 +2,11 @@
 
 #include <gtest/gtest.h>
 
-#include <tuw_iwos_odometer/joint_state_odometer.h>
+#include <tuw_iwos_odometer/encoder_odometer.h>
 
 #define ASSERTION_TOLERANCE 0.001
 
-using tuw_iwos_odometer::JointStateOdometer;
+using tuw_iwos_odometer::EncoderOdometer;
 using tuw_iwos_odometer::JointStateOdometerConfig;
 using tuw_iwos_odometer::Side;
 
@@ -47,8 +47,8 @@ protected:
 
   std::shared_ptr<JointStateOdometerConfig> config_ =
           std::make_shared<JointStateOdometerConfig>();
-  std::shared_ptr<JointStateOdometer> odometer_calculator_ =
-          std::make_shared<JointStateOdometer>(this->wheelbase_, this->wheeloffset_, this->config_);
+  std::shared_ptr<EncoderOdometer> odometer_calculator_ =
+          std::make_shared<EncoderOdometer>(this->wheelbase_, this->wheeloffset_, this->config_);
 };
 
 TEST_F(JointStateOdometerTest, odom_no_motion)

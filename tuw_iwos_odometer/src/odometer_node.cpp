@@ -16,7 +16,7 @@ OdometerNode::OdometerNode()
   this->tf_broadcaster_ = tf::TransformBroadcaster();
 
 
-  this->joint_state_odometer_ = std::make_unique<JointStateOdometer>(0.5, 0.1);
+  this->encoder_odometer_ = std::make_unique<EncoderOdometer>(0.5, 0.1);
 }
 
 void tuw_iwos_odometer::OdometerNode::run()
@@ -29,9 +29,9 @@ void tuw_iwos_odometer::OdometerNode::run()
 
 void OdometerNode::update(const sensor_msgs::JointState &joint_state)
 {
-  this->joint_state_odometer_->update(joint_state);
-  this->odometer_publisher_.publish(*this->joint_state_odometer_->get_message());
-  this->tf_broadcaster_.sendTransform(*this->joint_state_odometer_->get_transform());
+  this->encoder_odometer_->update(joint_state);
+  this->odometer_publisher_.publish(*this->encoder_odometer_->get_message());
+  this->tf_broadcaster_.sendTransform(*this->encoder_odometer_->get_transform());
 }
 
 int main(int argc, char** argv)

@@ -18,7 +18,7 @@ find_package(
 )
 
 generate_dynamic_reconfigure_options(
-  config/joint_state_odometer.cfg
+  config/encoder_odometer.cfg
 )
 
 catkin_package(
@@ -42,7 +42,7 @@ roslint_cpp()
 
 add_library(
   ${PROJECT_NAME}
-  src/${PROJECT_NAME}/joint_state_odometer.cpp
+  src/${PROJECT_NAME}/encoder_odometer.cpp
 )
 
 target_link_libraries(
@@ -55,7 +55,7 @@ if (CATKIN_ENABLE_TESTING)
   catkin_add_gtest(
     ${PROJECT_NAME}_tests
     test/all_tests.cpp
-    test/${PROJECT_NAME}/joint_state_odometer_test.cpp
+    test/${PROJECT_NAME}/encoder_odometer_test.cpp
   )
 
   target_link_libraries(
