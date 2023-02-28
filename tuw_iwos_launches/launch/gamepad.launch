@@ -1,10 +1,10 @@
 <launch>
 
   <!-- args for gamepad node -->
-  <arg name="converter" default="IWOSOrientation" />
+  <arg name="converter" default="JointsIwsForIwos" />
   <arg name="device" default="LogitechF710" />
   <arg name="origin_topic" default="joy" />
-  <arg name="target_topic" default="iwos_command_twist_with_orientation" />
+  <arg name="target_topic" default="iwos_command_hardware" />
 
   <!-- joy node -->
   <node pkg="joy" type="joy_node" name="joy_controller" >
@@ -18,21 +18,6 @@
     <param name="device" value="$(arg device)" />
     <remap from="joy" to="$(arg origin_topic)"/>
     <remap from="cmd" to="$(arg target_topic)"/>
-  </node>
-
-  <!-- args for converter node -->
-  <arg name="state_subscriber" default="joint_states"/>
-  <arg name="command_subscriber" default="iwos_command_twist_with_orientation"/>
-  <arg name="command_publisher" default="iwos_command_hardware"/>
-
-  <!-- converter node -->
-  <node name="IWOS_COMMAND_CONVERTER"
-        pkg="tuw_iwos_command_converter"
-        type="command_converter_node.py"
-        output="screen">
-    <remap from="joint_state" to="$(arg state_subscriber)"/>
-    <remap from="iwos_command_twist_with_orientation" to="$(arg command_subscriber)"/>
-    <remap from="iwos_command_hardware" to="$(arg command_publisher)"/>
   </node>
 
 </launch>
