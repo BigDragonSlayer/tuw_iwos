@@ -219,7 +219,8 @@ void JointStateOdometer::calculate_pose()
     cv::Matx<double, 3, 3> r_2_w = cv::Matx<double, 3, 3>(+cos(pose[2]), -sin(pose[2]), 0.0,
                                                           +sin(pose[2]), +cos(pose[2]), 0.0,
                                                           0.0, 0.0, 1.0);
-    pose += (r_2_w * this->velocity_ * dt);
+    cv::Vec<double, 3> change = this->velocity_ * dt;
+    pose += (r_2_w * change);
   }
   this->pose_ = tuw::Pose2D(pose);
 }
