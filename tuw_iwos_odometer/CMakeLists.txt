@@ -11,7 +11,10 @@ find_package(
   roslib
   roslint
   dynamic_reconfigure
+  tf
   tuw_geometry
+  sensor_msgs
+  nav_msgs
 )
 
 generate_dynamic_reconfigure_options(
@@ -22,12 +25,6 @@ catkin_package(
   INCLUDE_DIRS include
   LIBRARIES ${PROJECT_NAME}
   CATKIN_DEPENDS
-  roscpp
-  rospy
-  roslib
-  roslint
-  dynamic_reconfigure
-  tuw_geometry
 )
 
 if(CATKIN_ENABLE_TESTING AND ENABLE_COVERAGE_TESTING)
