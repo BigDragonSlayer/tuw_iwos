@@ -8,16 +8,16 @@
 
 using tuw_iwos_odometer::JointStateOdometer;
 
-tuw_iwos_odometer::JointStateOdometer::JointStateOdometer(double wheelbase,
-                                                          double wheeloffset,
-                                                          std::shared_ptr<JointStateOdometerConfig> config)
+JointStateOdometer::JointStateOdometer(double wheelbase, double wheeloffset)
 {
   this->wheelbase_ = wheelbase;
   this->wheeloffset_ = wheeloffset;
-  this->config_ = std::move(config);
 
   this->message_ = std::make_shared<nav_msgs::Odometry>();
   this->transform_ = std::make_shared<geometry_msgs::TransformStamped>();
+
+  this->callback_type_ = boost::bind(&JointStateOdometer::jointStateOdometerConfigCallback, this, _1, _2);
+  this->reconfigure_server_.setCallback(this->callback_type_);
 
   this->this_time_ = ros::Time::now();
   this->last_time_ = ros::Time::now();
@@ -43,6 +43,11 @@ tuw_iwos_odometer::JointStateOdometer::JointStateOdometer(double wheelbase,
   this->transform_->transform.translation.y = 0.0;
   this->transform_->transform.translation.z = 0.0;
   this->transform_->transform.rotation = this->quaternion_;
+}
+
+void JointStateOdometer::jointStateOdometerConfigCallback(JointStateOdometerConfig &config, uint32_t level)
+{
+  this->config_ = config;
 }
 
 bool JointStateOdometer::update(sensor_msgs::JointState joint_state, const std::shared_ptr<ros::Duration> &duration)
@@ -131,10 +136,10 @@ void tuw_iwos_odometer::JointStateOdometer::calculate_icc()
   double *alpha_r = &this->steering_position_[Side::RIGHT];
 
   // check if wheels are parallel
-  if (abs(*alpha_l - *alpha_r) <= this->config_->steering_position_tolerance)
+  if (abs(*alpha_l - *alpha_r) <= this->config_.steering_position_tolerance)
   {
     // case velocity on both wheels equal - radius infinity - line motion
-    if (abs(*v_l - *v_r) <= this->config_->revolute_velocity_tolerance)
+    if (abs(*v_l - *v_r) <= this->config_.revolute_velocity_tolerance)
     {
       this->icc_ = {std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity()};
       this->center_radius_ = std::numeric_limits<double>::infinity();
@@ -198,7 +203,7 @@ void JointStateOdometer::calculate_velocity()
     double w_l = this->revolute_velocity_[Side::LEFT] / this->radius_[Side::LEFT];
     double w_r = this->revolute_velocity_[Side::RIGHT] / this->radius_[Side::RIGHT];
 
-    if (abs(w_l - w_r) <= this->config_->revolute_velocity_tolerance)
+    if (abs(w_l - w_r) <= this->config_.revolute_velocity_tolerance)
     {
       w = (w_l + w_r) / 2.0;
       v = w * this->center_radius_;
@@ -214,8 +219,8 @@ void JointStateOdometer::calculate_velocity()
 void JointStateOdometer::calculate_pose()
 {
   cv::Vec<double, 3> pose = this->pose_.state_vector();
-  double dt = this->duration_.toSec() / this->config_->calculation_iterations;
-  for (int i = 0; i < this->config_->calculation_iterations; i++)
+  double dt = this->duration_.toSec() / this->config_.calculation_iterations;
+  for (int i = 0; i < this->config_.calculation_iterations; i++)
   {
     cv::Matx<double, 3, 3> r_2_w = cv::Matx<double, 3, 3>(+cos(pose[2]), -sin(pose[2]), 0.0,
                                                           +sin(pose[2]), +cos(pose[2]), 0.0,

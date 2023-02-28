@@ -15,8 +15,8 @@ OdometerNode::OdometerNode()
   this->odometer_publisher_ = this->node_handle_.advertise<nav_msgs::Odometry>("odom", 50);
   this->tf_broadcaster_ = tf::TransformBroadcaster();
 
-  this->joint_state_odometer_config_ = std::make_shared<JointStateOdometerConfig>();
-  this->joint_state_odometer_ = std::make_unique<JointStateOdometer>(0.5, 0.1, this->joint_state_odometer_config_);
+
+  this->joint_state_odometer_ = std::make_unique<JointStateOdometer>(0.5, 0.1);
 }
 
 void tuw_iwos_odometer::OdometerNode::run()

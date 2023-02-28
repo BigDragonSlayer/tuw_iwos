@@ -7,6 +7,8 @@
 #include <nav_msgs/Odometry.h>
 #include <geometry_msgs/TransformStamped.h>
 
+#include <dynamic_reconfigure/server.h>
+
 #include <tuw_geometry/line2d.h>
 #include <tuw_geometry/point2d.h>
 #include <tuw_geometry/pose2d.h>
@@ -21,7 +23,8 @@ class JointStateOdometer
 public:
   JointStateOdometer() = default;
   ~JointStateOdometer() = default;
-  JointStateOdometer(double wheelbase, double wheeloffset, std::shared_ptr<JointStateOdometerConfig> config);
+  JointStateOdometer(double wheelbase, double wheeloffset);
+  void jointStateOdometerConfigCallback(JointStateOdometerConfig& config, uint32_t level);
   bool update(sensor_msgs::JointState joint_state, const std::shared_ptr<ros::Duration>& duration = nullptr);
   std::shared_ptr<geometry_msgs::TransformStamped> get_transform();
   std::shared_ptr<nav_msgs::Odometry> get_message();
@@ -33,11 +36,14 @@ protected:
   void calculate_velocity();
   void calculate_pose();
 
+  JointStateOdometerConfig config_;
+  dynamic_reconfigure::Server<JointStateOdometerConfig> reconfigure_server_;
+  dynamic_reconfigure::Server<JointStateOdometerConfig>::CallbackType callback_type_;
+
   geometry_msgs::Quaternion quaternion_;
   std::shared_ptr<nav_msgs::Odometry> message_;
   std::shared_ptr<geometry_msgs::TransformStamped> transform_;
 
-  std::shared_ptr<JointStateOdometerConfig> config_;
   double wheelbase_ {0.0};
   double wheeloffset_ {0.0};
 
