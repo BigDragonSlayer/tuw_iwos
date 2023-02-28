@@ -4,6 +4,8 @@
 
 #include <tf/transform_datatypes.h>
 
+#include <utility>
+
 using tuw_iwos_odometer::JointStateOdometer;
 
 tuw_iwos_odometer::JointStateOdometer::JointStateOdometer(double wheelbase,
@@ -12,18 +14,12 @@ tuw_iwos_odometer::JointStateOdometer::JointStateOdometer(double wheelbase,
 {
   this->wheelbase_ = wheelbase;
   this->wheeloffset_ = wheeloffset;
-  this->config_ = config;
+  this->config_ = std::move(config);
 
   this->this_time_ = ros::Time::now();
   this->last_time_ = ros::Time::now();
 
-  this->transform_->header.frame_id = "odom";
-  this->transform_->child_frame_id = "base_link";
-  this->transform_->transform.translation.x = 0.0;
-  this->transform_->transform.translation.y = 0.0;
-  this->transform_->transform.translation.z = 0.0;
-  this->transform_->transform.rotation = this->quaternion_;
-
+  this->message_ = std::make_shared<nav_msgs::Odometry>();
   this->message_->header.frame_id = "odom";
   this->message_->child_frame_id = "base_link";
   this->message_->pose.pose.position.x = 0.0;
@@ -36,6 +32,14 @@ tuw_iwos_odometer::JointStateOdometer::JointStateOdometer(double wheelbase,
   this->message_->twist.twist.angular.x = 0.0;
   this->message_->twist.twist.angular.y = 0.0;
   this->message_->twist.twist.angular.z = 0.0;
+
+  this->transform_ = std::make_shared<geometry_msgs::TransformStamped>();
+  this->transform_->header.frame_id = "odom";
+  this->transform_->child_frame_id = "base_link";
+  this->transform_->transform.translation.x = 0.0;
+  this->transform_->transform.translation.y = 0.0;
+  this->transform_->transform.translation.z = 0.0;
+  this->transform_->transform.rotation = this->quaternion_;
 }
 
 bool JointStateOdometer::update(sensor_msgs::JointState joint_state, const std::shared_ptr<ros::Duration> &duration)
@@ -87,12 +91,12 @@ bool JointStateOdometer::update(sensor_msgs::JointState joint_state, const std::
   return true;
 }
 
-std::shared_ptr<nav_msgs::Odometry> JointStateOdometer::get_message_pointer()
+std::shared_ptr<nav_msgs::Odometry> JointStateOdometer::get_message()
 {
   return this->message_;
 }
 
-std::shared_ptr<geometry_msgs::TransformStamped> JointStateOdometer::get_transform_pointer()
+std::shared_ptr<geometry_msgs::TransformStamped> JointStateOdometer::get_transform()
 {
   return this->transform_;
 }
