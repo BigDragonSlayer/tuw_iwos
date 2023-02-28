@@ -6,12 +6,26 @@
 #include <ros/ros.h>
 #include <tf/transform_broadcaster.h>
 
-class odometer_node
+#include <tuw_iwos_odometer/joint_state_odometer.h>
+
+namespace tuw_iwos_odometer
 {
-  ros::Subscriber subscriber_;
-  ros::Publisher publisher_;
+class OdometerNode
+{
+public:
+  OdometerNode();
+  ~OdometerNode() = default;
+  void run();
+  void update(const sensor_msgs::JointState& joint_state);
+private:
+  ros::NodeHandle node_handle_;
+  ros::Subscriber joint_state_subscriber_;
+  ros::Publisher odometer_publisher_;
+  std::shared_ptr<JointStateOdometerConfig> joint_state_odometer_config_;
+  std::unique_ptr<JointStateOdometer> joint_state_odometer_;
+
   tf::TransformBroadcaster tf_broadcaster_;
 };
-
+}
 
 #endif //DIP_WS_ODOMETER_NODE_H
