@@ -16,6 +16,9 @@ tuw_iwos_odometer::JointStateOdometer::JointStateOdometer(double wheelbase,
   this->wheeloffset_ = wheeloffset;
   this->config_ = std::move(config);
 
+  this->message_ = std::make_shared<nav_msgs::Odometry>();
+  this->transform_ = std::make_shared<geometry_msgs::TransformStamped>();
+
   this->this_time_ = ros::Time::now();
   this->last_time_ = ros::Time::now();
 

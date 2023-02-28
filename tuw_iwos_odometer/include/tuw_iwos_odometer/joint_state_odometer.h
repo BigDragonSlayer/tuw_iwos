@@ -34,10 +34,8 @@ protected:
   void calculate_pose();
 
   geometry_msgs::Quaternion quaternion_;
-  std::shared_ptr<nav_msgs::Odometry> message_ =
-          ;
-  std::shared_ptr<geometry_msgs::TransformStamped> transform_ =
-          ;
+  std::shared_ptr<nav_msgs::Odometry> message_;
+  std::shared_ptr<geometry_msgs::TransformStamped> transform_;
 
   std::shared_ptr<JointStateOdometerConfig> config_;
   double wheelbase_ {0.0};
