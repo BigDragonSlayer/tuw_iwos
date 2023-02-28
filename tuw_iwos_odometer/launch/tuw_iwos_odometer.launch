@@ -1,0 +1,8 @@
+<launch>
+
+  <node name="tuw_iwos_odometer"
+         pkg="tuw_iwos_odometer"
+         type="tuw_iwos_odometer_node"
+         output="screen"/>
+
+</launch>
