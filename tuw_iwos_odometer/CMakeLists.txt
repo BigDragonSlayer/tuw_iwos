@@ -19,6 +19,7 @@ find_package(
 
 generate_dynamic_reconfigure_options(
   config/encoder_odometer.cfg
+  config/imu_odometer.cfg
 )
 
 catkin_package(
@@ -43,6 +44,7 @@ roslint_cpp()
 add_library(
   ${PROJECT_NAME}
   src/${PROJECT_NAME}/encoder_odometer.cpp
+  src/${PROJECT_NAME}/imu_odometer.cpp
 )
 
 target_link_libraries(
