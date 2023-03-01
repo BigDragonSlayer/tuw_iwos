@@ -2,6 +2,8 @@
 
 #include "tuw_iwos_odometer/imu_odometer.h"
 
+#include <tf/transform_datatypes.h>
+
 using tuw_iwos_odometer::ImuOdometer;
 
 ImuOdometer::ImuOdometer(const std::shared_ptr<ros::NodeHandle>& node_handle)
@@ -73,6 +75,21 @@ bool ImuOdometer::update(const sensor_msgs::Imu& imu, const std::shared_ptr<ros:
   double theta = integrate(wz, this->pose_.theta(), dt, this->config_.velocity_integration_iterations);
 
   this->pose_ = tuw::Pose2D(x, y, theta);
+
+  this->quaternion_ = tf::createQuaternionMsgFromYaw(this->pose_.theta());
+
+  this->message_->header.stamp = this->this_time_;
+  this->message_->pose.pose.position.x = this->pose_.x();
+  this->message_->pose.pose.position.y = this->pose_.y();
+  this->message_->pose.pose.orientation = this->quaternion_;
+  this->message_->twist.twist.linear.x = this->velocity_[0];
+  this->message_->twist.twist.linear.y = this->velocity_[1];
+  this->message_->twist.twist.angular.z = this->velocity_[2];
+
+  this->transform_->header.stamp = this->this_time_;
+  this->transform_->transform.translation.x = this->pose_.x();
+  this->transform_->transform.translation.x = this->pose_.y();
+  this->transform_->transform.rotation = this->quaternion_;
 
   return true;
 }
