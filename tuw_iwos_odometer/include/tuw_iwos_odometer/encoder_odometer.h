@@ -23,7 +23,7 @@ class EncoderOdometer
 public:
   EncoderOdometer() = default;
   ~EncoderOdometer() = default;
-  EncoderOdometer(double wheelbase, double wheeloffset);
+  EncoderOdometer(double wheelbase, double wheeloffset, const std::shared_ptr<ros::NodeHandle>& node_handle);
   void configCallback(EncoderOdometerConfig& config, uint32_t level);
   bool update(sensor_msgs::JointState joint_state, const std::shared_ptr<ros::Duration>& duration = nullptr);
   std::shared_ptr<geometry_msgs::TransformStamped> get_transform();
@@ -37,7 +37,7 @@ protected:
   void calculate_pose();
 
   EncoderOdometerConfig config_;
-  dynamic_reconfigure::Server<EncoderOdometerConfig> reconfigure_server_;
+  std::shared_ptr<dynamic_reconfigure::Server<EncoderOdometerConfig>> reconfigure_server_;
   dynamic_reconfigure::Server<EncoderOdometerConfig>::CallbackType callback_type_;
 
   geometry_msgs::Quaternion quaternion_;

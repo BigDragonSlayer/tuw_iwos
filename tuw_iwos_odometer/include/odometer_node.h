@@ -7,6 +7,7 @@
 #include <tf/transform_broadcaster.h>
 
 #include <tuw_iwos_odometer/encoder_odometer.h>
+#include <tuw_iwos_odometer/imu_odometer.h>
 
 namespace tuw_iwos_odometer
 {
@@ -16,12 +17,18 @@ public:
   OdometerNode();
   ~OdometerNode() = default;
   void run();
-  void update(const sensor_msgs::JointState& joint_state);
+  void updateEncoder(const sensor_msgs::JointState& joint_state);
+  void updateImu(const sensor_msgs::Imu& imu);
 private:
-  ros::NodeHandle node_handle_;
-  ros::Subscriber joint_state_subscriber_;
-  ros::Publisher odometer_publisher_;
-  std::unique_ptr<EncoderOdometer> encoder_odometer_;
+  std::shared_ptr<ros::NodeHandle> node_handle_;
+
+  ros::Subscriber encoder_subscriber_;
+  ros::Subscriber imu_subscriber_;
+  ros::Publisher encoder_odometer_publisher_;
+  ros::Publisher imu_odometer_publisher_;
+
+  std::shared_ptr<EncoderOdometer> encoder_odometer_;
+  std::unique_ptr<ImuOdometer> imu_odometer_;
 
   tf::TransformBroadcaster tf_broadcaster_;
 };

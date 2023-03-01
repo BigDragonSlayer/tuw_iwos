@@ -17,22 +17,23 @@
 
 namespace tuw_iwos_odometer
 {
-class ImuAccelerationOdometer
+class ImuOdometer
 {
 public:
-  ImuAccelerationOdometer();
-  ~ImuAccelerationOdometer() = default;
+  ImuOdometer() = default;
+  ~ImuOdometer() = default;
+  explicit ImuOdometer(const std::shared_ptr<ros::NodeHandle>& node_handle);
   bool update(const sensor_msgs::Imu& imu, const std::shared_ptr<ros::Duration>& duration = nullptr);
+  void configCallback(ImuOdometerConfig& config, uint32_t level);
   std::shared_ptr<geometry_msgs::TransformStamped> get_transform();
   std::shared_ptr<nav_msgs::Odometry> get_message();
   cv::Vec<double, 3> get_velocity();
   tuw::Pose2D get_pose();
 protected:
-
   static double integrate(double f, double c, double dt, double steps);
 
   ImuOdometerConfig config_;
-  dynamic_reconfigure::Server<ImuOdometerConfig> reconfigure_server_;
+  std::shared_ptr<dynamic_reconfigure::Server<ImuOdometerConfig>> reconfigure_server_;
   dynamic_reconfigure::Server<ImuOdometerConfig>::CallbackType callback_type_;
 
   geometry_msgs::Quaternion quaternion_;

@@ -2,10 +2,13 @@
 
 #include "tuw_iwos_odometer/imu_odometer.h"
 
-using tuw_iwos_odometer::ImuAccelerationOdometer;
+using tuw_iwos_odometer::ImuOdometer;
 
-ImuAccelerationOdometer::ImuAccelerationOdometer()
+ImuOdometer::ImuOdometer(const std::shared_ptr<ros::NodeHandle>& node_handle)
 {
+  this->reconfigure_server_ = std::make_shared<dynamic_reconfigure::Server<ImuOdometerConfig>>(ros::NodeHandle(*node_handle, "ImuOdometer"));
+  this->callback_type_ = boost::bind(&ImuOdometer::configCallback, this, _1, _2);
+
   this->message_ = std::make_shared<nav_msgs::Odometry>();
   this->transform_ = std::make_shared<geometry_msgs::TransformStamped>();
 
@@ -32,7 +35,7 @@ ImuAccelerationOdometer::ImuAccelerationOdometer()
   this->transform_->transform.rotation = this->quaternion_;
 }
 
-bool ImuAccelerationOdometer::update(const sensor_msgs::Imu& imu, const std::shared_ptr<ros::Duration> &duration)
+bool ImuOdometer::update(const sensor_msgs::Imu& imu, const std::shared_ptr<ros::Duration> &duration)
 {
   if (duration == nullptr)
   {
@@ -74,17 +77,17 @@ bool ImuAccelerationOdometer::update(const sensor_msgs::Imu& imu, const std::sha
   return true;
 }
 
-std::shared_ptr<geometry_msgs::TransformStamped> ImuAccelerationOdometer::get_transform()
+std::shared_ptr<geometry_msgs::TransformStamped> ImuOdometer::get_transform()
 {
   return this->transform_;
 }
 
-std::shared_ptr<nav_msgs::Odometry> ImuAccelerationOdometer::get_message()
+std::shared_ptr<nav_msgs::Odometry> ImuOdometer::get_message()
 {
   return this->message_;
 }
 
-double ImuAccelerationOdometer::integrate(double f, double c, double dt, double steps)
+double ImuOdometer::integrate(double f, double c, double dt, double steps)
 {
   double x = 0.0;
   double dt_step = dt / steps;
@@ -95,12 +98,17 @@ double ImuAccelerationOdometer::integrate(double f, double c, double dt, double 
   return x + c;
 }
 
-cv::Vec<double, 3> ImuAccelerationOdometer::get_velocity()
+cv::Vec<double, 3> ImuOdometer::get_velocity()
 {
   return this->velocity_;
 }
 
-tuw::Pose2D ImuAccelerationOdometer::get_pose()
+tuw::Pose2D ImuOdometer::get_pose()
 {
   return this->pose_;
+}
+
+void ImuOdometer::configCallback(tuw_iwos_odometer::ImuOdometerConfig &config, uint32_t level)
+{
+  this->config_ = config;
 }

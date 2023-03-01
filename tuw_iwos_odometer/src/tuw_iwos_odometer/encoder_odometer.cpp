@@ -8,16 +8,18 @@
 
 using tuw_iwos_odometer::EncoderOdometer;
 
-EncoderOdometer::EncoderOdometer(double wheelbase, double wheeloffset)
+EncoderOdometer::EncoderOdometer(double wheelbase,
+                                 double wheeloffset,
+                                 const std::shared_ptr<ros::NodeHandle>& node_handle)
 {
   this->wheelbase_ = wheelbase;
   this->wheeloffset_ = wheeloffset;
 
+  this->reconfigure_server_ = std::make_shared<dynamic_reconfigure::Server<EncoderOdometerConfig>>(ros::NodeHandle(*node_handle, "EncoderOdometer"));
+  this->callback_type_ = boost::bind(&EncoderOdometer::configCallback, this, _1, _2);
+
   this->message_ = std::make_shared<nav_msgs::Odometry>();
   this->transform_ = std::make_shared<geometry_msgs::TransformStamped>();
-
-  this->callback_type_ = boost::bind(&EncoderOdometer::configCallback, this, _1, _2);
-  this->reconfigure_server_.setCallback(this->callback_type_);
 
   this->this_time_ = ros::Time::now();
   this->last_time_ = ros::Time::now();
