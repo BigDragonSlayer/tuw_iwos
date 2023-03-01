@@ -25,9 +25,6 @@ EncoderOdometer::EncoderOdometer(double wheelbase,
   this->message_ = std::make_shared<nav_msgs::Odometry>();
   this->transform_ = std::make_shared<geometry_msgs::TransformStamped>();
 
-  this->this_time_ = ros::Time::now();
-  this->last_time_ = ros::Time::now();
-
   this->message_ = std::make_shared<nav_msgs::Odometry>();
   this->message_->header.frame_id = "odom";
   this->message_->child_frame_id = "base_link";
