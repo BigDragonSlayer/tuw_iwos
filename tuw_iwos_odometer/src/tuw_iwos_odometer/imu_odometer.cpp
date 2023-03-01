@@ -69,8 +69,17 @@ bool ImuOdometer::update(const sensor_msgs::Imu& imu, const std::shared_ptr<ros:
 
   double wz = this->angular_velocity_[2];
 
-  double vx = integrate(ax, this->velocity_[0], dt, this->config_.acceleration_integration_iterations);
-  double vy = integrate(ay, this->velocity_[1], dt, this->config_.acceleration_integration_iterations);
+  double vx = this->velocity_[0];
+  double vy = this->velocity_[1];
+
+  if (abs(ax) > this->config_.angular_velocity_activation_threshold)
+  {
+    vx = integrate(ax, this->velocity_[0], dt, this->config_.acceleration_integration_iterations);
+  }
+  if (abs(ay) > this->config_.angular_velocity_activation_threshold)
+  {
+    vy = integrate(ay, this->velocity_[1], dt, this->config_.acceleration_integration_iterations);
+  }
 
   this->velocity_[0] = vx;
   this->velocity_[1] = vy;
