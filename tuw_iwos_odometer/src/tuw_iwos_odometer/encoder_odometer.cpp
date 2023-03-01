@@ -17,6 +17,10 @@ EncoderOdometer::EncoderOdometer(double wheelbase,
 
   this->reconfigure_server_ = std::make_shared<dynamic_reconfigure::Server<EncoderOdometerConfig>>(ros::NodeHandle(*node_handle, "EncoderOdometer"));
   this->callback_type_ = boost::bind(&EncoderOdometer::configCallback, this, _1, _2);
+  this->reconfigure_server_->setCallback(this->callback_type_);
+
+  this->this_time_ = ros::Time::now();
+  this->last_time_ = ros::Time::now();
 
   this->message_ = std::make_shared<nav_msgs::Odometry>();
   this->transform_ = std::make_shared<geometry_msgs::TransformStamped>();
