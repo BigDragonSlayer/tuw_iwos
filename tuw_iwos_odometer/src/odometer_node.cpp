@@ -25,10 +25,7 @@ OdometerNode::OdometerNode()
 
 void tuw_iwos_odometer::OdometerNode::run()
 {
-  while (this->node_handle_->ok())
-  {
-    ros::spin();
-  }
+  ros::spin();
 }
 
 void OdometerNode::updateEncoder(const sensor_msgs::JointState& joint_state)
