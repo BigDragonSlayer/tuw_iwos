@@ -10,6 +10,10 @@ ImuOdometer::ImuOdometer(const std::shared_ptr<ros::NodeHandle>& node_handle)
 {
   this->reconfigure_server_ = std::make_shared<dynamic_reconfigure::Server<ImuOdometerConfig>>(ros::NodeHandle(*node_handle, "ImuOdometer"));
   this->callback_type_ = boost::bind(&ImuOdometer::configCallback, this, _1, _2);
+  this->reconfigure_server_->setCallback(this->callback_type_);
+
+  this->this_time_ = ros::Time::now();
+  this->last_time_ = ros::Time::now();
 
   this->message_ = std::make_shared<nav_msgs::Odometry>();
   this->transform_ = std::make_shared<geometry_msgs::TransformStamped>();
@@ -37,13 +41,15 @@ ImuOdometer::ImuOdometer(const std::shared_ptr<ros::NodeHandle>& node_handle)
   this->transform_->transform.rotation = this->quaternion_;
 }
 
-bool ImuOdometer::update(const sensor_msgs::Imu& imu, const std::shared_ptr<ros::Duration> &duration)
+bool ImuOdometer::update(const sensor_msgs::Imu& imu, const std::shared_ptr<ros::Duration>& duration)
 {
   if (duration == nullptr)
   {
     this->this_time_ = ros::Time::now();
     this->duration_ = this->this_time_ - this->last_time_;
-  } else
+    this->last_time_ = this->this_time_;
+  }
+  else
   {
     this->duration_ = *duration;
   }
