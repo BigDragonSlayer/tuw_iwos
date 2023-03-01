@@ -110,11 +110,11 @@ std::shared_ptr<nav_msgs::Odometry> ImuOdometer::get_message()
   return this->message_;
 }
 
-double ImuOdometer::integrate(double f, double c, double dt, double steps)
+double ImuOdometer::integrate(double f, double c, double dt, int iterations)
 {
   double x = 0.0;
-  double dt_step = dt / steps;
-  for (int i = 0; i < steps; i++)
+  double dt_step = dt / static_cast<double>(iterations);
+  for (int i = 0; i < iterations; i++)
   {
      x += f * dt_step;
   }
@@ -131,7 +131,7 @@ tuw::Pose2D ImuOdometer::get_pose()
   return this->pose_;
 }
 
-void ImuOdometer::configCallback(tuw_iwos_odometer::ImuOdometerConfig &config, uint32_t level)
+void ImuOdometer::configCallback(tuw_iwos_odometer::ImuOdometerConfig& config, uint32_t level)
 {
   this->config_ = config;
 }

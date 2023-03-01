@@ -30,7 +30,7 @@ public:
   cv::Vec<double, 3> get_velocity();
   tuw::Pose2D get_pose();
 protected:
-  static double integrate(double f, double c, double dt, double steps);
+  static double integrate(double f, double c, double dt, int iterations);
 
   ImuOdometerConfig config_;
   std::shared_ptr<dynamic_reconfigure::Server<ImuOdometerConfig>> reconfigure_server_;
