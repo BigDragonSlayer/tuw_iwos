@@ -12,7 +12,7 @@ OdometerNode::OdometerNode()
 {
   this->node_handle_ = std::make_shared<ros::NodeHandle>();
   this->encoder_subscriber_ = this->node_handle_->subscribe("joint_states", 100, &OdometerNode::updateEncoder, this);
-  this->imu_subscriber_ = this->node_handle_->subscribe("imu_lin_acc_ang_vel", 100, &OdometerNode::updateEncoder, this);
+  this->imu_subscriber_ = this->node_handle_->subscribe("imu_lin_acc_ang_vel", 100, &OdometerNode::updateImu, this);
 
   this->encoder_odometer_publisher_ = this->node_handle_->advertise<nav_msgs::Odometry>("odom_encoder", 50);
   this->imu_odometer_publisher_ = this->node_handle_->advertise<nav_msgs::Odometry>("odom_imu", 50);
