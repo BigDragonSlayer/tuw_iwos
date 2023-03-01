@@ -32,7 +32,7 @@ void OdometerNode::updateEncoder(const sensor_msgs::JointState& joint_state)
 {
   this->encoder_odometer_->update(joint_state);
   this->encoder_odometer_publisher_.publish(*this->encoder_odometer_->get_message());
-  this->tf_broadcaster_.sendTransform(*this->encoder_odometer_->get_transform());
+//  this->tf_broadcaster_.sendTransform(*this->encoder_odometer_->get_transform());
 }
 
 void OdometerNode::updateImu(const sensor_msgs::Imu& imu)
