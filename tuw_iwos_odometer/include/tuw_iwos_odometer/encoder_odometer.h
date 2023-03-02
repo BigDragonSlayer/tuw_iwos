@@ -6,6 +6,7 @@
 #include <sensor_msgs/JointState.h>
 #include <nav_msgs/Odometry.h>
 #include <geometry_msgs/TransformStamped.h>
+#include <geometry_msgs/PointStamped.h>
 
 #include <dynamic_reconfigure/server.h>
 
@@ -26,8 +27,9 @@ public:
   EncoderOdometer(double wheelbase, double wheeloffset, const std::shared_ptr<ros::NodeHandle>& node_handle);
   void configCallback(EncoderOdometerConfig& config, uint32_t level);
   bool update(sensor_msgs::JointState joint_state, const std::shared_ptr<ros::Duration>& duration = nullptr);
-  std::shared_ptr<geometry_msgs::TransformStamped> get_transform();
-  std::shared_ptr<nav_msgs::Odometry> get_message();
+  std::shared_ptr<nav_msgs::Odometry> get_odometer_message();
+  std::shared_ptr<geometry_msgs::TransformStamped> get_transform_message();
+  std::shared_ptr<geometry_msgs::PointStamped> get_icc_message();
   cv::Vec<double, 3> get_velocity();
   tuw::Point2D get_icc();
   tuw::Pose2D get_pose();
@@ -41,8 +43,9 @@ protected:
   dynamic_reconfigure::Server<EncoderOdometerConfig>::CallbackType callback_type_;
 
   geometry_msgs::Quaternion quaternion_;
-  std::shared_ptr<nav_msgs::Odometry> message_;
-  std::shared_ptr<geometry_msgs::TransformStamped> transform_;
+  std::shared_ptr<nav_msgs::Odometry> odometer_message_;
+  std::shared_ptr<geometry_msgs::TransformStamped> transform_message_;
+  std::shared_ptr<geometry_msgs::PointStamped> icc_message_;
 
   double wheelbase_ {0.0};
   double wheeloffset_ {0.0};

@@ -22,30 +22,33 @@ EncoderOdometer::EncoderOdometer(double wheelbase,
   this->this_time_ = ros::Time::now();
   this->last_time_ = ros::Time::now();
 
-  this->message_ = std::make_shared<nav_msgs::Odometry>();
-  this->transform_ = std::make_shared<geometry_msgs::TransformStamped>();
+  this->odometer_message_ = std::make_shared<nav_msgs::Odometry>();
+  this->odometer_message_->header.frame_id = "odom";
+  this->odometer_message_->child_frame_id = "base_link";
+  this->odometer_message_->pose.pose.position.x = 0.0;
+  this->odometer_message_->pose.pose.position.y = 0.0;
+  this->odometer_message_->pose.pose.position.z = 0.0;
+  this->odometer_message_->pose.pose.orientation = this->quaternion_;
+  this->odometer_message_->twist.twist.linear.x = 0.0;
+  this->odometer_message_->twist.twist.linear.y = 0.0;
+  this->odometer_message_->twist.twist.linear.z = 0.0;
+  this->odometer_message_->twist.twist.angular.x = 0.0;
+  this->odometer_message_->twist.twist.angular.y = 0.0;
+  this->odometer_message_->twist.twist.angular.z = 0.0;
 
-  this->message_ = std::make_shared<nav_msgs::Odometry>();
-  this->message_->header.frame_id = "odom";
-  this->message_->child_frame_id = "base_link";
-  this->message_->pose.pose.position.x = 0.0;
-  this->message_->pose.pose.position.y = 0.0;
-  this->message_->pose.pose.position.z = 0.0;
-  this->message_->pose.pose.orientation = this->quaternion_;
-  this->message_->twist.twist.linear.x = 0.0;
-  this->message_->twist.twist.linear.y = 0.0;
-  this->message_->twist.twist.linear.z = 0.0;
-  this->message_->twist.twist.angular.x = 0.0;
-  this->message_->twist.twist.angular.y = 0.0;
-  this->message_->twist.twist.angular.z = 0.0;
+  this->transform_message_ = std::make_shared<geometry_msgs::TransformStamped>();
+  this->transform_message_->header.frame_id = "odom";
+  this->transform_message_->child_frame_id = "base_link";
+  this->transform_message_->transform.translation.x = 0.0;
+  this->transform_message_->transform.translation.y = 0.0;
+  this->transform_message_->transform.translation.z = 0.0;
+  this->transform_message_->transform.rotation = this->quaternion_;
 
-  this->transform_ = std::make_shared<geometry_msgs::TransformStamped>();
-  this->transform_->header.frame_id = "odom";
-  this->transform_->child_frame_id = "base_link";
-  this->transform_->transform.translation.x = 0.0;
-  this->transform_->transform.translation.y = 0.0;
-  this->transform_->transform.translation.z = 0.0;
-  this->transform_->transform.rotation = this->quaternion_;
+  this->icc_message_ = std::make_shared<geometry_msgs::PointStamped>();
+  this->icc_message_->header.frame_id = "base_link";
+  this->icc_message_->point.x = 0.0;
+  this->icc_message_->point.y = 0.0;
+  this->icc_message_->point.z = 0.0;
 }
 
 void EncoderOdometer::configCallback(EncoderOdometerConfig &config, uint32_t level)
@@ -87,30 +90,39 @@ bool EncoderOdometer::update(sensor_msgs::JointState joint_state, const std::sha
 
   this->quaternion_ = tf::createQuaternionMsgFromYaw(this->pose_.theta());
 
-  this->message_->header.stamp = this->this_time_;
-  this->message_->pose.pose.position.x = this->pose_.x();
-  this->message_->pose.pose.position.y = this->pose_.y();
-  this->message_->pose.pose.orientation = this->quaternion_;
-  this->message_->twist.twist.linear.x = this->velocity_[0];
-  this->message_->twist.twist.linear.y = this->velocity_[1];
-  this->message_->twist.twist.angular.z = this->velocity_[2];
+  this->odometer_message_->header.stamp = this->this_time_;
+  this->odometer_message_->pose.pose.position.x = this->pose_.x();
+  this->odometer_message_->pose.pose.position.y = this->pose_.y();
+  this->odometer_message_->pose.pose.orientation = this->quaternion_;
+  this->odometer_message_->twist.twist.linear.x = this->velocity_[0];
+  this->odometer_message_->twist.twist.linear.y = this->velocity_[1];
+  this->odometer_message_->twist.twist.angular.z = this->velocity_[2];
 
-  this->transform_->header.stamp = this->this_time_;
-  this->transform_->transform.translation.x = this->pose_.x();
-  this->transform_->transform.translation.x = this->pose_.y();
-  this->transform_->transform.rotation = this->quaternion_;
+  this->transform_message_->header.stamp = this->this_time_;
+  this->transform_message_->transform.translation.x = this->pose_.x();
+  this->transform_message_->transform.translation.x = this->pose_.y();
+  this->transform_message_->transform.rotation = this->quaternion_;
+
+  this->icc_message_->header.stamp = this->this_time_;
+  this->icc_message_->point.x = this->icc_.x();
+  this->icc_message_->point.y = this->icc_.y();
 
   return true;
 }
 
-std::shared_ptr<nav_msgs::Odometry> EncoderOdometer::get_message()
+std::shared_ptr<nav_msgs::Odometry> EncoderOdometer::get_odometer_message()
 {
-  return this->message_;
+  return this->odometer_message_;
 }
 
-std::shared_ptr<geometry_msgs::TransformStamped> EncoderOdometer::get_transform()
+std::shared_ptr<geometry_msgs::TransformStamped> EncoderOdometer::get_transform_message()
 {
-  return this->transform_;
+  return this->transform_message_;
+}
+
+std::shared_ptr<geometry_msgs::PointStamped> EncoderOdometer::get_icc_message()
+{
+  return this->icc_message_;
 }
 
 cv::Vec<double, 3> tuw_iwos_odometer::EncoderOdometer::get_velocity()

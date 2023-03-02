@@ -26,6 +26,7 @@ private:
   ros::Subscriber imu_subscriber_;
   ros::Publisher encoder_odometer_publisher_;
   ros::Publisher imu_odometer_publisher_;
+  ros::Publisher icc_publisher_;
 
   std::shared_ptr<EncoderOdometer> encoder_odometer_;
   std::unique_ptr<ImuOdometer> imu_odometer_;
