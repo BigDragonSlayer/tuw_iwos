@@ -1,6 +1,13 @@
 <launch>
 
-  <node pkg="tf" type="static_transform_publisher" name="link1_broadcaster" args="0 0 0 0 0 0 base_link laser 100" />
+  <arg name="imu_filter" default="true"/>
+
+  <group if="$(arg imu_filter)" >
+      <node pkg="tf"
+            type="static_transform_publisher"
+            name="base_link_to_laser_broadcaster"
+            args="0.1 0 0 0 0 0 base_link laser 100" />
+  </group>
 
   <node pkg="urg_node" type="urg_node" name="laser_scanner" >
     <param name="ip_address" value="192.168.0.10" />
