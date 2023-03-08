@@ -4,7 +4,7 @@
   <arg name="converter" default="JointsIwsForIwos" />
   <arg name="device" default="LogitechF710" />
   <arg name="origin_topic" default="joy" />
-  <arg name="target_topic" default="iwos_command_hardware" />
+  <arg name="target_topic" default="iwos_command" />
 
   <!-- joy node -->
   <node pkg="joy" type="joy_node" name="joy_controller" >
