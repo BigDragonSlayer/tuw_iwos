@@ -23,6 +23,7 @@
   <include file="$(find tuw_iwos_robot_description)/launch/robot_state_publisher.launch"/>
   <include file="$(find tuw_iwos_hardware)/launch/tuw_iwos_hardware_node.launch"/>
   <include file="$(find tuw_iwos_hardware_broker)/launch/tuw_iwos_hardware_broker_node.launch"/>
+  <include file="$(find tuw_iwos_motion_controller)/launch/motion_controller_node.launch"/>
 
   <include file="$(find tuw_iwos_odometer)/launch/tuw_iwos_odometer_node.launch"/>
 
