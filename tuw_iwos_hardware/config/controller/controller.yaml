@@ -18,18 +18,34 @@ controller:
 
   # REVOLUTE CONTROLLER
   revolute_left_controller:
+    # pass-trough controller velocity_controllers/JointVelocityController
     type: velocity_controllers/JointVelocityController
     joint: revolute_left
+    # required for non-pass-trough controllers
+    # (such as  e.g. effort_controllers/JointVelocityController)
+    #pid: {p: 1000.0, i: 100.0, d: 100.0}
 
   revolute_right_controller:
+    # pass-trough controller velocity_controllers/JointVelocityController
     type: velocity_controllers/JointVelocityController
     joint: revolute_right
+    # required for non-pass-trough controllers
+    # (such as  e.g. effort_controllers/JointVelocityController)
+    #pid: {p: 1000.0, i: 100.0, d: 100.0}
 
   # STEERING CONTROLLER
   steering_left_controller:
+    # pass-trough controller position_controllers/JointPositionController
     type: position_controllers/JointPositionController
     joint: steering_left
+    # required for non-pass-trough controllers
+    # (such as  e.g. velocity_controllers/JointPositionController or effort_controllers/JointPositionController)
+    #pid: {p: 1000.0, i: 100.0, d: 100.0}
 
   steering_right_controller:
+    # pass-trough controller position_controllers/JointPositionController
     type: position_controllers/JointPositionController
     joint: steering_right
+    # required for non-pass-trough controllers
+    # (such as  e.g. velocity_controllers/JointPositionController or effort_controllers/JointPositionController)
+    #pid: {p: 1000.0, i: 100.0, d: 100.0}
