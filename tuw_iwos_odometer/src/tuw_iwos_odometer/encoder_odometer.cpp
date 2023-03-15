@@ -100,7 +100,7 @@ bool EncoderOdometer::update(sensor_msgs::JointState joint_state, const std::sha
 
   this->transform_message_->header.stamp = this->this_time_;
   this->transform_message_->transform.translation.x = this->pose_.x();
-  this->transform_message_->transform.translation.x = this->pose_.y();
+  this->transform_message_->transform.translation.y = this->pose_.y();
   this->transform_message_->transform.rotation = this->quaternion_;
 
   this->icc_message_->header.stamp = this->this_time_;
