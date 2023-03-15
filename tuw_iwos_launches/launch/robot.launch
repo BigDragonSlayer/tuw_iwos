@@ -8,11 +8,11 @@
   <arg name="rviz"        default="true"/>
 
   <group if="$(arg gamepad)">
-    <include file="$(find tuw_iwos_launches)/launch/gamepad.launch"/>
+    <include file="$(find tuw_iwos_launches)/launch/device/gamepad.launch"/>
   </group>
 
   <group if="$(arg laser)">
-    <include file="$(find tuw_iwos_launches)/launch/laser.launch"/>
+    <include file="$(find tuw_iwos_launches)/launch/device/laser.launch"/>
   </group>
 
   <group if="$(arg imu)">
