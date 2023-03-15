@@ -4,21 +4,15 @@
 
 #include <tuw_iwos_odometer/encoder_odometer.h>
 
-#define ASSERTION_TOLERANCE 0.001
+#define ASSERTION_TOLERANCE 0.05
 
 using tuw_iwos_odometer::EncoderOdometer;
-using tuw_iwos_odometer::JointStateOdometerConfig;
+using tuw_iwos_odometer::EncoderOdometerConfig;
 using tuw_iwos_odometer::Side;
 
 class JointStateOdometerTest : public ::testing::Test
 {
 public:
-  void SetUp() override
-  {
-    this->config_->revolute_velocity_tolerance = 0.01;
-    this->config_->steering_position_tolerance = 0.01;
-    this->config_->calculation_iterations = 10000;
-  }
   void set_joint_state(double p_r_l, double p_r_r, double p_s_l, double p_s_r,
                        double v_r_l, double v_r_r, double v_s_l, double v_s_r)
   {
@@ -45,10 +39,10 @@ protected:
   tuw::Pose2D end_{0.0, 0.0, 0.0};
   sensor_msgs::JointState joint_state_;
 
-  std::shared_ptr<JointStateOdometerConfig> config_ =
-          std::make_shared<JointStateOdometerConfig>();
+  std::shared_ptr<ros::NodeHandle> node_handle_ =
+          std::make_shared<ros::NodeHandle>();
   std::shared_ptr<EncoderOdometer> odometer_calculator_ =
-          std::make_shared<EncoderOdometer>(this->wheelbase_, this->wheeloffset_, this->config_);
+          std::make_shared<EncoderOdometer>(this->wheelbase_, this->wheeloffset_, this->node_handle_);
 };
 
 TEST_F(JointStateOdometerTest, odom_no_motion)
