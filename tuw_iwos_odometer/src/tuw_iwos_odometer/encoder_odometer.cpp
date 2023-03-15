@@ -143,14 +143,14 @@ tuw::Pose2D tuw_iwos_odometer::EncoderOdometer::get_pose()
 void tuw_iwos_odometer::EncoderOdometer::calculate_icc()
 {
   // write velocity to variables (to shorten lines below)
-  double *v_l = &this->revolute_velocity_[Side::LEFT];
+  double *v_l = &this->revolute_velocity_[Side::LEFT ];
   double *v_r = &this->revolute_velocity_[Side::RIGHT];
 
   // write angles to variables (to shorten lines below)
-  double *alpha_l = &this->steering_position_[Side::LEFT];
+  double *alpha_l = &this->steering_position_[Side::LEFT ];
   double *alpha_r = &this->steering_position_[Side::RIGHT];
 
-  // check if wheels are parallel
+  // case: kastor wheels are parallel
   if (abs(*alpha_l - *alpha_r) <= this->config_.steering_position_tolerance)
   {
     // case velocity on both wheels equal - radius infinity - line motion
@@ -160,44 +160,45 @@ void tuw_iwos_odometer::EncoderOdometer::calculate_icc()
       this->center_radius_ = std::numeric_limits<double>::infinity();
       this->radius_[Side::LEFT] = std::numeric_limits<double>::infinity();
       this->radius_[Side::RIGHT] = std::numeric_limits<double>::infinity();
-      return;
     }
-      // case velocity on both wheels not equal - radius not infinity - arc motion
+    // case velocity on both wheels not equal - radius not infinity - arc motion
     else
     {
       this->center_radius_ = (this->wheelbase_ / 2.0) * ((*v_l + *v_r) / (-*v_l + *v_r));
       this->icc_ = {0.0, this->center_radius_};
       this->radius_[Side::LEFT] = this->center_radius_ - this->wheelbase_ / 2.0;
       this->radius_[Side::RIGHT] = this->center_radius_ + this->wheelbase_ / 2.0;
-      return;
     }
   }
+  // case: kastor wheels are not parallel
+  else
+  {
+    // calculate position of kastor pivot point
+    tuw::Point2D a_l(this->wheeloffset_, this->wheelbase_ / 2.0);
+    tuw::Point2D a_r(this->wheeloffset_, -this->wheelbase_ / 2.0);
 
-  // calculate position of kastor pivot point
-  tuw::Point2D a_l(this->wheeloffset_, this->wheelbase_ / 2.0);
-  tuw::Point2D a_r(this->wheeloffset_, -this->wheelbase_ / 2.0);
+    // calculate position of wheel contact point
+    tuw::Point2D b_l(a_l.x() - cos(*alpha_l) * this->wheeloffset_, a_l.y() - sin(*alpha_l) * this->wheeloffset_);
+    tuw::Point2D b_r(a_r.x() - cos(*alpha_r) * this->wheeloffset_, a_r.y() - sin(*alpha_r) * this->wheeloffset_);
 
-  // calculate position of wheel contact point
-  tuw::Point2D b_l(a_l.x() - cos(*alpha_l) * this->wheeloffset_, a_l.y() - sin(*alpha_l) * this->wheeloffset_);
-  tuw::Point2D b_r(a_r.x() - cos(*alpha_r) * this->wheeloffset_, a_r.y() - sin(*alpha_r) * this->wheeloffset_);
+    // create vector pointing in wheel driving direction
+    // tuw::Pose2D p_l(b_l, alpha_l);
+    // tuw::Pose2D p_r(b_r, alpha_r);
 
-  // create vector pointing in wheel driving direction
-  // tuw::Pose2D p_l(b_l, alpha_l);
-  // tuw::Pose2D p_r(b_r, alpha_r);
+    // create vector orthogonal to wheel driving direction
+    tuw::Pose2D n_l(b_l, *alpha_l + M_PI / 2.0);
+    tuw::Pose2D n_r(b_r, *alpha_r + M_PI / 2.0);
 
-  // create vector orthogonal to wheel driving direction
-  tuw::Pose2D n_l(b_l, *alpha_l + M_PI / 2.0);
-  tuw::Pose2D n_r(b_r, *alpha_r + M_PI / 2.0);
+    tuw::Line2D l_l(b_l, n_l.point_ahead());
+    tuw::Line2D l_r(b_r, n_r.point_ahead());
 
-  tuw::Line2D l_l(b_l, n_l.point_ahead());
-  tuw::Line2D l_r(b_r, n_r.point_ahead());
+    // find intersection of the lines
+    this->icc_ = l_l.intersection(l_r);
 
-  // find intersection of the lines
-  this->icc_ = l_l.intersection(l_r);
-
-  this->center_radius_ = tuw::Point2D(0.0, 0.0).distanceTo(this->icc_);
-  this->radius_[Side::LEFT] = b_l.distanceTo(this->icc_);
-  this->radius_[Side::RIGHT] = b_r.distanceTo(this->icc_);
+    this->center_radius_ = abs(tuw::Point2D(0.0, 0.0).distanceTo(this->icc_));
+    this->radius_[Side::LEFT ] = abs(b_l.distanceTo(this->icc_));
+    this->radius_[Side::RIGHT] = abs(b_r.distanceTo(this->icc_));
+  }
 }
 
 void EncoderOdometer::calculate_velocity()
@@ -206,7 +207,7 @@ void EncoderOdometer::calculate_velocity()
   double w;  // angular velocity
 
   // case line motion
-  if (this->center_radius_ == std::numeric_limits<double>::infinity())
+  if (isinf(this->center_radius_) || isinf(this->radius_[Side::LEFT ]) || isinf(this->radius_[Side::RIGHT]))
   {
     v = (this->revolute_velocity_[Side::LEFT] + this->revolute_velocity_[Side::RIGHT]) / 2.0;
     w = 0.0;
@@ -215,14 +216,15 @@ void EncoderOdometer::calculate_velocity()
   else
   {
     // calculate angular velocity for the wheel motion arc
-    double w_l = this->revolute_velocity_[Side::LEFT] / this->radius_[Side::LEFT];
+    double w_l = this->revolute_velocity_[Side::LEFT ] / this->radius_[Side::LEFT ];
     double w_r = this->revolute_velocity_[Side::RIGHT] / this->radius_[Side::RIGHT];
 
     if (abs(w_l - w_r) <= this->config_.revolute_velocity_tolerance)
     {
       w = (w_l + w_r) / 2.0;
       v = w * this->center_radius_;
-    } else
+    }
+    else
     {
       throw std::runtime_error("failed to calculate center velocity within tolerance");
     }
@@ -233,15 +235,18 @@ void EncoderOdometer::calculate_velocity()
 
 void EncoderOdometer::calculate_pose()
 {
+  double dt = this->duration_.toSec() / static_cast<double>(this->config_.calculation_iterations);
   cv::Vec<double, 3> pose = this->pose_.state_vector();
-  double dt = this->duration_.toSec() / this->config_.calculation_iterations;
+  cv::Vec<double, 3> change = this->velocity_ * dt;
+  cv::Matx<double, 3, 3> r_2_w;
+  cv::Vec<double, 3> increment;
   for (int i = 0; i < this->config_.calculation_iterations; i++)
   {
-    cv::Matx<double, 3, 3> r_2_w = cv::Matx<double, 3, 3>(+cos(pose[2]), -sin(pose[2]), 0.0,
-                                                          +sin(pose[2]), +cos(pose[2]), 0.0,
-                                                          0.0, 0.0, 1.0);
-    cv::Vec<double, 3> change = this->velocity_ * dt;
-    pose += (r_2_w * change);
+    r_2_w = cv::Matx<double, 3, 3>(+cos(pose[2]), -sin(pose[2]), 0.0,
+                                   +sin(pose[2]), +cos(pose[2]), 0.0,
+                                   0.0, 0.0, 1.0);
+    increment = r_2_w * change;
+    pose += increment;
   }
   this->pose_ = tuw::Pose2D(pose);
 }
