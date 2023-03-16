@@ -2,6 +2,7 @@
 
 #include "tuw_iwos_odometer/mixed_odometer.h"
 
+#include <limits>
 #include <map>
 #include <memory>
 
