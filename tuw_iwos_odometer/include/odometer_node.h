@@ -3,6 +3,8 @@
 #ifndef ODOMETER_NODE_H
 #define ODOMETER_NODE_H
 
+#include <memory>
+
 #include <ros/ros.h>
 
 #include <tf/transform_broadcaster.h>
@@ -26,7 +28,7 @@ private:
   ros::Subscriber encoder_subscriber_;
   ros::Subscriber imu_subscriber_;
 
-  std::shared_ptr<EncoderOdometer> encoder_odometer_;
+  std::unique_ptr<EncoderOdometer> encoder_odometer_;
   std::unique_ptr<ImuOdometer> imu_odometer_;
 };
 }  // namespace tuw_iwos_odometer

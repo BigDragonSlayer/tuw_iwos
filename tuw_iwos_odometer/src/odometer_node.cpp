@@ -2,6 +2,8 @@
 
 #include <odometer_node.h>
 
+#include <memory>
+
 using tuw_iwos_odometer::OdometerNode;
 
 OdometerNode::OdometerNode()
@@ -10,7 +12,7 @@ OdometerNode::OdometerNode()
   this->encoder_subscriber_ = this->node_handle_->subscribe("joint_states", 100, &OdometerNode::updateEncoder, this);
   this->imu_subscriber_ = this->node_handle_->subscribe("imu_lin_acc_ang_vel", 100, &OdometerNode::updateImu, this);
 
-  this->encoder_odometer_ = std::make_shared<EncoderOdometer>(0.5, 0.1, this->node_handle_);
+  this->encoder_odometer_ = std::make_unique<EncoderOdometer>(0.5, 0.1, this->node_handle_);
   this->imu_odometer_ = std::make_unique<ImuOdometer>(this->node_handle_);
 }
 
