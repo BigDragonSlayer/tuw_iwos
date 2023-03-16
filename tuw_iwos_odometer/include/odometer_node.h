@@ -1,7 +1,7 @@
 // Copyright 2023 Eugen Kaltenegger
 
-#ifndef DIP_WS_ODOMETER_NODE_H
-#define DIP_WS_ODOMETER_NODE_H
+#ifndef ODOMETER_NODE_H
+#define ODOMETER_NODE_H
 
 #include <ros/ros.h>
 
@@ -29,6 +29,6 @@ private:
   std::shared_ptr<EncoderOdometer> encoder_odometer_;
   std::unique_ptr<ImuOdometer> imu_odometer_;
 };
-}
+}  // namespace tuw_iwos_odometer
 
-#endif //DIP_WS_ODOMETER_NODE_H
+#endif  // ODOMETER_NODE_H
