@@ -1,5 +1,8 @@
 // Copyright 2023 Eugen Kaltenegger
 
+#include <memory>
+#include <vector>
+
 #include <gtest/gtest.h>
 
 #include <tuw_iwos_odometer/encoder_odometer.h>

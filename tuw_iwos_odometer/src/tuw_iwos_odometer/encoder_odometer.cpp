@@ -2,11 +2,12 @@
 
 #include <tuw_iwos_odometer/encoder_odometer.h>
 
-
-
-#include <utility>
+#include <limits>
+#include <map>
+#include <memory>
 
 using tuw_iwos_odometer::EncoderOdometer;
+using dynamic_reconfigure::Server;
 
 EncoderOdometer::EncoderOdometer(double wheelbase,
                                  double wheeloffset,
@@ -18,7 +19,8 @@ EncoderOdometer::EncoderOdometer(double wheelbase,
   this->odometer_publisher_ = node_handle->advertise<nav_msgs::Odometry>("odom", 50);
   this->tf_broadcaster_ = tf::TransformBroadcaster();
 
-  this->reconfigure_server_ = std::make_shared<dynamic_reconfigure::Server<EncoderOdometerConfig>>(ros::NodeHandle(*node_handle, "EncoderOdometer"));
+  this->reconfigure_server_ =
+          std::make_shared<Server<EncoderOdometerConfig>>(ros::NodeHandle(*node_handle, "EncoderOdometer"));
   this->callback_type_ = boost::bind(&EncoderOdometer::configCallback, this, _1, _2);
   this->reconfigure_server_->setCallback(this->callback_type_);
 
@@ -79,9 +81,9 @@ bool EncoderOdometer::update(sensor_msgs::JointState joint_state, const std::sha
   {
     try
     {
-      this->calculate_icc();
-      this->calculate_velocity();
-      this->calculate_pose();
+      this->calculateICC();
+      this->calculateVelocity();
+      this->calculatePose();
     }
     catch (...)
     {
@@ -106,32 +108,12 @@ bool EncoderOdometer::update(sensor_msgs::JointState joint_state, const std::sha
   return true;
 }
 
-std::shared_ptr<nav_msgs::Odometry> EncoderOdometer::get_odometer_message()
-{
-  return this->odometer_message_;
-}
-
-std::shared_ptr<geometry_msgs::TransformStamped> EncoderOdometer::get_transform_message()
-{
-  return this->transform_message_;
-}
-
-cv::Vec<double, 3> tuw_iwos_odometer::EncoderOdometer::get_velocity()
-{
-  return this->velocity_;
-}
-
-tuw::Point2D tuw_iwos_odometer::EncoderOdometer::get_icc()
-{
-  return this->icc_;
-}
-
 tuw::Pose2D tuw_iwos_odometer::EncoderOdometer::get_pose()
 {
   return this->pose_;
 }
 
-void tuw_iwos_odometer::EncoderOdometer::calculate_icc()
+void tuw_iwos_odometer::EncoderOdometer::calculateICC()
 {
   // write velocity to variables (to shorten lines below)
   double *v_l = &this->revolute_velocity_[Side::LEFT ];
@@ -192,7 +174,7 @@ void tuw_iwos_odometer::EncoderOdometer::calculate_icc()
   }
 }
 
-void EncoderOdometer::calculate_velocity()
+void EncoderOdometer::calculateVelocity()
 {
   double v;  // linear velocity
   double w;  // angular velocity
@@ -224,7 +206,7 @@ void EncoderOdometer::calculate_velocity()
   this->velocity_ = {v, 0.0, w};
 }
 
-void EncoderOdometer::calculate_pose()
+void EncoderOdometer::calculatePose()
 {
   double dt = this->duration_.toSec() / static_cast<double>(this->config_.calculation_iterations);
   cv::Vec<double, 3> pose = this->pose_.state_vector();

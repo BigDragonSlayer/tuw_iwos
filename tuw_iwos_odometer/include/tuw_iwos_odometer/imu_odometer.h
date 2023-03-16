@@ -1,7 +1,11 @@
 // Copyright 2023 Eugen Kaltenegger
 
-#ifndef DIP_WS_IMU_ODOMETER_H
-#define DIP_WS_IMU_ODOMETER_H
+#ifndef TUW_IWOS_ODOMETER_IMU_ODOMETER_H
+#define TUW_IWOS_ODOMETER_IMU_ODOMETER_H
+
+#include <memory>
+
+#include <ros/ros.h>
 
 #include <geometry_msgs/TransformStamped.h>
 #include <nav_msgs/Odometry.h>
@@ -62,6 +66,6 @@ protected:
   cv::Vec<double, 3> velocity_{0.0, 0.0, 0.0};
   tuw::Pose2D pose_{0.0, 0.0, 0.0};
 };
-}
+}  // namespace tuw_iwos_odometer
 
-#endif //DIP_WS_IMU_ODOMETER_H
+#endif  // TUW_IWOS_ODOMETER_IMU_ODOMETER_H

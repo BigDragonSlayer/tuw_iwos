@@ -1,10 +1,14 @@
 // Copyright 2023 Eugen Kaltenegger
 
-#ifndef DIP_WS_ENCODER_ODOMETER_H
-#define DIP_WS_ENCODER_ODOMETER_H
+#ifndef TUW_IWOS_ODOMETER_ENCODER_ODOMETER_H
+#define TUW_IWOS_ODOMETER_ENCODER_ODOMETER_H
+
+#include <map>
+#include <memory>
+
+#include <ros/ros.h>
 
 #include <geometry_msgs/TransformStamped.h>
-#include <geometry_msgs/PointStamped.h>
 #include <nav_msgs/Odometry.h>
 #include <sensor_msgs/JointState.h>
 
@@ -29,16 +33,13 @@ public:
   ~EncoderOdometer() = default;
   EncoderOdometer(double wheelbase, double wheeloffset, const std::shared_ptr<ros::NodeHandle>& node_handle);
   void configCallback(EncoderOdometerConfig& config, uint32_t level);
-  bool update(sensor_msgs::JointState joint_state, const std::shared_ptr<ros::Duration>& duration = nullptr);
-  std::shared_ptr<nav_msgs::Odometry> get_odometer_message();
-  std::shared_ptr<geometry_msgs::TransformStamped> get_transform_message();
-  cv::Vec<double, 3> get_velocity();
-  tuw::Point2D get_icc();
-  tuw::Pose2D get_pose();
+  bool update(sensor_msgs::JointState joint_state,
+              const std::shared_ptr<ros::Duration>& duration = nullptr);
+  tuw::Pose2D get_pose();  // required for unit test
 protected:
-  void calculate_icc();
-  void calculate_velocity();
-  void calculate_pose();
+  void calculateICC();
+  void calculateVelocity();
+  void calculatePose();
 
   void updateMessage();
   void updateTransform();
@@ -71,6 +72,6 @@ protected:
   tuw::Point2D icc_{0.0, 0.0, 0.0};
   tuw::Pose2D pose_{0.0, 0.0, 0.0};
 };
-}
+}  // namespace tuw_iwos_odometer
 
-#endif //DIP_WS_ENCODER_ODOMETER_H
+#endif  // TUW_IWOS_ODOMETER_ENCODER_ODOMETER_H

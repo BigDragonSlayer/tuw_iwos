@@ -2,14 +2,17 @@
 
 #include "tuw_iwos_odometer/imu_odometer.h"
 
+#include <memory>
+
 using tuw_iwos_odometer::ImuOdometer;
+using dynamic_reconfigure::Server;
 
 ImuOdometer::ImuOdometer(const std::shared_ptr<ros::NodeHandle>& node_handle)
 {
   this->odometer_publisher_ = node_handle->advertise<nav_msgs::Odometry>("odom", 50);
   this->tf_broadcaster_ = tf::TransformBroadcaster();
 
-  this->reconfigure_server_ = std::make_shared<dynamic_reconfigure::Server<ImuOdometerConfig>>(ros::NodeHandle(*node_handle, "ImuOdometer"));
+  this->reconfigure_server_ = std::make_shared<Server<ImuOdometerConfig>>(ros::NodeHandle(*node_handle, "ImuOdometer"));
   this->callback_type_ = boost::bind(&ImuOdometer::configCallback, this, _1, _2);
   this->reconfigure_server_->setCallback(this->callback_type_);
 
