@@ -11,6 +11,7 @@
         name="laser_scanner"
         output="screen">
     <param name="ip_address" value="192.168.0.10"/>
+    <param name="frame_id" value="laser_link"/>
     <remap from="scan" to="scan_raw"/>
   </node>
 
@@ -19,6 +20,8 @@
         name="laser_filter"
         output="screen">
     <rosparam command="load" file="$(find tuw_iwos_launches)/config/laser_filter_chain.yaml"/>
+<!--     <rosparam param="tf_message_filter_target_frame">laser_link"</rosparam> -->
+    <remap from="scan" to="scan_raw"/>
     <remap from="scan_filtered" to="scan"/>
   </node>
 
