@@ -33,10 +33,6 @@ public:
   explicit ImuOdometer(const std::shared_ptr<ros::NodeHandle>& node_handle);
   bool update(const sensor_msgs::Imu& imu, const std::shared_ptr<ros::Duration>& duration = nullptr);
   void configCallback(ImuOdometerConfig& config, uint32_t level);
-  std::shared_ptr<geometry_msgs::TransformStamped> get_transform();
-  std::shared_ptr<nav_msgs::Odometry> get_message();
-  cv::Vec<double, 3> get_velocity();
-  tuw::Pose2D get_pose();
 protected:
   void calculateVelocity();
   void calculatePose();

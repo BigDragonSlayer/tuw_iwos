@@ -1,6 +1,6 @@
 // Copyright 2023 Eugen Kaltenegger
 
-#include "tuw_iwos_odometer/imu_odometer.h"
+#include <tuw_iwos_odometer/imu_odometer.h>
 
 #include <memory>
 
@@ -89,14 +89,9 @@ bool ImuOdometer::update(const sensor_msgs::Imu& imu, const std::shared_ptr<ros:
   return true;
 }
 
-std::shared_ptr<geometry_msgs::TransformStamped> ImuOdometer::get_transform()
+void ImuOdometer::configCallback(tuw_iwos_odometer::ImuOdometerConfig& config, uint32_t level)
 {
-  return this->transform_;
-}
-
-std::shared_ptr<nav_msgs::Odometry> ImuOdometer::get_message()
-{
-  return this->message_;
+  this->config_ = config;
 }
 
 double ImuOdometer::integrate(double f, double c, double dt, int iterations)
@@ -108,21 +103,6 @@ double ImuOdometer::integrate(double f, double c, double dt, int iterations)
      x += f * dt_step;
   }
   return x + c;
-}
-
-cv::Vec<double, 3> ImuOdometer::get_velocity()
-{
-  return this->velocity_;
-}
-
-tuw::Pose2D ImuOdometer::get_pose()
-{
-  return this->pose_;
-}
-
-void ImuOdometer::configCallback(tuw_iwos_odometer::ImuOdometerConfig& config, uint32_t level)
-{
-  this->config_ = config;
 }
 
 void tuw_iwos_odometer::ImuOdometer::calculateVelocity()
