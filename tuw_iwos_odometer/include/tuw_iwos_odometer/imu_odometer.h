@@ -3,9 +3,14 @@
 #ifndef DIP_WS_IMU_ODOMETER_H
 #define DIP_WS_IMU_ODOMETER_H
 
-#include <sensor_msgs/Imu.h>
-#include <nav_msgs/Odometry.h>
 #include <geometry_msgs/TransformStamped.h>
+#include <nav_msgs/Odometry.h>
+#include <sensor_msgs/Imu.h>
+
+#include <dynamic_reconfigure/server.h>
+
+#include <tf/transform_datatypes.h>
+#include <tf/transform_broadcaster.h>
 
 #include <tuw_geometry/line2d.h>
 #include <tuw_geometry/point2d.h>
@@ -13,7 +18,6 @@
 
 #include <tuw_iwos_odometer/ImuOdometerConfig.h>
 #include <tuw_iwos_odometer/side.h>
-#include <dynamic_reconfigure/server.h>
 
 namespace tuw_iwos_odometer
 {
@@ -30,7 +34,16 @@ public:
   cv::Vec<double, 3> get_velocity();
   tuw::Pose2D get_pose();
 protected:
+  void calculateVelocity();
+  void calculatePose();
+
   static double integrate(double f, double c, double dt, int iterations);
+
+  void updateMessage();
+  void updateTransform();
+
+  ros::Publisher odometer_publisher_;
+  tf::TransformBroadcaster tf_broadcaster_;
 
   ImuOdometerConfig config_;
   std::shared_ptr<dynamic_reconfigure::Server<ImuOdometerConfig>> reconfigure_server_;

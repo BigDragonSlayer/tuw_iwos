@@ -3,12 +3,15 @@
 #ifndef DIP_WS_ENCODER_ODOMETER_H
 #define DIP_WS_ENCODER_ODOMETER_H
 
-#include <sensor_msgs/JointState.h>
-#include <nav_msgs/Odometry.h>
 #include <geometry_msgs/TransformStamped.h>
 #include <geometry_msgs/PointStamped.h>
+#include <nav_msgs/Odometry.h>
+#include <sensor_msgs/JointState.h>
 
 #include <dynamic_reconfigure/server.h>
+
+#include <tf/transform_datatypes.h>
+#include <tf/transform_broadcaster.h>
 
 #include <tuw_geometry/line2d.h>
 #include <tuw_geometry/point2d.h>
@@ -29,7 +32,6 @@ public:
   bool update(sensor_msgs::JointState joint_state, const std::shared_ptr<ros::Duration>& duration = nullptr);
   std::shared_ptr<nav_msgs::Odometry> get_odometer_message();
   std::shared_ptr<geometry_msgs::TransformStamped> get_transform_message();
-  std::shared_ptr<geometry_msgs::PointStamped> get_icc_message();
   cv::Vec<double, 3> get_velocity();
   tuw::Point2D get_icc();
   tuw::Pose2D get_pose();
@@ -38,6 +40,12 @@ protected:
   void calculate_velocity();
   void calculate_pose();
 
+  void updateMessage();
+  void updateTransform();
+
+  ros::Publisher odometer_publisher_;
+  tf::TransformBroadcaster tf_broadcaster_;
+
   EncoderOdometerConfig config_;
   std::shared_ptr<dynamic_reconfigure::Server<EncoderOdometerConfig>> reconfigure_server_;
   dynamic_reconfigure::Server<EncoderOdometerConfig>::CallbackType callback_type_;
@@ -45,7 +53,6 @@ protected:
   geometry_msgs::Quaternion quaternion_;
   std::shared_ptr<nav_msgs::Odometry> odometer_message_;
   std::shared_ptr<geometry_msgs::TransformStamped> transform_message_;
-  std::shared_ptr<geometry_msgs::PointStamped> icc_message_;
 
   double wheelbase_ {0.0};
   double wheeloffset_ {0.0};

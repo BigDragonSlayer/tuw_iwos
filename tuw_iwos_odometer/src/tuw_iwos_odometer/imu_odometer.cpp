@@ -2,12 +2,13 @@
 
 #include "tuw_iwos_odometer/imu_odometer.h"
 
-#include <tf/transform_datatypes.h>
-
 using tuw_iwos_odometer::ImuOdometer;
 
 ImuOdometer::ImuOdometer(const std::shared_ptr<ros::NodeHandle>& node_handle)
 {
+  this->odometer_publisher_ = node_handle->advertise<nav_msgs::Odometry>("odom", 50);
+  this->tf_broadcaster_ = tf::TransformBroadcaster();
+
   this->reconfigure_server_ = std::make_shared<dynamic_reconfigure::Server<ImuOdometerConfig>>(ros::NodeHandle(*node_handle, "ImuOdometer"));
   this->callback_type_ = boost::bind(&ImuOdometer::configCallback, this, _1, _2);
   this->reconfigure_server_->setCallback(this->callback_type_);
@@ -62,49 +63,25 @@ bool ImuOdometer::update(const sensor_msgs::Imu& imu, const std::shared_ptr<ros:
   this->angular_velocity_[1] = imu.angular_velocity.y;
   this->angular_velocity_[2] = imu.angular_velocity.z;
 
-  double dt = this->duration_.toSec();
-
-  double ax = this->linear_acceleration_[0];
-  double ay = this->linear_acceleration_[1];
-
-  double wz = this->angular_velocity_[2];
-
-  double vx = this->velocity_[0];
-  double vy = this->velocity_[1];
-
-  if (abs(ax) > this->config_.angular_velocity_activation_threshold)
+  if (this->config_.broadcast_odom_transform || this->config_.publish_odom_message)
   {
-    vx = integrate(ax, this->velocity_[0], dt, this->config_.acceleration_integration_iterations);
-  }
-  if (abs(ay) > this->config_.angular_velocity_activation_threshold)
-  {
-    vy = integrate(ay, this->velocity_[1], dt, this->config_.acceleration_integration_iterations);
+    this->calculateVelocity();
+    this->calculatePose();
+
+    this->quaternion_ = tf::createQuaternionMsgFromYaw(this->pose_.theta());
   }
 
-  this->velocity_[0] = vx;
-  this->velocity_[1] = vy;
-  this->velocity_[2] = wz;
+  if (this->config_.broadcast_odom_transform)
+  {
+    this->updateMessage();
+    this->odometer_publisher_.publish(*this->message_);
+  }
 
-  double x = integrate(vx, this->pose_.x(), dt, this->config_.velocity_integration_iterations);
-  double y = integrate(vy, this->pose_.y(), dt, this->config_.velocity_integration_iterations);
-  double theta = integrate(wz, this->pose_.theta(), dt, this->config_.velocity_integration_iterations);
-
-  this->pose_ = tuw::Pose2D(x, y, theta);
-
-  this->quaternion_ = tf::createQuaternionMsgFromYaw(this->pose_.theta());
-
-  this->message_->header.stamp = this->this_time_;
-  this->message_->pose.pose.position.x = this->pose_.x();
-  this->message_->pose.pose.position.y = this->pose_.y();
-  this->message_->pose.pose.orientation = this->quaternion_;
-  this->message_->twist.twist.linear.x = this->velocity_[0];
-  this->message_->twist.twist.linear.y = this->velocity_[1];
-  this->message_->twist.twist.angular.z = this->velocity_[2];
-
-  this->transform_->header.stamp = this->this_time_;
-  this->transform_->transform.translation.x = this->pose_.x();
-  this->transform_->transform.translation.x = this->pose_.y();
-  this->transform_->transform.rotation = this->quaternion_;
+  if (this->config_.broadcast_odom_transform)
+  {
+    this->updateTransform();
+    this->tf_broadcaster_.sendTransform(*this->transform_);
+  }
 
   return true;
 }
@@ -143,4 +120,64 @@ tuw::Pose2D ImuOdometer::get_pose()
 void ImuOdometer::configCallback(tuw_iwos_odometer::ImuOdometerConfig& config, uint32_t level)
 {
   this->config_ = config;
+}
+
+void tuw_iwos_odometer::ImuOdometer::calculateVelocity()
+{
+  double dt = this->duration_.toSec();
+
+  double ax = this->linear_acceleration_[0];
+  double ay = this->linear_acceleration_[1];
+
+  double wz = this->angular_velocity_[2];
+
+  double vx = this->velocity_[0];
+  double vy = this->velocity_[1];
+
+  if (abs(ax) > this->config_.angular_velocity_activation_threshold)
+  {
+    vx = integrate(ax, this->velocity_[0], dt, this->config_.acceleration_integration_iterations);
+  }
+  if (abs(ay) > this->config_.angular_velocity_activation_threshold)
+  {
+    vy = integrate(ay, this->velocity_[1], dt, this->config_.acceleration_integration_iterations);
+  }
+
+  this->velocity_[0] = vx;
+  this->velocity_[1] = vy;
+  this->velocity_[2] = wz;
+}
+
+void tuw_iwos_odometer::ImuOdometer::calculatePose()
+{
+  double dt = this->duration_.toSec();
+
+  double vx = this->velocity_[0];
+  double vy = this->velocity_[1];
+  double wz = this->velocity_[2];
+
+  double x = integrate(vx, this->pose_.x(), dt, this->config_.velocity_integration_iterations);
+  double y = integrate(vy, this->pose_.y(), dt, this->config_.velocity_integration_iterations);
+  double theta = integrate(wz, this->pose_.theta(), dt, this->config_.velocity_integration_iterations);
+
+  this->pose_ = tuw::Pose2D(x, y, theta);
+}
+
+void tuw_iwos_odometer::ImuOdometer::updateMessage()
+{
+  this->message_->header.stamp = this->this_time_;
+  this->message_->pose.pose.position.x = this->pose_.x();
+  this->message_->pose.pose.position.y = this->pose_.y();
+  this->message_->pose.pose.orientation = this->quaternion_;
+  this->message_->twist.twist.linear.x = this->velocity_[0];
+  this->message_->twist.twist.linear.y = this->velocity_[1];
+  this->message_->twist.twist.angular.z = this->velocity_[2];
+}
+
+void tuw_iwos_odometer::ImuOdometer::updateTransform()
+{
+  this->transform_->header.stamp = this->this_time_;
+  this->transform_->transform.translation.x = this->pose_.x();
+  this->transform_->transform.translation.x = this->pose_.y();
+  this->transform_->transform.rotation = this->quaternion_;
 }
