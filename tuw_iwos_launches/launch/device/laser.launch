@@ -18,7 +18,7 @@
         type="scan_to_scan_filter_chain"
         name="laser_filter"
         output="screen">
-    <rosparam command="load" file="$(find tuw_iwos_launches)/config/laser_box_filter.yaml"/>
+    <rosparam command="load" file="$(find tuw_iwos_launches)/config/laser_filter_chain.yaml"/>
     <remap from="scan_filtered" to="scan"/>
   </node>
 
