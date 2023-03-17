@@ -7,10 +7,14 @@
 
 #include <ros/ros.h>
 
+#include <message_filters/subscriber.h>
+#include <message_filters/time_synchronizer.h>
+
 #include <tf/transform_broadcaster.h>
 
 #include <tuw_iwos_odometer/encoder_odometer.h>
 #include <tuw_iwos_odometer/imu_odometer.h>
+#include <tuw_iwos_odometer/mixed_odometer.h>
 
 namespace tuw_iwos_odometer
 {
@@ -20,16 +24,21 @@ public:
   OdometerNode();
   ~OdometerNode() = default;
   void run();
-  void updateEncoder(const sensor_msgs::JointState& joint_state);
-  void updateImu(const sensor_msgs::Imu& imu);
+  void updateEncoderOdometer(const sensor_msgs::JointStatePtr& joint_state);
+  void updateImuOdometer(const sensor_msgs::ImuPtr& imu);
+  void updateMixedOdometer(const sensor_msgs::JointStatePtr& joint_state, const sensor_msgs::ImuPtr& imu);
 private:
   std::shared_ptr<ros::NodeHandle> node_handle_;
 
-  ros::Subscriber encoder_subscriber_;
-  ros::Subscriber imu_subscriber_;
+  std::unique_ptr<message_filters::Subscriber<sensor_msgs::JointState>> encoder_subscriber_;
+  std::unique_ptr<message_filters::Subscriber<sensor_msgs::Imu>> raw_imu_subscriber_;
+  std::unique_ptr<message_filters::Subscriber<sensor_msgs::Imu>> rpy_imu_subscriber_;
+
+  std::unique_ptr<message_filters::TimeSynchronizer<sensor_msgs::JointState, sensor_msgs::Imu>> synchronizer_;
 
   std::unique_ptr<EncoderOdometer> encoder_odometer_;
   std::unique_ptr<ImuOdometer> imu_odometer_;
+  std::unique_ptr<MixedOdometer> mixed_odometer_;
 };
 }  // namespace tuw_iwos_odometer
 
