@@ -9,7 +9,8 @@ using dynamic_reconfigure::Server;
 
 ImuOdometer::ImuOdometer(const std::shared_ptr<ros::NodeHandle>& node_handle)
 {
-  this->odometer_publisher_ = node_handle->advertise<nav_msgs::Odometry>("odom", 50);
+  this->node_handle_ = node_handle;
+
   this->tf_broadcaster_ = tf::TransformBroadcaster();
 
   this->reconfigure_server_ = std::make_shared<Server<ImuOdometerConfig>>(ros::NodeHandle(*node_handle, "ImuOdometer"));
@@ -91,6 +92,17 @@ bool ImuOdometer::update(const sensor_msgs::Imu& imu, const std::shared_ptr<ros:
 
 void ImuOdometer::configCallback(tuw_iwos_odometer::ImuOdometerConfig& config, uint32_t level)
 {
+  if (config.publish_odom_message && !this->odometer_publisher_is_advertised_)
+  {
+    this->odometer_publisher_ = this->node_handle_->advertise<nav_msgs::Odometry>("odom", 50);
+    this->odometer_publisher_is_advertised_ = true;
+  }
+  if (!config.publish_odom_message && this->odometer_publisher_is_advertised_)
+  {
+    this->odometer_publisher_.shutdown();
+    this->odometer_publisher_is_advertised_ = false;
+  }
+
   this->config_ = config;
 }
 
@@ -105,7 +117,7 @@ double ImuOdometer::integrate(double f, double c, double dt, int iterations)
   return x + c;
 }
 
-void tuw_iwos_odometer::ImuOdometer::calculateVelocity()
+void ImuOdometer::calculateVelocity()
 {
   double dt = this->duration_.toSec();
 
@@ -131,7 +143,7 @@ void tuw_iwos_odometer::ImuOdometer::calculateVelocity()
   this->velocity_[2] = wz;
 }
 
-void tuw_iwos_odometer::ImuOdometer::calculatePose()
+void ImuOdometer::calculatePose()
 {
   double dt = this->duration_.toSec();
 
@@ -146,7 +158,7 @@ void tuw_iwos_odometer::ImuOdometer::calculatePose()
   this->pose_ = tuw::Pose2D(x, y, theta);
 }
 
-void tuw_iwos_odometer::ImuOdometer::updateMessage()
+void ImuOdometer::updateMessage()
 {
   this->message_->header.stamp = this->this_time_;
   this->message_->pose.pose.position.x = this->pose_.x();
@@ -157,7 +169,7 @@ void tuw_iwos_odometer::ImuOdometer::updateMessage()
   this->message_->twist.twist.angular.z = this->velocity_[2];
 }
 
-void tuw_iwos_odometer::ImuOdometer::updateTransform()
+void ImuOdometer::updateTransform()
 {
   this->transform_->header.stamp = this->this_time_;
   this->transform_->transform.translation.x = this->pose_.x();

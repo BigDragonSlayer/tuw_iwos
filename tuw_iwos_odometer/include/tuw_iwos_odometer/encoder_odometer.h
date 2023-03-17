@@ -44,6 +44,9 @@ protected:
   void updateMessage();
   void updateTransform();
 
+  std::shared_ptr<ros::NodeHandle> node_handle_;
+
+  bool odometer_publisher_is_advertised_ {false};
   ros::Publisher odometer_publisher_;
   tf::TransformBroadcaster tf_broadcaster_;
 

@@ -13,10 +13,11 @@ EncoderOdometer::EncoderOdometer(double wheelbase,
                                  double wheeloffset,
                                  const std::shared_ptr<ros::NodeHandle>& node_handle)
 {
+  this->node_handle_ = node_handle;
+
   this->wheelbase_ = wheelbase;
   this->wheeloffset_ = wheeloffset;
 
-  this->odometer_publisher_ = node_handle->advertise<nav_msgs::Odometry>("odom", 50);
   this->tf_broadcaster_ = tf::TransformBroadcaster();
 
   this->reconfigure_server_ =
@@ -52,6 +53,17 @@ EncoderOdometer::EncoderOdometer(double wheelbase,
 
 void EncoderOdometer::configCallback(EncoderOdometerConfig &config, uint32_t level)
 {
+  if (config.publish_odom_message && !this->odometer_publisher_is_advertised_)
+  {
+    this->odometer_publisher_ = this->node_handle_->advertise<nav_msgs::Odometry>("odom", 50);
+    this->odometer_publisher_is_advertised_ = true;
+  }
+  if (!config.publish_odom_message && this->odometer_publisher_is_advertised_)
+  {
+    this->odometer_publisher_.shutdown();
+    this->odometer_publisher_is_advertised_ = false;
+  }
+
   this->config_ = config;
 }
 
@@ -157,8 +169,8 @@ void tuw_iwos_odometer::EncoderOdometer::calculateICC()
     // tuw::Pose2D p_r(b_r, alpha_r);
 
     // create vector orthogonal to wheel driving direction
-    tuw::Pose2D n_l(b_l, *alpha_l + M_PI / 2.0);
-    tuw::Pose2D n_r(b_r, *alpha_r + M_PI / 2.0);
+    tuw::Pose2D n_l(b_l, *alpha_l + M_PI_2);
+    tuw::Pose2D n_r(b_r, *alpha_r + M_PI_2);
 
     tuw::Line2D l_l(b_l, n_l.point_ahead());
     tuw::Line2D l_r(b_r, n_r.point_ahead());
