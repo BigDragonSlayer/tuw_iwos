@@ -26,7 +26,7 @@ MessageSubscriber::MessageSubscriber(ros::NodeHandle node_handle,
   this->subscriber_ = node_handle.subscribe("iwos_command_hardware", 100, &MessageSubscriber::callback, this);
 }
 
-void MessageSubscriber::callback(const tuw_nav_msgs::JointsIWSConstPtr &message)
+void MessageSubscriber::callback(const tuw_nav_msgs::JointsIWSConstPtr& message)
 {
   ROS_DEBUG("%s: receiving message", LOGGING_PREFIX);
 
