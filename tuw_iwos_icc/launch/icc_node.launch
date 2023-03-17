@@ -1,0 +1,8 @@
+<launch>
+
+  <node name="tuw_iwos_icc"
+         pkg="tuw_iwos_icc"
+         type="tuw_iwos_icc_node"
+         output="screen"/>
+
+</launch>
