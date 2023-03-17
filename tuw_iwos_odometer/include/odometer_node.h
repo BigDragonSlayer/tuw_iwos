@@ -9,6 +9,7 @@
 
 #include <message_filters/subscriber.h>
 #include <message_filters/time_synchronizer.h>
+#include <message_filters/sync_policies/approximate_time.h>
 
 #include <tf/transform_broadcaster.h>
 
@@ -26,7 +27,8 @@ public:
   void run();
   void updateEncoderOdometer(const sensor_msgs::JointStatePtr& joint_state);
   void updateImuOdometer(const sensor_msgs::ImuPtr& imu);
-  void updateMixedOdometer(const sensor_msgs::JointStatePtr& joint_state, const sensor_msgs::ImuPtr& imu);
+  void updateMixedOdometer(const sensor_msgs::ImuPtr& imu);
+//  void updateMixedOdometer(const sensor_msgs::JointStatePtr& joint_state, const sensor_msgs::ImuPtr& imu);
 private:
   std::shared_ptr<ros::NodeHandle> node_handle_;
 
@@ -34,7 +36,8 @@ private:
   std::unique_ptr<message_filters::Subscriber<sensor_msgs::Imu>> raw_imu_subscriber_;
   std::unique_ptr<message_filters::Subscriber<sensor_msgs::Imu>> rpy_imu_subscriber_;
 
-  std::unique_ptr<message_filters::TimeSynchronizer<sensor_msgs::JointState, sensor_msgs::Imu>> synchronizer_;
+  bool has_joint_state_ {false};
+  sensor_msgs::JointState joint_state_;
 
   std::unique_ptr<EncoderOdometer> encoder_odometer_;
   std::unique_ptr<ImuOdometer> imu_odometer_;
