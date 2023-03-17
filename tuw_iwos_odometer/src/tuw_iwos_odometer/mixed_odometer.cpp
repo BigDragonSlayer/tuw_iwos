@@ -21,7 +21,7 @@ MixedOdometer::MixedOdometer(double wheelbase,
   this->tf_broadcaster_ = tf::TransformBroadcaster();
 
   this->reconfigure_server_ =
-          std::make_shared<Server<MixedOdometerConfig>>(ros::NodeHandle(*node_handle, "EncoderOdometer"));
+          std::make_shared<Server<MixedOdometerConfig>>(ros::NodeHandle(*node_handle, "MixedOdometer"));
   this->callback_type_ = boost::bind(&MixedOdometer::configCallback, this, _1, _2);
   this->reconfigure_server_->setCallback(this->callback_type_);
 
