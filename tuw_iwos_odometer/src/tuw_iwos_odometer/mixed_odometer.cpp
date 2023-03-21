@@ -117,13 +117,13 @@ bool MixedOdometer::update(sensor_msgs::JointState joint_state,
     }
   }
 
-  if (this->config_.broadcast_odom_transform)
+  if (this->config_.publish_odom_message)
   {
     this->updateMessage();
     this->odometer_publisher_.publish(*this->odometer_message_);
   }
 
-  if (this->config_.publish_odom_message)
+  if (this->config_.broadcast_odom_transform)
   {
     this->updateTransform();
     this->tf_broadcaster_.sendTransform(*this->transform_message_);
