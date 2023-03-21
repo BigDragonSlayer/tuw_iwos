@@ -99,6 +99,10 @@ bool MixedOdometer::update(sensor_msgs::JointState joint_state,
   tf::Matrix3x3(quaternion).getRPY(roll, pitch, yaw);
   this->orientation_ = yaw;
 
+  // this->pose_.set_x(this->pose_.x());
+  // this->pose_.set_y(this->pose_.y());
+  this->pose_.set_theta(this->orientation_);
+
   if (this->config_.broadcast_odom_transform || this->config_.publish_odom_message)
   {
     try
