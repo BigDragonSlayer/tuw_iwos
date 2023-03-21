@@ -1,0 +1,13 @@
+<launch>
+
+  <!-- robot_localization EKF node for the odom frame -->
+  <node pkg="robot_localization"
+        type="ekf_localization_node"
+        name="robot_localization_ekf_node_odom"
+        output="screen"
+        clear_params="true">
+    <rosparam command="load" file="$(find tuw_iwos_launches)/config/localization.yaml" />
+    <remap from="odometry/filtered" to="odom_ekf" />
+  </node>
+
+</launch>

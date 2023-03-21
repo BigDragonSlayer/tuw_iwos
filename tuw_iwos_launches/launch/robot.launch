@@ -1,11 +1,12 @@
 <launch>
 
-  <arg name="gamepad"     default="true"/>
-  <arg name="laser"       default="true"/>
-  <arg name="imu"         default="true"/>
-  <arg name="imu_filter"  default="true"/>
-  <arg name="odom"        default="true"/>
-  <arg name="rviz"        default="true"/>
+  <arg name="gamepad"               default="true"/>
+  <arg name="laser"                 default="true"/>
+  <arg name="imu"                   default="true"/>
+  <arg name="imu_filter"            default="true"/>
+  <arg name="odom"                  default="true"/>
+  <arg name="robot_localization"    default="true"/>
+  <arg name="rviz"                  default="true"/>
 
   <group if="$(arg gamepad)">
     <include file="$(find tuw_iwos_launches)/launch/device/gamepad.launch"/>
@@ -29,6 +30,11 @@
 
   <group if="$(arg odom)">
     <include file="$(find tuw_iwos_odometer)/launch/tuw_iwos_odometer_node.launch"/>
+<!--     <remap from="odom" to="odom_raw" /> -->
+  </group>
+
+  <group if="$(arg robot_localization)">
+    <include file="$(find tuw_iwos_launches)/launch/localization.launch"/>
   </group>
 
   <group if="$(arg rviz)">

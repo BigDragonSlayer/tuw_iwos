@@ -1,0 +1,29 @@
+map_frame: map
+odom_frame: odom
+base_link_frame: base_link
+world_frame: odom
+
+two_d_mode: true
+publish_tf: true
+
+odom0: odom
+imu0: imu_data_raw
+imu1: imu_data_rpy
+
+odom0_config: [true,  true,  false,
+               false, false, false,
+               false, false, false,
+               false, false, false,
+               false, false, false]
+
+imu0_config: [false, false, false,
+              false, false, false,
+              true,  true,  false,
+              false, false, true,
+              true,  true,  false]
+
+imu1_config: [false, false, false,
+              true,  true,  true,
+              false, false, false,
+              false, false, false,
+              false, false, false]
