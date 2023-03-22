@@ -1,8 +1,8 @@
 config:
   - identifier: motor_poles
-    value: 10
+    value: 5
   - identifier: regulation_loop_delay
-    value: 0
+    value: 1
   - identifier: overvoltage_protection
     value: 0
   - identifier: driver_switch
@@ -30,4 +30,4 @@ config:
   - identifier: current_i_parameter
     value: 800
   - identifier: init_sine_mode
-    value: 1
+    value: 0
