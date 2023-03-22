@@ -24,10 +24,10 @@ config:
   - identifier: velocity_p_parameter
     value: 1000
   - identifier: velocity_i_parameter
-    value: 800
+    value: 500
   - identifier: current_p_parameter
     value: 1000
   - identifier: current_i_parameter
-    value: 800
+    value: 500
   - identifier: init_sine_mode
-    value: 0
+    value: 1
