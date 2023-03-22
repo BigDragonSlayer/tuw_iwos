@@ -4,7 +4,7 @@ config:
   - identifier: regulation_loop_delay
     value: 1
   - identifier: overvoltage_protection
-    value: 0
+    value: 1
   - identifier: driver_switch
     value: 1
   - identifier: ramp_switch
@@ -18,7 +18,7 @@ config:
   - identifier: motor_halted_velocity
     value: 5
   - identifier: maximum_current
-    value: 2000
+    value: 4000
   - identifier: position_p_parameter
     value: 0
   - identifier: velocity_p_parameter
