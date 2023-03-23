@@ -34,8 +34,8 @@ public:
   ~MixedOdometer() = default;
   MixedOdometer(double wheelbase, double wheeloffset, const std::shared_ptr<ros::NodeHandle>& node_handle);
   void configCallback(MixedOdometerConfig& config, uint32_t level);
-  bool update(sensor_msgs::JointState joint_state,
-              sensor_msgs::Imu imu,
+  bool update(const sensor_msgs::JointStateConstPtr& joint_state,
+              const sensor_msgs::ImuConstPtr& imu,
               const std::shared_ptr<ros::Duration>& duration = nullptr);
 protected:
   void calculateICC();

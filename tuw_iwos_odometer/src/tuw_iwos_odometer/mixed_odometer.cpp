@@ -67,8 +67,8 @@ void MixedOdometer::configCallback(tuw_iwos_odometer::MixedOdometerConfig &confi
   this->config_ = config;
 }
 
-bool MixedOdometer::update(sensor_msgs::JointState joint_state,
-                           sensor_msgs::Imu imu,
+bool MixedOdometer::update(const sensor_msgs::JointStateConstPtr& joint_state,
+                           const sensor_msgs::ImuConstPtr& imu,
                            const std::shared_ptr<ros::Duration> &duration)
 {
   if (duration == nullptr)
@@ -82,20 +82,20 @@ bool MixedOdometer::update(sensor_msgs::JointState joint_state,
     this->duration_ = *duration;
   }
 
-  this->revolute_velocity_[Side::LEFT] = joint_state.velocity[0];
-  this->revolute_velocity_[Side::RIGHT] = joint_state.velocity[1];
+  this->revolute_velocity_[Side::LEFT] = joint_state->velocity[0];
+  this->revolute_velocity_[Side::RIGHT] = joint_state->velocity[1];
 
-  this->steering_velocity_[Side::LEFT] = joint_state.velocity[2];
-  this->steering_velocity_[Side::RIGHT] = joint_state.velocity[3];
+  this->steering_velocity_[Side::LEFT] = joint_state->velocity[2];
+  this->steering_velocity_[Side::RIGHT] = joint_state->velocity[3];
 
-  this->steering_position_[Side::LEFT] = joint_state.position[2];
-  this->steering_position_[Side::RIGHT] = joint_state.position[3];
+  this->steering_position_[Side::LEFT] = joint_state->position[2];
+  this->steering_position_[Side::RIGHT] = joint_state->position[3];
 
   double roll;
   double pitch;
   double yaw;
   tf::Quaternion quaternion;
-  tf::quaternionMsgToTF(imu.orientation, quaternion);
+  tf::quaternionMsgToTF(imu->orientation, quaternion);
   tf::Matrix3x3(quaternion).getRPY(roll, pitch, yaw);
   this->orientation_ = yaw;
 
