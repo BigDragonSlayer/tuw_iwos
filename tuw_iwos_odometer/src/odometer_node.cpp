@@ -21,9 +21,9 @@ OdometerNode::OdometerNode()
   this->encoder_subscriber_->registerCallback(&OdometerNode::updateEncoderOdometer, this);
   this->raw_imu_subscriber_->registerCallback(&OdometerNode::updateImuOdometer, this);
 
-  this->ats_.reset(new approximate_time_synchronizer(approximate_time_policy(100),
-                                                     *this->encoder_subscriber_,
-                                                     *this->rpy_imu_subscriber_));
+  // atp: Approximate Time Policy
+  // ats: Approximate Time Synchronizer
+  this->ats_.reset(new ats(atp(100), *this->encoder_subscriber_, *this->rpy_imu_subscriber_));
   /* Optional Parameters for approximate time synchronizer
    * (https://wiki.ros.org/message_filters/ApproximateTime)
    * Age penalty: when comparing the size of sets, later intervals are penalized by a factor (1+AgePenalty).

@@ -17,6 +17,9 @@
 #include <tuw_iwos_odometer/imu_odometer.h>
 #include <tuw_iwos_odometer/mixed_odometer.h>
 
+using message_filters::sync_policies::ApproximateTime;
+using message_filters::Synchronizer;
+
 namespace tuw_iwos_odometer
 {
 class OdometerNode
@@ -36,9 +39,11 @@ private:
   std::unique_ptr<message_filters::Subscriber<sensor_msgs::Imu>> raw_imu_subscriber_;
   std::unique_ptr<message_filters::Subscriber<sensor_msgs::Imu>> rpy_imu_subscriber_;
 
-  typedef message_filters::sync_policies::ApproximateTime<sensor_msgs::JointState, sensor_msgs::Imu> approximate_time_policy;
-  typedef message_filters::Synchronizer<approximate_time_policy> approximate_time_synchronizer;
-  boost::shared_ptr<approximate_time_synchronizer> ats_;
+  // atp: Approximate Time Policy
+  typedef message_filters::sync_policies::ApproximateTime<sensor_msgs::JointState, sensor_msgs::Imu> atp;
+  // ats: Approximate Time Synchronizer
+  typedef message_filters::Synchronizer<atp> ats;
+  boost::shared_ptr<ats> ats_;
 
   std::unique_ptr<EncoderOdometer> encoder_odometer_;
   std::unique_ptr<ImuOdometer> imu_odometer_;
