@@ -9,7 +9,10 @@ find_package(
   roscpp
   rospy
   roslint
-  dynamic_reconfigure
+  geometry_msgs
+  sensor_msgs
+  tuw_nav_msgs
+#  dynamic_reconfigure
 )
 
 #generate_dynamic_reconfigure_options(
@@ -29,11 +32,10 @@ include_directories(
 
 roslint_cpp()
 
-#add_library(
-#  ${PROJECT_NAME}
-#  src/${PROJECT_NAME}/velocity_model.cpp
-#  src/${PROJECT_NAME}/odometer_model.cpp
-#)
+add_library(
+  ${PROJECT_NAME}
+  src/${PROJECT_NAME}/motion_model_odometer.cpp
+)
 
 #target_link_libraries(
 #  ${PROJECT_NAME}
