@@ -1,3 +1,5 @@
+<!--  TODO: make robot_localization optional-->
+
 <launch>
 
   <arg name="gamepad"               default="true"/>

@@ -1,3 +1,5 @@
+<!--  TODO: get rid of this file and clean up robot.launch -->
+
 <launch>
 
   <arg name="gamepad"               default="true"/>
