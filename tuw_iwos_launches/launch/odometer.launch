@@ -1,0 +1,33 @@
+<launch>
+
+  <arg name="robot_localization"  default="false"/>
+
+  <group if="$(eval robot_localization == true)">
+    <node pkg="tuw_iwos_odometer"
+          type="tuw_iwos_odometer_node"
+          name="tuw_iwos_odometer"
+          output="screen"
+          clear_params="true">
+      <remap from="odom" to="odom_encoder"/>
+    </node>
+    <node pkg="robot_localization"
+          type="ekf_localization_node"
+          name="robot_localization_ekf_node_odom"
+          output="screen"
+          clear_params="true">
+      <rosparam command="load" file="$(find tuw_iwos_launches)/config/robot_localization.yaml" />
+      <remap from="odometry/filtered" to="odom"/>
+    </node>
+  </group>
+
+
+  <group if="$(eval robot_localization == false)">
+    <node pkg="tuw_iwos_odometer"
+          type="tuw_iwos_odometer_node"
+           name="tuw_iwos_odometer"
+           output="screen"
+           clear_params="true"/>
+  </group>
+
+
+</launch>
