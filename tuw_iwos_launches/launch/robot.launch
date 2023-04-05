@@ -24,8 +24,8 @@
 
   <include file="$(find tuw_iwos_robot_description)/launch/robot_description_publisher.launch"/>
   <include file="$(find tuw_iwos_robot_description)/launch/robot_state_publisher.launch"/>
-  <include file="$(find tuw_iwos_hardware)/launch/tuw_iwos_hardware_node.launch"/>
-  <include file="$(find tuw_iwos_hardware_broker)/launch/tuw_iwos_hardware_broker_node.launch"/>
+  <include file="$(find tuw_iwos_hardware)/launch/hardware.launch"/>
+  <include file="$(find tuw_iwos_hardware_broker)/launch/hardware_broker.launch"/>
 
   <group if="$(eval odom == true)">
     <include file="$(find tuw_iwos_launches)/launch/odometer.launch">
