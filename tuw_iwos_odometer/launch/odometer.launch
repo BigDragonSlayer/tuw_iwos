@@ -1,7 +1,7 @@
 <launch>
   <node pkg="tuw_iwos_odometer"
         type="tuw_iwos_odometer_node"
-         name="tuw_iwos_odometer"
-         output="screen"
-         clear_params="true"/>
+        name="tuw_iwos_odometer"
+        output="screen"
+        clear_params="true"/>
 </launch>

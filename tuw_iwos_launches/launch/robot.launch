@@ -2,9 +2,9 @@
 
   <arg name="gamepad"               default="true"/>
   <arg name="laser"                 default="true"/>
-  <arg name="imu"                   default="true"/>
-  <arg name="imu_filter"            default="true"/>
   <arg name="odom"                  default="true"/>
+  <arg name="imu"                   default="true"/>
+  <arg name="imu_filter"            default="false"/>
   <arg name="robot_localization"    default="false"/>
   <arg name="rviz"                  default="false"/>
 
