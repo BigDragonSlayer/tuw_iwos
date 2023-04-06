@@ -9,6 +9,7 @@ find_package(
   roscpp
   rospy
   roslint
+  tuw_geometry
 )
 
 catkin_package(
@@ -29,8 +30,9 @@ roslint_cpp()
 
 add_library(
   ${PROJECT_NAME}
-  src/${PROJECT_NAME}/command_verifier.cpp
-  src/${PROJECT_NAME}/icc.cpp
+  src/${PROJECT_NAME}/icc_calculator.cpp
+  src/${PROJECT_NAME}/icc_verifier.cpp
+  src/icc_publisher_node.cpp
 )
 
 target_link_libraries(

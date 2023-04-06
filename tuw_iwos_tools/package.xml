@@ -16,10 +16,12 @@
   <build_depend>roscpp</build_depend>
   <build_depend>rospy</build_depend>
   <build_depend>roslint</build_depend>
+  <build_depend>tuw_geometry</build_depend>
 
   <exec_depend>roscpp</exec_depend>
   <exec_depend>rospy</exec_depend>
   <exec_depend>roslint</exec_depend>
+  <exec_depend>tuw_geometry</exec_depend>
 
   <export>
     <!-- nothing to export -->
