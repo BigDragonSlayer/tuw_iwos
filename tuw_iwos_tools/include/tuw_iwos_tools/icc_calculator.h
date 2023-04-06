@@ -22,6 +22,10 @@ public:
                     std::map<Side, double> steering_position,
                     const std::shared_ptr<tuw::Point2D>& icc_pointer,
                     const std::shared_ptr<std::map<Side, double>>& radius_pointer);
+  void calculateIccWithNoise(std::map<Side, double> revolute_velocity,
+                             std::map<Side, double> steering_position,
+                             const std::shared_ptr<tuw::Point2D>& icc_pointer,
+                             const std::shared_ptr<std::map<Side, double>>& radius_pointer);
 
   void setRevoluteVelocityTolerance(double revolute_velocity_tolerance);
   void setSteeringPositionTolerance(double steering_position_tolerance);

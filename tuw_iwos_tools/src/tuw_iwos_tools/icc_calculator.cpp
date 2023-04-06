@@ -133,6 +133,14 @@ void IccCalculator::calculateIcc(std::map<Side, double> revolute_velocity,
   }
 }
 
+void tuw_iwos_tools::IccCalculator::calculateIccWithNoise(std::map<Side, double> revolute_velocity,
+                                                          std::map<Side, double> steering_position,
+                                                          const std::shared_ptr<tuw::Point2D>& icc_pointer,
+                                                          const std::shared_ptr<std::map<Side, double>>& radius_pointer)
+{
+  // TODO(eugen): write this
+}
+
 void IccCalculator::setRevoluteVelocityTolerance(double revolute_velocity_tolerance)
 {
   this->revolute_velocity_tolerance_ = revolute_velocity_tolerance;

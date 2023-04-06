@@ -21,6 +21,12 @@ catkin_package(
   roslint
 )
 
+if(CATKIN_ENABLE_TESTING AND ENABLE_COVERAGE_TESTING)
+  find_package(code_coverage REQUIRED)
+  # Add compiler flags for coverage instrumentation before defining any targets
+  APPEND_COVERAGE_COMPILER_FLAGS()
+endif()
+
 include_directories(
   ./include
   ${catkin_INCLUDE_DIRS}
@@ -39,6 +45,33 @@ target_link_libraries(
   ${PROJECT_NAME}
   ${catkin_LIBRARIES}
 )
+
+if (CATKIN_ENABLE_TESTING)
+
+  catkin_add_gtest(
+    ${PROJECT_NAME}_tests
+    test/test.cpp
+    test/${PROJECT_NAME}/icc_calculator_test.cpp
+    test/${PROJECT_NAME}/icc_verifier_test.cpp
+  )
+
+  target_link_libraries(
+    ${PROJECT_NAME}_tests
+    ${PROJECT_NAME}
+    ${catkin_LIBRARIES}
+    gmock
+  )
+
+  # Create a target ${PROJECT_NAME}_coverage_report
+  if(ENABLE_COVERAGE_TESTING)
+    set(COVERAGE_EXCLUDES "*/${PROJECT_NAME}/test*" "*/${PROJECT_NAME}/other_dir_i_dont_care_about*")
+    add_code_coverage(
+      NAME ${PROJECT_NAME}_coverage_report
+      DEPENDENCIES tests
+  )
+  endif()
+
+endif()
 
 install(
   TARGETS ${PROJECT_NAME}
