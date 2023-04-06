@@ -11,7 +11,6 @@
 
 using tuw_iwos_odometer::EncoderOdometer;
 using tuw_iwos_odometer::EncoderOdometerConfig;
-using tuw_iwos_odometer::Side;
 
 class JointStateOdometerTest : public ::testing::Test
 {
