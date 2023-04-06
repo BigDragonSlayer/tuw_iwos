@@ -8,7 +8,8 @@ namespace tuw_iwos_tools
 enum Side
 {
   LEFT,
-  RIGHT
+  RIGHT,
+  CENTER
 };
 }  // namespace tuw_iwos_tools
 

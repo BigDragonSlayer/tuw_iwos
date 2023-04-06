@@ -24,13 +24,12 @@ IccVerifier::IccVerifier(double wheelbase,
 
 bool IccVerifier::verify(std::map<Side, double> revolute_velocity,
                          std::map<Side, double> steering_position,
-                         std::shared_ptr<tuw::Point2D> icc_pointer)
+                         std::shared_ptr<tuw::Point2D> icc_pointer,
+                         std::shared_ptr<std::map<Side, double>> radius_pointer)
 {
   try
   {
-    tuw::Point2D icc = this->icc_calculator_->calculateIcc(revolute_velocity,
-                                                           steering_position);
-    icc_pointer->set(icc.x(), icc.y());
+    this->icc_calculator_->calculateIcc(revolute_velocity, steering_position, icc_pointer, radius_pointer);
     return true;
   }
   catch (...)

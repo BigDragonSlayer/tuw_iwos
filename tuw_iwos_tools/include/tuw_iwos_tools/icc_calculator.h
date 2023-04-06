@@ -17,16 +17,19 @@ public:
                 double wheeloffset,
                 double revolute_velocity_tolerance,
                 double steering_position_tolerance);
-  tuw::Point2D calculateIcc(std::map<Side, double> revolute_velocity,
-                            std::map<Side, double> steering_position);
+  void calculateIcc(std::map<Side, double> revolute_velocity,
+                    std::map<Side, double> steering_position,
+                    std::shared_ptr<tuw::Point2D> icc_pointer,
+                    std::shared_ptr<std::map<Side, double>> radius_pointer);
+
   void setRevoluteVelocityTolerance(double revolute_velocity_tolerance);
   void setSteeringPositionTolerance(double steering_position_tolerance);
 private:
-  double wheelbase_ {0.0};
-  double wheeloffset_ {0.0};
+  double wheelbase_{0.0};
+  double wheeloffset_{0.0};
 
-  double revolute_velocity_tolerance_ {0.0};
-  double steering_position_tolerance_ {0.0};
+  double revolute_velocity_tolerance_{0.0};
+  double steering_position_tolerance_{0.0};
 };
 }  // namespace tuw_iwos_tools
 
