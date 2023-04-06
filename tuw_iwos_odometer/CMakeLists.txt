@@ -79,6 +79,7 @@ if (CATKIN_ENABLE_TESTING)
       DEPENDENCIES tests
     )
   endif()
+
 endif()
 
 add_executable(
