@@ -21,7 +21,6 @@
 #include <tuw_geometry/pose2d.h>
 
 #include <tuw_iwos_odometer/ImuOdometerConfig.h>
-#include <tuw_iwos_odometer/side.h>
 
 namespace tuw_iwos_odometer
 {

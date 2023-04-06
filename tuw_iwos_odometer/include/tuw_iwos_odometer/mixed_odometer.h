@@ -22,7 +22,7 @@
 #include <tuw_geometry/point2d.h>
 #include <tuw_geometry/pose2d.h>
 
-#include <tuw_iwos_odometer/side.h>
+#include <tuw_iwos_tools/icc_calculator.h>
 #include <tuw_iwos_odometer/MixedOdometerConfig.h>
 
 namespace tuw_iwos_odometer
@@ -66,16 +66,16 @@ protected:
   ros::Time last_time_;
   ros::Duration duration_;
 
-  std::map<Side, double> revolute_velocity_ {{Side::LEFT, 0.0}, {Side::RIGHT, 0.0}};
-  std::map<Side, double> steering_velocity_ {{Side::LEFT, 0.0}, {Side::RIGHT, 0.0}};
-  std::map<Side, double> steering_position_ {{Side::LEFT, 0.0}, {Side::RIGHT, 0.0}};
+  std::map<tuw_iwos_tools::Side, double> revolute_velocity_;
+  std::map<tuw_iwos_tools::Side, double> steering_position_;
   double orientation_{0.0};
 
-  double center_radius_ {0.0};
-  std::map<Side, double> radius_ {{Side::LEFT, 0.0}, {Side::RIGHT, 0.0}};
 
+  std::unique_ptr<tuw_iwos_tools::IccCalculator> icc_calculator_;
+
+  std::shared_ptr<tuw::Point2D> icc_;
+  std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> radius_;
   cv::Vec<double, 3> velocity_ {0.0, 0.0, 0.0};
-  tuw::Point2D icc_ {0.0, 0.0, 0.0};
   tuw::Pose2D pose_ {0.0, 0.0, 0.0};
 };
 }  // namespace tuw_iwos_odometer

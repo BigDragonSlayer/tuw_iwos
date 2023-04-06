@@ -82,14 +82,11 @@ bool MixedOdometer::update(const sensor_msgs::JointStateConstPtr& joint_state,
     this->duration_ = *duration;
   }
 
-  this->revolute_velocity_[Side::LEFT] = joint_state->velocity[0];
-  this->revolute_velocity_[Side::RIGHT] = joint_state->velocity[1];
+  this->revolute_velocity_[tuw_iwos_tools::Side::LEFT] = joint_state->velocity[0];
+  this->revolute_velocity_[tuw_iwos_tools::Side::RIGHT] = joint_state->velocity[1];
 
-  this->steering_velocity_[Side::LEFT] = joint_state->velocity[2];
-  this->steering_velocity_[Side::RIGHT] = joint_state->velocity[3];
-
-  this->steering_position_[Side::LEFT] = joint_state->position[2];
-  this->steering_position_[Side::RIGHT] = joint_state->position[3];
+  this->steering_position_[tuw_iwos_tools::Side::LEFT] = joint_state->position[2];
+  this->steering_position_[tuw_iwos_tools::Side::RIGHT] = joint_state->position[3];
 
   double roll;
   double pitch;
@@ -134,63 +131,10 @@ bool MixedOdometer::update(const sensor_msgs::JointStateConstPtr& joint_state,
 
 void MixedOdometer::calculateICC()
 {
-  // write velocity to variables (to shorten lines below)
-  double *v_l = &this->revolute_velocity_[Side::LEFT ];
-  double *v_r = &this->revolute_velocity_[Side::RIGHT];
-
-  // write angles to variables (to shorten lines below)
-  double *alpha_l = &this->steering_position_[Side::LEFT ];
-  double *alpha_r = &this->steering_position_[Side::RIGHT];
-
-  // case: kastor wheels are parallel
-  if (abs(*alpha_l - *alpha_r) <= this->config_.steering_position_tolerance)
-  {
-    // case velocity on both wheels equal - radius infinity - line motion
-    if (abs(*v_l - *v_r) <= this->config_.revolute_velocity_tolerance)
-    {
-      this->icc_ = {std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity()};
-      this->center_radius_ = std::numeric_limits<double>::infinity();
-      this->radius_[Side::LEFT] = std::numeric_limits<double>::infinity();
-      this->radius_[Side::RIGHT] = std::numeric_limits<double>::infinity();
-    }
-      // case velocity on both wheels not equal - radius not infinity - arc motion
-    else
-    {
-      this->center_radius_ = (this->wheelbase_ / 2.0) * ((*v_l + *v_r) / (-*v_l + *v_r));
-      this->icc_ = {0.0, this->center_radius_};
-      this->radius_[Side::LEFT] = this->center_radius_ - this->wheelbase_ / 2.0;
-      this->radius_[Side::RIGHT] = this->center_radius_ + this->wheelbase_ / 2.0;
-    }
-  }
-    // case: kastor wheels are not parallel
-  else
-  {
-    // calculate position of kastor pivot point
-    tuw::Point2D a_l(this->wheeloffset_, this->wheelbase_ / 2.0);
-    tuw::Point2D a_r(this->wheeloffset_, -this->wheelbase_ / 2.0);
-
-    // calculate position of wheel contact point
-    tuw::Point2D b_l(a_l.x() - cos(*alpha_l) * this->wheeloffset_, a_l.y() - sin(*alpha_l) * this->wheeloffset_);
-    tuw::Point2D b_r(a_r.x() - cos(*alpha_r) * this->wheeloffset_, a_r.y() - sin(*alpha_r) * this->wheeloffset_);
-
-    // create vector pointing in wheel driving direction
-    // tuw::Pose2D p_l(b_l, alpha_l);
-    // tuw::Pose2D p_r(b_r, alpha_r);
-
-    // create vector orthogonal to wheel driving direction
-    tuw::Pose2D n_l(b_l, *alpha_l + M_PI_2);
-    tuw::Pose2D n_r(b_r, *alpha_r + M_PI_2);
-
-    tuw::Line2D l_l(b_l, n_l.point_ahead());
-    tuw::Line2D l_r(b_r, n_r.point_ahead());
-
-    // find intersection of the lines
-    this->icc_ = l_l.intersection(l_r);
-
-    this->center_radius_ = abs(tuw::Point2D(0.0, 0.0).distanceTo(this->icc_));
-    this->radius_[Side::LEFT ] = abs(b_l.distanceTo(this->icc_));
-    this->radius_[Side::RIGHT] = abs(b_r.distanceTo(this->icc_));
-  }
+  this->icc_calculator_->calculateIcc(this->revolute_velocity_,
+                                      this->steering_position_,
+                                      this->icc_,
+                                      this->radius_);
 }
 
 void MixedOdometer::calculateVelocity()
@@ -199,22 +143,24 @@ void MixedOdometer::calculateVelocity()
   double w;  // angular velocity
 
   // case line motion
-  if (isinf(this->center_radius_) || isinf(this->radius_[Side::LEFT ]) || isinf(this->radius_[Side::RIGHT]))
+  if ( isinf(this->radius_->at(tuw_iwos_tools::Side::LEFT  )) ||
+       isinf(this->radius_->at(tuw_iwos_tools::Side::RIGHT )) ||
+       isinf(this->radius_->at(tuw_iwos_tools::Side::CENTER)) )
   {
-    v = (this->revolute_velocity_[Side::LEFT] + this->revolute_velocity_[Side::RIGHT]) / 2.0;
+    v = (this->revolute_velocity_[tuw_iwos_tools::Side::LEFT] + this->revolute_velocity_[tuw_iwos_tools::Side::RIGHT]) / 2.0;
     w = 0.0;
   }
     // case arc motion
   else
   {
     // calculate angular velocity for the wheel motion arc
-    double w_l = this->revolute_velocity_[Side::LEFT ] / this->radius_[Side::LEFT ];
-    double w_r = this->revolute_velocity_[Side::RIGHT] / this->radius_[Side::RIGHT];
+    double w_l = this->revolute_velocity_[tuw_iwos_tools::Side::LEFT ] / this->radius_->at(tuw_iwos_tools::Side::LEFT );
+    double w_r = this->revolute_velocity_[tuw_iwos_tools::Side::RIGHT] / this->radius_->at(tuw_iwos_tools::Side::RIGHT);
 
     if (abs(w_l - w_r) <= this->config_.revolute_velocity_tolerance)
     {
       w = (w_l + w_r) / 2.0;
-      v = w * this->center_radius_;
+      v = w * this->radius_->at(tuw_iwos_tools::Side::CENTER);
     }
     else
     {
