@@ -29,6 +29,7 @@ roslint_cpp()
 
 add_library(
   ${PROJECT_NAME}
+  src/${PROJECT_NAME}/command_verifier.cpp
   src/${PROJECT_NAME}/icc.cpp
 )
 

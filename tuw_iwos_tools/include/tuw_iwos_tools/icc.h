@@ -1,13 +1,14 @@
 // Copyright 2023 Eugen Kaltenegger
 
-#ifndef DIP_WS_ICC_H
-#define DIP_WS_ICC_H
+#ifndef TUW_IWOS_TOOLS_ICC_H
+#define TUW_IWOS_TOOLS_ICC_H
 
-
-class icc
+namespace tuw_iwos_tools
+{
+class ICC
 {
 
 };
+}  // namespace tuw_iwos_tools
 
-
-#endif //DIP_WS_ICC_H
+#endif  // TUW_IWOS_TOOLS_ICC_H
