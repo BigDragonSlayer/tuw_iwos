@@ -4,6 +4,7 @@
 
 #include <map>
 #include <memory>
+#include <utility>
 
 using tuw_iwos_tools::IccVerifier;
 
@@ -24,12 +25,15 @@ IccVerifier::IccVerifier(double wheelbase,
 
 bool IccVerifier::verify(std::map<Side, double> revolute_velocity,
                          std::map<Side, double> steering_position,
-                         std::shared_ptr<tuw::Point2D> icc_pointer,
-                         std::shared_ptr<std::map<Side, double>> radius_pointer)
+                         const std::shared_ptr<tuw::Point2D>& icc_pointer,
+                         const std::shared_ptr<std::map<Side, double>>& radius_pointer)
 {
   try
   {
-    this->icc_calculator_->calculateIcc(revolute_velocity, steering_position, icc_pointer, radius_pointer);
+    this->icc_calculator_->calculateIcc(std::move(revolute_velocity),
+                                        std::move(steering_position),
+                                        icc_pointer,
+                                        radius_pointer);
     return true;
   }
   catch (...)

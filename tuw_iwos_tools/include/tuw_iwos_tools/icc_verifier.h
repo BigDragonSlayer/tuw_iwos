@@ -15,13 +15,13 @@ class IccVerifier
 {
 public:
   IccVerifier(double wheelbase,
-           double wheeloffset,
-           double revolute_velocity_tolerance,
-           double steering_position_tolerance);
+              double wheeloffset,
+              double revolute_velocity_tolerance,
+              double steering_position_tolerance);
   bool verify(std::map<Side, double> revolute_velocity,
               std::map<Side, double> steering_position,
-              std::shared_ptr<tuw::Point2D> icc_pointer,
-              std::shared_ptr<std::map<Side, double>> radius_pointer);
+              const std::shared_ptr<tuw::Point2D>& icc_pointer,
+              const std::shared_ptr<std::map<Side, double>>& radius_pointer);
 
   void setRevoluteVelocityTolerance(double revolute_velocity_tolerance);
   void setSteeringPositionTolerance(double steering_position_tolerance);
