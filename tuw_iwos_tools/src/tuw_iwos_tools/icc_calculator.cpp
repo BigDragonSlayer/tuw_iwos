@@ -154,13 +154,17 @@ void IccCalculator::setSteeringPositionTolerance(double steering_position_tolera
 Side IccCalculator::vectorSide(tuw::Pose2D wheel, tuw::Point2D icc)
 {
   // TODO(eugen): write tests for this
+  // wheel-ground contact point (orientation normal to wheel axis)
   tuw::Point2D a {wheel.x(), wheel.y()};
+  // point in front of wheel-ground contact point (orientation normal to wheel axis)
   tuw::Point2D b {wheel.point_ahead().x(), wheel.point_ahead().y()};
   double position = (b.x() - a.x()) * (icc.y() - a.y()) - (b.y() - a.y()) * (icc.x() - a.x());
-  if (position == 0.0)
-    return Side::CENTER;
-  else if (position < 0.0)
+
+  if (position < 0.0)
     return Side::RIGHT;
-  else if (position > 0.0)
+
+  if (position > 0.0)
     return Side::LEFT;
+
+  return Side::CENTER;
 }
