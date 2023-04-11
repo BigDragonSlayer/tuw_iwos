@@ -6,7 +6,6 @@
 
 using tuw_iwos_odometer::OdometerNode;
 using message_filters::Subscriber;
-using message_filters::TimeSynchronizer;
 
 OdometerNode::OdometerNode()
 {
