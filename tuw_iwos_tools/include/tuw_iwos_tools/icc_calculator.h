@@ -29,15 +29,12 @@ public:
 
   void setRevoluteVelocityTolerance(double revolute_velocity_tolerance);
   void setSteeringPositionTolerance(double steering_position_tolerance);
+  static Side vectorSide(tuw::Pose2D wheel, tuw::Point2D icc);
 private:
-  Side vectorSide(tuw::Pose2D wheel, tuw::Point2D icc);
-
   double wheelbase_{0.0};
   double wheeloffset_{0.0};
-
   double revolute_velocity_tolerance_{0.0};
   double steering_position_tolerance_{0.0};
-
   tuw::Point2D base_link_{0.0, 0.0, 0.0};
 };
 }  // namespace tuw_iwos_tools
