@@ -6,8 +6,14 @@
 #include <map>
 #include <memory>
 
+using tuw_iwos_tools::Side;
 using tuw_iwos_odometer::EncoderOdometer;
 using dynamic_reconfigure::Server;
+
+std::random_device EncoderOdometer::random_device_;
+std::mt19937 EncoderOdometer::generator_(random_device_());
+std::normal_distribution<double> EncoderOdometer::normal_distribution_;
+
 
 EncoderOdometer::EncoderOdometer(double wheelbase,
                                  double wheeloffset,
@@ -91,17 +97,17 @@ bool EncoderOdometer::update(sensor_msgs::JointState joint_state, const std::sha
     this->duration_ = *duration;
   }
 
-  this->revolute_velocity_[tuw_iwos_tools::Side::LEFT ] = joint_state.velocity[0];
+  this->revolute_velocity_[tuw_iwos_tools::Side::LEFT] = joint_state.velocity[0];
   this->revolute_velocity_[tuw_iwos_tools::Side::RIGHT] = joint_state.velocity[1];
 
-  this->steering_position_[tuw_iwos_tools::Side::LEFT ] = joint_state.position[2];
+  this->steering_position_[tuw_iwos_tools::Side::LEFT] = joint_state.position[2];
   this->steering_position_[tuw_iwos_tools::Side::RIGHT] = joint_state.position[3];
 
   if (this->config_.broadcast_odom_transform || this->config_.publish_odom_message)
   {
     try
     {
-      this->calculateICC();
+      this->calculateIcc();
       this->calculateVelocity();
       this->calculatePose();
     }
@@ -131,7 +137,7 @@ tuw::Pose2D tuw_iwos_odometer::EncoderOdometer::get_pose()
   return this->pose_;
 }
 
-void tuw_iwos_odometer::EncoderOdometer::calculateICC()
+void EncoderOdometer::calculateIcc()
 {
   this->icc_calculator_->calculateIcc(this->revolute_velocity_,
                                       this->steering_position_,
@@ -145,18 +151,19 @@ void EncoderOdometer::calculateVelocity()
   double w;  // angular velocity
 
   // case line motion
-  if ( isinf(this->radius_->at(tuw_iwos_tools::Side::LEFT  )) ||
-       isinf(this->radius_->at(tuw_iwos_tools::Side::RIGHT )) ||
-       isinf(this->radius_->at(tuw_iwos_tools::Side::CENTER)) )
+  if (isinf(this->radius_->at(tuw_iwos_tools::Side::LEFT)) ||
+      isinf(this->radius_->at(tuw_iwos_tools::Side::RIGHT)) ||
+      isinf(this->radius_->at(tuw_iwos_tools::Side::CENTER)))
   {
-    v = (this->revolute_velocity_[tuw_iwos_tools::Side::LEFT] + this->revolute_velocity_[tuw_iwos_tools::Side::RIGHT]) / 2.0;
+    v = (this->revolute_velocity_[tuw_iwos_tools::Side::LEFT] + this->revolute_velocity_[tuw_iwos_tools::Side::RIGHT]) /
+        2.0;
     w = 0.0;
   }
     // case arc motion
   else
   {
     // calculate angular velocity for the wheel motion arc
-    double w_l = this->revolute_velocity_[tuw_iwos_tools::Side::LEFT ] / this->radius_->at(tuw_iwos_tools::Side::LEFT );
+    double w_l = this->revolute_velocity_[tuw_iwos_tools::Side::LEFT] / this->radius_->at(tuw_iwos_tools::Side::LEFT);
     double w_r = this->revolute_velocity_[tuw_iwos_tools::Side::RIGHT] / this->radius_->at(tuw_iwos_tools::Side::RIGHT);
 
     if (abs(w_l - w_r) <= this->config_.revolute_velocity_tolerance)
@@ -211,4 +218,37 @@ void EncoderOdometer::updateTransform()
   this->transform_message_->transform.translation.x = this->pose_.x();
   this->transform_message_->transform.translation.y = this->pose_.y();
   this->transform_message_->transform.rotation = this->quaternion_;
+}
+
+void EncoderOdometer::updateSample(const std::shared_ptr<tuw::Pose2D>& sample,
+                                   ros::Duration duration,
+                                   std::map<tuw_iwos_tools::Side, double> revolute_velocity,
+                                   std::map<tuw_iwos_tools::Side, double> steering_position)
+{
+  
+}
+
+void EncoderOdometer::updateSamples(const std::shared_ptr<tuw::Pose2D>& sample,
+                                    const std::shared_ptr<tuw_nav_msgs::JointsIWS>& last_joint_measurement,
+                                    const std::shared_ptr<tuw_nav_msgs::JointsIWS>& this_joint_measurement)
+{
+  ros::Duration duration = this_joint_measurement->header.stamp - last_joint_measurement->header.stamp;
+
+  const std::shared_ptr<tuw_nav_msgs::JointsIWS>& calculation_measurement = this_joint_measurement;
+  std::map<Side, double> revolute_velocity{{Side::LEFT,  calculation_measurement->revolute[0]},
+                                           {Side::RIGHT, calculation_measurement->revolute[1]}};
+  std::map<Side, double> steering_position{{Side::LEFT,  calculation_measurement->steering[0]},
+                                           {Side::RIGHT, calculation_measurement->steering[1]}};
+
+  if (this->config_.apply_measurement_noise)
+  {
+    for (auto side : revolute_velocity)
+      side.second += EncoderOdometer::normal_distribution_(EncoderOdometer::generator_) * this->config_.alpha_revolute;
+
+    for (auto side : steering_position)
+      side.second += EncoderOdometer::normal_distribution_(EncoderOdometer::generator_) * this->config_.alpha_steering;
+  }
+
+  for (auto sample : this->samples)
+    this->updateSample(sample, duration, revolute_velocity, steering_position);
 }

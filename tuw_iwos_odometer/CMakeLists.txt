@@ -17,6 +17,7 @@ find_package(
   nav_msgs
   message_filters
   tuw_iwos_tools
+  tuw_nav_msgs
 )
 
 generate_dynamic_reconfigure_options(
@@ -26,9 +27,10 @@ generate_dynamic_reconfigure_options(
 )
 
 catkin_package(
-  INCLUDE_DIRS include
-  LIBRARIES ${PROJECT_NAME}
+  INCLUDE_DIRS
+  include
   CATKIN_DEPENDS
+  tuw_nav_msgs
 )
 
 if(CATKIN_ENABLE_TESTING AND ENABLE_COVERAGE_TESTING)

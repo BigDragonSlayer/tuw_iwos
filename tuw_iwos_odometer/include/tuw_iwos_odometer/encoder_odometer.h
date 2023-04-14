@@ -5,8 +5,11 @@
 
 #include <map>
 #include <memory>
+#include <random>
 
 #include <ros/ros.h>
+
+#include <tuw_nav_msgs/JointsIWS.h>
 
 #include <geometry_msgs/TransformStamped.h>
 #include <nav_msgs/Odometry.h>
@@ -24,6 +27,7 @@
 #include <tuw_iwos_odometer/EncoderOdometerConfig.h>
 #include <tuw_iwos_tools/icc_calculator.h>
 
+
 namespace tuw_iwos_odometer
 {
 class EncoderOdometer
@@ -37,16 +41,30 @@ public:
               const std::shared_ptr<ros::Duration>& duration = nullptr);
   tuw::Pose2D get_pose();  // required for unit test
 protected:
-  void calculateICC();
+  void calculateIcc();
   void calculateVelocity();
   void calculatePose();
 
   void updateMessage();
   void updateTransform();
 
+  static std::random_device random_device_;  /// random number device
+  static std::mt19937 generator_; /// random number generator
+  static std::normal_distribution<double> normal_distribution_;
+
+  std::vector<std::shared_ptr<tuw::Pose2D>> samples;
+
+  void updateSample(const std::shared_ptr<tuw::Pose2D>& sample,
+                    ros::Duration duration,
+                    std::map<tuw_iwos_tools::Side, double> revolute_velocity,
+                    std::map<tuw_iwos_tools::Side, double> steering_position);
+  void updateSamples(const std::shared_ptr<tuw::Pose2D>& sample,
+                     const std::shared_ptr<tuw_nav_msgs::JointsIWS>& last_joint_state,
+                     const std::shared_ptr<tuw_nav_msgs::JointsIWS>& this_joint_state);
+
   std::shared_ptr<ros::NodeHandle> node_handle_;
 
-  bool odometer_publisher_is_advertised_ {false};
+  bool odometer_publisher_is_advertised_{false};
   ros::Publisher odometer_publisher_;
   tf::TransformBroadcaster tf_broadcaster_;
 
@@ -58,8 +76,8 @@ protected:
   std::shared_ptr<nav_msgs::Odometry> odometer_message_;
   std::shared_ptr<geometry_msgs::TransformStamped> transform_message_;
 
-  double wheelbase_ {0.0};
-  double wheeloffset_ {0.0};
+  double wheelbase_{0.0};
+  double wheeloffset_{0.0};
 
   ros::Time this_time_;
   ros::Time last_time_;
