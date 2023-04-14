@@ -1,8 +1,0 @@
-<launch>
-
-  <node name="tuw_iwos_motion_controller_node"
-         pkg="tuw_iwos_motion_controller"
-         type="tuw_iwos_motion_controller_node"
-         output="screen"/>
-
-</launch>
