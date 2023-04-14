@@ -15,6 +15,7 @@ find_package(
   tuw_geometry
   sensor_msgs
   nav_msgs
+  tuw_nav_msgs
   message_filters
   tuw_iwos_tools
   tuw_nav_msgs
@@ -30,7 +31,6 @@ catkin_package(
   INCLUDE_DIRS
   include
   CATKIN_DEPENDS
-  tuw_nav_msgs
 )
 
 if(CATKIN_ENABLE_TESTING AND ENABLE_COVERAGE_TESTING)
