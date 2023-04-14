@@ -10,11 +10,6 @@ using tuw_iwos_tools::Side;
 using tuw_iwos_odometer::EncoderOdometer;
 using dynamic_reconfigure::Server;
 
-std::random_device EncoderOdometer::random_device_;
-std::mt19937 EncoderOdometer::generator_(random_device_());
-std::normal_distribution<double> EncoderOdometer::normal_distribution_;
-
-
 EncoderOdometer::EncoderOdometer(double wheelbase,
                                  double wheeloffset,
                                  const std::shared_ptr<ros::NodeHandle>& node_handle)
@@ -218,37 +213,4 @@ void EncoderOdometer::updateTransform()
   this->transform_message_->transform.translation.x = this->pose_.x();
   this->transform_message_->transform.translation.y = this->pose_.y();
   this->transform_message_->transform.rotation = this->quaternion_;
-}
-
-void EncoderOdometer::updateSample(const std::shared_ptr<tuw::Pose2D>& sample,
-                                   ros::Duration duration,
-                                   std::map<tuw_iwos_tools::Side, double> revolute_velocity,
-                                   std::map<tuw_iwos_tools::Side, double> steering_position)
-{
-  
-}
-
-void EncoderOdometer::updateSamples(const std::shared_ptr<tuw::Pose2D>& sample,
-                                    const std::shared_ptr<tuw_nav_msgs::JointsIWS>& last_joint_measurement,
-                                    const std::shared_ptr<tuw_nav_msgs::JointsIWS>& this_joint_measurement)
-{
-  ros::Duration duration = this_joint_measurement->header.stamp - last_joint_measurement->header.stamp;
-
-  const std::shared_ptr<tuw_nav_msgs::JointsIWS>& calculation_measurement = this_joint_measurement;
-  std::map<Side, double> revolute_velocity{{Side::LEFT,  calculation_measurement->revolute[0]},
-                                           {Side::RIGHT, calculation_measurement->revolute[1]}};
-  std::map<Side, double> steering_position{{Side::LEFT,  calculation_measurement->steering[0]},
-                                           {Side::RIGHT, calculation_measurement->steering[1]}};
-
-  if (this->config_.apply_measurement_noise)
-  {
-    for (auto side : revolute_velocity)
-      side.second += EncoderOdometer::normal_distribution_(EncoderOdometer::generator_) * this->config_.alpha_revolute;
-
-    for (auto side : steering_position)
-      side.second += EncoderOdometer::normal_distribution_(EncoderOdometer::generator_) * this->config_.alpha_steering;
-  }
-
-  for (auto sample : this->samples)
-    this->updateSample(sample, duration, revolute_velocity, steering_position);
 }

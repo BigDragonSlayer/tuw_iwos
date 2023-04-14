@@ -11,6 +11,9 @@
 #include <sensor_msgs/JointState.h>
 
 #include <tuw_nav_msgs/JointsIWS.h>
+#include <tuw_geometry/pose2d.h>
+#include <tuw_iwos_tools/side.h>
+#include <random>
 
 namespace tuw_iwos_motion_model
 {
@@ -18,32 +21,21 @@ class MotionModelOdometer
 {
 
 public:
+  void updateSample(const std::shared_ptr<tuw::Pose2D>& sample,
+                    ros::Duration duration,
+                    const std::map<tuw_iwos_tools::Side, double>& revolute_velocity,
+                    const std::map<tuw_iwos_tools::Side, double>& steering_position);
+  void updateSamples(const std::shared_ptr<tuw_nav_msgs::JointsIWS>& last_joint_state,
+                     const std::shared_ptr<tuw_nav_msgs::JointsIWS>& this_joint_state);
 
 private:
-  static tuw_nav_msgs::JointsIWS toJointsMessage(sensor_msgs::JointState joint_state);
-  static geometry_msgs::PoseStamped predict
-    (const geometry_msgs::PoseStamped& pose, const std::pair<tuw_nav_msgs::JointsIWS, ros::Duration>& motion);
-  static std::vector<geometry_msgs::PoseStamped> predict
-    (const geometry_msgs::PoseStamped& pose, std::vector<std::pair<tuw_nav_msgs::JointsIWS, ros::Duration>> motions);
-  static std::vector<double> error
-    (const geometry_msgs::PoseStamped& prediction, const geometry_msgs::PoseStamped& localization);
-  static double calculateMean(std::vector<double> data);
-  static double calculateVariance(std::vector<double> data, double mean);
-  static double calculateStandardDeviation(std::vector<double> data, double mean);
-  static std::pair<double, double> calculateMeanAndVariance(const std::vector<double>& data);
-  static std::pair<double, double> calculateMeanAndStandardDeviation(const std::vector<double>& data);
+  static std::random_device random_device_;
+  static std::mt19937 generator_;
+  static std::normal_distribution<double> normal_distribution_;
 
-  double alpha_1_;
-  double alpha_2_;
-  double alpha_3_;
-  double alpha_4_;
-  double alpha_5_;
-  double alpha_6_;
+  MotionModelConfig config_;
 
-  double gradient_decent_step_size_;
-
-  int number_of_samples_;
-
+  std::vector<std::shared_ptr<tuw::Pose2D>> samples;
 };
 }  // namespace tuw_iwos_motion_model
 

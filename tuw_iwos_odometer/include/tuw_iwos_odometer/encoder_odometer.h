@@ -48,20 +48,6 @@ protected:
   void updateMessage();
   void updateTransform();
 
-  static std::random_device random_device_;  /// random number device
-  static std::mt19937 generator_; /// random number generator
-  static std::normal_distribution<double> normal_distribution_;
-
-  std::vector<std::shared_ptr<tuw::Pose2D>> samples;
-
-  void updateSample(const std::shared_ptr<tuw::Pose2D>& sample,
-                    ros::Duration duration,
-                    std::map<tuw_iwos_tools::Side, double> revolute_velocity,
-                    std::map<tuw_iwos_tools::Side, double> steering_position);
-  void updateSamples(const std::shared_ptr<tuw::Pose2D>& sample,
-                     const std::shared_ptr<tuw_nav_msgs::JointsIWS>& last_joint_state,
-                     const std::shared_ptr<tuw_nav_msgs::JointsIWS>& this_joint_state);
-
   std::shared_ptr<ros::NodeHandle> node_handle_;
 
   bool odometer_publisher_is_advertised_{false};

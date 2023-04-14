@@ -10,6 +10,8 @@ find_package(
   rospy
   roslint
   tuw_geometry
+  tuw_nav_msgs
+  sensor_msgs
 )
 
 catkin_package(
@@ -38,6 +40,7 @@ add_library(
   ${PROJECT_NAME}
   src/${PROJECT_NAME}/icc_calculator.cpp
   src/${PROJECT_NAME}/icc_verifier.cpp
+  src/${PROJECT_NAME}/message_transformer.cpp
   src/icc_publisher_node.cpp
 )
 
