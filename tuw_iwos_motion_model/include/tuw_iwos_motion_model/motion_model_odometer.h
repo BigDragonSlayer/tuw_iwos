@@ -6,6 +6,8 @@
 #include <geometry_msgs/PoseStamped.h>
 #include <geometry_msgs/PoseWithCovarianceStamped.h>
 
+#include <tuw_iwos_motion_model/MotionModelConfig.h>
+
 #include <sensor_msgs/JointState.h>
 
 #include <tuw_nav_msgs/JointsIWS.h>
