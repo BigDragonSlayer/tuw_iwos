@@ -12,12 +12,14 @@ find_package(
   geometry_msgs
   sensor_msgs
   tuw_nav_msgs
-#  dynamic_reconfigure
+  tuw_geometry
+  tuw_iwos_tools
+  dynamic_reconfigure
 )
 
-#generate_dynamic_reconfigure_options(
-#  config/???.cfg
-#)
+generate_dynamic_reconfigure_options(
+  config/motion_model.cfg
+)
 
 catkin_package(
   INCLUDE_DIRS include
@@ -37,10 +39,16 @@ add_library(
   src/${PROJECT_NAME}/motion_model_odometer.cpp
 )
 
-#target_link_libraries(
-#  ${PROJECT_NAME}
-#  ${catkin_LIBRARIES}
-#)
+target_link_libraries(
+  ${PROJECT_NAME}
+  ${catkin_LIBRARIES}
+)
+
+add_dependencies(
+  ${PROJECT_NAME}
+  ${PROJECT_NAME}_gencfg
+)
+
 
 #add_executable(
 #  ${PROJECT_NAME}_node

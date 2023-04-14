@@ -18,6 +18,9 @@
   <build_depend>geometry_msgs</build_depend>
   <build_depend>sensor_msgs</build_depend>
   <build_depend>tuw_nav_msgs</build_depend>
+  <build_depend>tuw_geometry</build_depend>
+  <build_depend>tuw_iwos_tools</build_depend>
+
 
   <exec_depend>roscpp</exec_depend>
   <exec_depend>rospy</exec_depend>
@@ -26,6 +29,8 @@
   <exec_depend>geometry_msgs</exec_depend>
   <exec_depend>sensor_msgs</exec_depend>
   <exec_depend>tuw_nav_msgs</exec_depend>
+  <exec_depend>tuw_geometry</exec_depend>
+  <exec_depend>tuw_iwos_tools</exec_depend>
 
   <export>
     <!-- nothing to export -->
