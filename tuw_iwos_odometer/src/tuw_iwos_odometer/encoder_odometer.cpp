@@ -5,6 +5,7 @@
 #include <limits>
 #include <map>
 #include <memory>
+#include "tuw_iwos_tools/message_transformer.h"
 
 using tuw_iwos_tools::Side;
 using tuw_iwos_odometer::EncoderOdometer;
@@ -21,15 +22,11 @@ EncoderOdometer::EncoderOdometer(double wheelbase,
 
   this->tf_broadcaster_ = tf::TransformBroadcaster();
 
-  this->icc_calculator_ = std::make_unique<tuw_iwos_tools::IccTool>(this->wheelbase_,
-                                                                    this->wheeloffset_,
-                                                                    0.0,
-                                                                    0.0);
+  this->icc_tool_ = std::make_unique<tuw_iwos_tools::IccTool>(this->wheelbase_, this->wheeloffset_, 0.0, 0.0, 0.0);
   this->icc_ = std::make_shared<tuw::Point2D>(0.0, 0.0, 0.0);
-  this->radius_ = std::make_shared<std::map<tuw_iwos_tools::Side, double>>();
-  this->radius_->insert({tuw_iwos_tools::Side::LEFT, 0.0});
-  this->radius_->insert({tuw_iwos_tools::Side::RIGHT, 0.0});
-  this->radius_->insert({tuw_iwos_tools::Side::CENTER, 0.0});
+  this->r_pointer = std::make_shared<std::map<tuw_iwos_tools::Side, double>>();
+  this->v_pointer = std::make_shared<std::map<tuw_iwos_tools::Side, double>>();
+  this->w_pointer = std::make_shared<std::map<tuw_iwos_tools::Side, double>>();
 
   this->reconfigure_server_ =
           std::make_shared<Server<EncoderOdometerConfig>>(ros::NodeHandle(*node_handle, "EncoderOdometer"));
@@ -76,8 +73,9 @@ void EncoderOdometer::configCallback(EncoderOdometerConfig& config, uint32_t lev
   }
 
   this->config_ = config;
-  this->icc_calculator_->setRevoluteVelocityTolerance(config.revolute_velocity_tolerance);
-  this->icc_calculator_->setSteeringPositionTolerance(config.steering_position_tolerance);
+  this->icc_tool_->setLinearVelocityTolerance(config.linear_velocity_tolerance);
+  this->icc_tool_->setAngularVelocityTolerance(config.angular_velocity_tolerance);
+  this->icc_tool_->setSteeringPositionTolerance(config.steering_position_tolerance);
 }
 
 bool EncoderOdometer::update(sensor_msgs::JointState joint_state, const std::shared_ptr<ros::Duration>& duration)
@@ -87,23 +85,26 @@ bool EncoderOdometer::update(sensor_msgs::JointState joint_state, const std::sha
     this->this_time_ = ros::Time::now();
     this->duration_ = this->this_time_ - this->last_time_;
     this->last_time_ = this->this_time_;
-  } else
+  }
+  else
   {
     this->duration_ = *duration;
   }
 
-  this->revolute_velocity_[tuw_iwos_tools::Side::LEFT] = joint_state.velocity[0];
-  this->revolute_velocity_[tuw_iwos_tools::Side::RIGHT] = joint_state.velocity[1];
+  std::shared_ptr<tuw_nav_msgs::JointsIWS> joints = tuw_iwos_tools::MessageTransformer::toJointsIWSPointer(joint_state);
 
-  this->steering_position_[tuw_iwos_tools::Side::LEFT] = joint_state.position[2];
-  this->steering_position_[tuw_iwos_tools::Side::RIGHT] = joint_state.position[3];
+  (*this->revolute_velocity_)[tuw_iwos_tools::Side::LEFT] = joints->revolute[0];
+  (*this->revolute_velocity_)[tuw_iwos_tools::Side::RIGHT] = joints->revolute[1];
+
+  (*this->steering_position_)[tuw_iwos_tools::Side::LEFT] = joints->steering[0];
+  (*this->steering_position_)[tuw_iwos_tools::Side::RIGHT] = joints->revolute[1];
 
   if (this->config_.broadcast_odom_transform || this->config_.publish_odom_message)
   {
     try
     {
-      this->calculateIcc();
-      this->calculateVelocity();
+      this->icc_tool_->calculateIcc(this->revolute_velocity_, this->steering_position_,
+                                    this->icc_, this->r_pointer, this->v_pointer, this->w_pointer);
       this->calculatePose();
     }
     catch (...)
@@ -132,53 +133,11 @@ tuw::Pose2D tuw_iwos_odometer::EncoderOdometer::get_pose()
   return this->pose_;
 }
 
-void EncoderOdometer::calculateIcc()
-{
-  this->icc_calculator_->calculateIcc(this->revolute_velocity_,
-                                      this->steering_position_,
-                                      this->icc_,
-                                      this->radius_);
-}
-
-void EncoderOdometer::calculateVelocity()
-{
-  double v;  // linear velocity
-  double w;  // angular velocity
-
-  // case line motion
-  if (isinf(this->radius_->at(tuw_iwos_tools::Side::LEFT)) ||
-      isinf(this->radius_->at(tuw_iwos_tools::Side::RIGHT)) ||
-      isinf(this->radius_->at(tuw_iwos_tools::Side::CENTER)))
-  {
-    v = (this->revolute_velocity_[tuw_iwos_tools::Side::LEFT] + this->revolute_velocity_[tuw_iwos_tools::Side::RIGHT]) /
-        2.0;
-    w = 0.0;
-  }
-    // case arc motion
-  else
-  {
-    // calculate angular velocity for the wheel motion arc
-    double w_l = this->revolute_velocity_[tuw_iwos_tools::Side::LEFT] / this->radius_->at(tuw_iwos_tools::Side::LEFT);
-    double w_r = this->revolute_velocity_[tuw_iwos_tools::Side::RIGHT] / this->radius_->at(tuw_iwos_tools::Side::RIGHT);
-
-    if (abs(w_l - w_r) <= this->config_.revolute_velocity_tolerance)
-    {
-      w = (w_l + w_r) / 2.0;
-      v = w * this->radius_->at(tuw_iwos_tools::Side::CENTER);
-    } else
-    {
-      throw std::runtime_error("failed to calculate center velocity within tolerance");
-    }
-  }
-
-  this->velocity_ = {v, 0.0, w};
-}
-
 void EncoderOdometer::calculatePose()
 {
   double dt = this->duration_.toSec() / static_cast<double>(this->config_.calculation_iterations);
   cv::Vec<double, 3> pose = this->pose_.state_vector();
-  cv::Vec<double, 3> change = this->velocity_ * dt;
+  cv::Vec<double, 3> change = cv::Vec<double, 3>{this->v_pointer->at(Side::CENTER), 0.0, this->w_pointer->at(Side::CENTER)} * dt;
   cv::Matx<double, 3, 3> r_2_w;
   cv::Vec<double, 3> increment;
   for (int i = 0; i < this->config_.calculation_iterations; i++)
@@ -200,9 +159,8 @@ void EncoderOdometer::updateMessage()
   this->odometer_message_->pose.pose.position.x = this->pose_.x();
   this->odometer_message_->pose.pose.position.y = this->pose_.y();
   this->odometer_message_->pose.pose.orientation = this->quaternion_;
-  this->odometer_message_->twist.twist.linear.x = this->velocity_[0];
-  this->odometer_message_->twist.twist.linear.y = this->velocity_[1];
-  this->odometer_message_->twist.twist.angular.z = this->velocity_[2];
+  this->odometer_message_->twist.twist.linear.x = this->v_pointer->at(Side::CENTER);
+  this->odometer_message_->twist.twist.angular.z = this->w_pointer->at(Side::CENTER);
 }
 
 void EncoderOdometer::updateTransform()

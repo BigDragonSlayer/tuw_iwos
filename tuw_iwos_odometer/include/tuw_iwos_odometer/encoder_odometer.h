@@ -41,8 +41,6 @@ public:
               const std::shared_ptr<ros::Duration>& duration = nullptr);
   tuw::Pose2D get_pose();  // required for unit test
 protected:
-  void calculateIcc();
-  void calculateVelocity();
   void calculatePose();
 
   void updateMessage();
@@ -68,14 +66,16 @@ protected:
   ros::Time this_time_;
   ros::Time last_time_;
   ros::Duration duration_;
-  std::map<tuw_iwos_tools::Side, double> revolute_velocity_;
-  std::map<tuw_iwos_tools::Side, double> steering_position_;
 
-  std::unique_ptr<tuw_iwos_tools::IccTool> icc_calculator_;
+  std::unique_ptr<tuw_iwos_tools::IccTool> icc_tool_;
+
+  std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> revolute_velocity_;
+  std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> steering_position_;
 
   std::shared_ptr<tuw::Point2D> icc_;
-  std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> radius_;
-  cv::Vec<double, 3> velocity_{0.0, 0.0, 0.0};
+  std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> r_pointer;
+  std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> v_pointer;
+  std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> w_pointer;
   tuw::Pose2D pose_{0.0, 0.0, 0.0};
 };
 }  // namespace tuw_iwos_odometer
