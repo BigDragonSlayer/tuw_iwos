@@ -21,10 +21,10 @@ EncoderOdometer::EncoderOdometer(double wheelbase,
 
   this->tf_broadcaster_ = tf::TransformBroadcaster();
 
-  this->icc_calculator_ = std::make_unique<tuw_iwos_tools::IccCalculator>(this->wheelbase_,
-                                                                          this->wheeloffset_,
-                                                                          0.0,
-                                                                          0.0);
+  this->icc_calculator_ = std::make_unique<tuw_iwos_tools::IccTool>(this->wheelbase_,
+                                                                    this->wheeloffset_,
+                                                                    0.0,
+                                                                    0.0);
   this->icc_ = std::make_shared<tuw::Point2D>(0.0, 0.0, 0.0);
   this->radius_ = std::make_shared<std::map<tuw_iwos_tools::Side, double>>();
   this->radius_->insert({tuw_iwos_tools::Side::LEFT, 0.0});

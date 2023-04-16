@@ -25,7 +25,7 @@
 #include <tuw_geometry/pose2d.h>
 
 #include <tuw_iwos_odometer/EncoderOdometerConfig.h>
-#include <tuw_iwos_tools/icc_calculator.h>
+#include <tuw_iwos_tools/icc_tool.h>
 
 
 namespace tuw_iwos_odometer
@@ -71,7 +71,7 @@ protected:
   std::map<tuw_iwos_tools::Side, double> revolute_velocity_;
   std::map<tuw_iwos_tools::Side, double> steering_position_;
 
-  std::unique_ptr<tuw_iwos_tools::IccCalculator> icc_calculator_;
+  std::unique_ptr<tuw_iwos_tools::IccTool> icc_calculator_;
 
   std::shared_ptr<tuw::Point2D> icc_;
   std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> radius_;

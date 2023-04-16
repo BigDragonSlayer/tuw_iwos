@@ -38,8 +38,7 @@ roslint_cpp()
 
 add_library(
   ${PROJECT_NAME}
-  src/${PROJECT_NAME}/icc_calculator.cpp
-  src/${PROJECT_NAME}/icc_verifier.cpp
+  src/${PROJECT_NAME}/icc_tool.cpp
   src/${PROJECT_NAME}/message_transformer.cpp
   src/icc_publisher_node.cpp
 )
@@ -54,8 +53,7 @@ if (CATKIN_ENABLE_TESTING)
   catkin_add_gtest(
     ${PROJECT_NAME}_tests
     test/test.cpp
-    test/${PROJECT_NAME}/icc_calculator_test.cpp
-    test/${PROJECT_NAME}/icc_verifier_test.cpp
+    test/${PROJECT_NAME}/icc_tool_test.cpp
   )
 
   target_link_libraries(

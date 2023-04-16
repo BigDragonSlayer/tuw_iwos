@@ -22,7 +22,7 @@
 #include <tuw_geometry/point2d.h>
 #include <tuw_geometry/pose2d.h>
 
-#include <tuw_iwos_tools/icc_calculator.h>
+#include <tuw_iwos_tools/icc_tool.h>
 #include <tuw_iwos_odometer/MixedOdometerConfig.h>
 
 namespace tuw_iwos_odometer
@@ -71,7 +71,7 @@ protected:
   double orientation_{0.0};
 
 
-  std::unique_ptr<tuw_iwos_tools::IccCalculator> icc_calculator_;
+  std::unique_ptr<tuw_iwos_tools::IccTool> icc_calculator_;
 
   std::shared_ptr<tuw::Point2D> icc_;
   std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> radius_;

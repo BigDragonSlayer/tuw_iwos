@@ -1,19 +1,19 @@
 // Copyright 2023 Eugen Kaltenegger
 
-#include <tuw_iwos_tools/icc_calculator.h>
+#include <tuw_iwos_tools/icc_tool.h>
 
 #include <tuw_geometry/pose2d.h>
 #include <tuw_geometry/line2d.h>
 #include <map>
 #include <limits>
 
-using tuw_iwos_tools::IccCalculator;
+using tuw_iwos_tools::IccTool;
 using tuw_iwos_tools::Side;
 
-IccCalculator::IccCalculator(double wheelbase,
-                             double wheeloffset,
-                             double revolute_velocity_tolerance,
-                             double steering_position_tolerance)
+IccTool::IccTool(double wheelbase,
+                 double wheeloffset,
+                 double revolute_velocity_tolerance,
+                 double steering_position_tolerance)
 {
   this->wheelbase_ = wheelbase;
   this->wheeloffset_ = wheeloffset;
@@ -21,10 +21,10 @@ IccCalculator::IccCalculator(double wheelbase,
   this->steering_position_tolerance_ = steering_position_tolerance;
 }
 
-void IccCalculator::calculateIcc(std::map<Side, double> revolute_velocity,
-                                 std::map<Side, double> steering_position,
-                                 const std::shared_ptr<tuw::Point2D>& icc_pointer,
-                                 const std::shared_ptr<std::map<Side, double>>& radius_pointer)
+void IccTool::calculateIcc(std::map<Side, double> revolute_velocity,
+                           std::map<Side, double> steering_position,
+                           const std::shared_ptr<tuw::Point2D>& icc_pointer,
+                           const std::shared_ptr<std::map<Side, double>>& radius_pointer)
 {
   // TODO(eugen): write tests for this
   // create pointers for velocity (to shorten lines below)
@@ -111,8 +111,8 @@ void IccCalculator::calculateIcc(std::map<Side, double> revolute_velocity,
 
     // calculate radius
     // positive if icc is to the left of the wheel, negative if icc is to the right of the wheel
-    double r_l = abs(b_l.distanceTo(icc)) * this->vectorSide(p_l, icc) != Side::RIGHT ? 1.0 : -1.0;
-    double r_r = abs(b_r.distanceTo(icc)) * this->vectorSide(p_l, icc) != Side::RIGHT ? 1.0 : -1.0;
+    double r_l = abs(b_l.distanceTo(icc)) * IccTool::vectorSide(p_l, icc) != Side::RIGHT ? 1.0 : -1.0;
+    double r_r = abs(b_r.distanceTo(icc)) * IccTool::vectorSide(p_l, icc) != Side::RIGHT ? 1.0 : -1.0;
 
     double w_l = revolute_velocity[Side::LEFT ] / r_l;
     double w_r = revolute_velocity[Side::RIGHT] / r_r;
@@ -133,25 +133,17 @@ void IccCalculator::calculateIcc(std::map<Side, double> revolute_velocity,
   }
 }
 
-void tuw_iwos_tools::IccCalculator::calculateIccWithNoise(std::map<Side, double> revolute_velocity,
-                                                          std::map<Side, double> steering_position,
-                                                          const std::shared_ptr<tuw::Point2D>& icc_pointer,
-                                                          const std::shared_ptr<std::map<Side, double>>& radius_pointer)
-{
-  // TODO(eugen): write this
-}
-
-void IccCalculator::setRevoluteVelocityTolerance(double revolute_velocity_tolerance)
+void IccTool::setRevoluteVelocityTolerance(double revolute_velocity_tolerance)
 {
   this->revolute_velocity_tolerance_ = revolute_velocity_tolerance;
 }
 
-void IccCalculator::setSteeringPositionTolerance(double steering_position_tolerance)
+void IccTool::setSteeringPositionTolerance(double steering_position_tolerance)
 {
   this->steering_position_tolerance_ = steering_position_tolerance;
 }
 
-Side IccCalculator::vectorSide(tuw::Pose2D wheel, tuw::Point2D icc)
+Side IccTool::vectorSide(tuw::Pose2D wheel, tuw::Point2D icc)
 {
   // TODO(eugen): write tests for this
   // wheel-ground contact point (orientation normal to wheel axis)
