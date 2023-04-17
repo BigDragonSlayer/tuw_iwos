@@ -36,7 +36,7 @@ private:
   std::unique_ptr<message_filters::Subscriber<sensor_msgs::Imu>> rpy_imu_subscriber_;
 
   ros::Publisher odometer_publisher_;
-  tf::TransformBroadcaster odometer_broadcaster_;
+  tf::TransformBroadcaster transform_broadcaster_;
 
   OdometerNodeConfig config_;
   std::shared_ptr<dynamic_reconfigure::Server<OdometerNodeConfig>> reconfigure_server_;
