@@ -2,9 +2,9 @@
 
 #include <tuw_iwos_odometer/encoder_odometer.h>
 
-#include <limits>
 #include <map>
 #include <memory>
+#include <utility>
 #include "tuw_iwos_tools/message_transformer.h"
 
 using tuw_iwos_tools::Side;
@@ -22,12 +22,6 @@ EncoderOdometer::EncoderOdometer(double wheelbase,
 
   this->tf_broadcaster_ = tf::TransformBroadcaster();
 
-  this->icc_tool_ = std::make_unique<tuw_iwos_tools::IccTool>(this->wheelbase_, this->wheeloffset_, 0.0, 0.0, 0.0);
-  this->icc_ = std::make_shared<tuw::Point2D>(0.0, 0.0, 0.0);
-  this->r_pointer = std::make_shared<std::map<tuw_iwos_tools::Side, double>>();
-  this->v_pointer = std::make_shared<std::map<tuw_iwos_tools::Side, double>>();
-  this->w_pointer = std::make_shared<std::map<tuw_iwos_tools::Side, double>>();
-
   this->reconfigure_server_ =
           std::make_shared<Server<EncoderOdometerConfig>>(ros::NodeHandle(*node_handle, "EncoderOdometer"));
   this->callback_type_ = boost::bind(&EncoderOdometer::configCallback, this, _1, _2);
@@ -35,6 +29,12 @@ EncoderOdometer::EncoderOdometer(double wheelbase,
 
   this->this_time_ = ros::Time::now();
   this->last_time_ = ros::Time::now();
+
+  this->icc_tool_ = std::make_unique<tuw_iwos_tools::IccTool>(this->wheelbase_, this->wheeloffset_, 0.0, 0.0, 0.0);
+  this->icc_ = std::make_shared<tuw::Point2D>(0.0, 0.0, 0.0);
+  this->r_pointer = std::make_shared<std::map<tuw_iwos_tools::Side, double>>();
+  this->v_pointer = std::make_shared<std::map<tuw_iwos_tools::Side, double>>();
+  this->w_pointer = std::make_shared<std::map<tuw_iwos_tools::Side, double>>();
 
   this->odometer_message_ = std::make_shared<nav_msgs::Odometry>();
   this->odometer_message_->header.frame_id = "odom";
@@ -78,20 +78,21 @@ void EncoderOdometer::configCallback(EncoderOdometerConfig& config, uint32_t lev
   this->icc_tool_->setSteeringPositionTolerance(config.steering_position_tolerance);
 }
 
-bool EncoderOdometer::update(sensor_msgs::JointState joint_state, const std::shared_ptr<ros::Duration>& duration)
+bool EncoderOdometer::update(sensor_msgs::JointState joint_state,
+                             const std::shared_ptr<ros::Duration>& duration)
 {
   if (duration == nullptr)
   {
     this->this_time_ = ros::Time::now();
     this->duration_ = this->this_time_ - this->last_time_;
     this->last_time_ = this->this_time_;
-  }
-  else
+  } else
   {
     this->duration_ = *duration;
   }
 
-  std::shared_ptr<tuw_nav_msgs::JointsIWS> joints = tuw_iwos_tools::MessageTransformer::toJointsIWSPointer(joint_state);
+  std::shared_ptr<tuw_nav_msgs::JointsIWS> joints =
+          tuw_iwos_tools::MessageTransformer::toJointsIWSPointer(std::move(joint_state));
 
   (*this->revolute_velocity_)[tuw_iwos_tools::Side::LEFT] = joints->revolute[0];
   (*this->revolute_velocity_)[tuw_iwos_tools::Side::RIGHT] = joints->revolute[1];
@@ -128,7 +129,7 @@ bool EncoderOdometer::update(sensor_msgs::JointState joint_state, const std::sha
   return true;
 }
 
-tuw::Pose2D tuw_iwos_odometer::EncoderOdometer::get_pose()
+tuw::Pose2D EncoderOdometer::get_pose()
 {
   return this->pose_;
 }
@@ -136,8 +137,9 @@ tuw::Pose2D tuw_iwos_odometer::EncoderOdometer::get_pose()
 void EncoderOdometer::calculatePose()
 {
   double dt = this->duration_.toSec() / static_cast<double>(this->config_.calculation_iterations);
+  cv::Vec<double, 3> velocity{this->v_pointer->at(Side::CENTER), 0.0, this->w_pointer->at(Side::CENTER)};
+  cv::Vec<double, 3> change = velocity * dt;
   cv::Vec<double, 3> pose = this->pose_.state_vector();
-  cv::Vec<double, 3> change = cv::Vec<double, 3>{this->v_pointer->at(Side::CENTER), 0.0, this->w_pointer->at(Side::CENTER)} * dt;
   cv::Matx<double, 3, 3> r_2_w;
   cv::Vec<double, 3> increment;
   for (int i = 0; i < this->config_.calculation_iterations; i++)

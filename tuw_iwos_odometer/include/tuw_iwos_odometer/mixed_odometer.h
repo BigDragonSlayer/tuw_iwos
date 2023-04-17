@@ -6,17 +6,14 @@
 #include <map>
 #include <memory>
 
-#include <ros/ros.h>
-
+#include <dynamic_reconfigure/server.h>
 #include <geometry_msgs/TransformStamped.h>
 #include <nav_msgs/Odometry.h>
+#include <ros/ros.h>
 #include <sensor_msgs/Imu.h>
 #include <sensor_msgs/JointState.h>
-
-#include <dynamic_reconfigure/server.h>
-
-#include <tf/transform_datatypes.h>
 #include <tf/transform_broadcaster.h>
+#include <tf/transform_datatypes.h>
 
 #include <tuw_geometry/line2d.h>
 #include <tuw_geometry/point2d.h>
@@ -38,8 +35,6 @@ public:
               const sensor_msgs::ImuConstPtr& imu,
               const std::shared_ptr<ros::Duration>& duration = nullptr);
 protected:
-  void calculateICC();
-  void calculateVelocity();
   void calculatePose();
 
   void updateMessage();
@@ -59,6 +54,8 @@ protected:
   std::shared_ptr<nav_msgs::Odometry> odometer_message_;
   std::shared_ptr<geometry_msgs::TransformStamped> transform_message_;
 
+  std::unique_ptr<tuw_iwos_tools::IccTool> icc_tool_;
+
   double wheelbase_ {0.0};
   double wheeloffset_ {0.0};
 
@@ -66,17 +63,14 @@ protected:
   ros::Time last_time_;
   ros::Duration duration_;
 
-  std::map<tuw_iwos_tools::Side, double> revolute_velocity_;
-  std::map<tuw_iwos_tools::Side, double> steering_position_;
+  std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> revolute_velocity_;
+  std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> steering_position_;
   double orientation_{0.0};
-
-
-  std::unique_ptr<tuw_iwos_tools::IccTool> icc_calculator_;
-
   std::shared_ptr<tuw::Point2D> icc_;
-  std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> radius_;
-  cv::Vec<double, 3> velocity_ {0.0, 0.0, 0.0};
-  tuw::Pose2D pose_ {0.0, 0.0, 0.0};
+  std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> r_pointer;
+  std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> v_pointer;
+  std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> w_pointer;
+  tuw::Pose2D pose_{0.0, 0.0, 0.0};
 };
 }  // namespace tuw_iwos_odometer
 

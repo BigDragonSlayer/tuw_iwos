@@ -1,17 +1,19 @@
 // Copyright 2023 Eugen Kaltenegger
 
 #include "tuw_iwos_odometer/mixed_odometer.h"
+#include "tuw_iwos_tools/message_transformer.h"
 
-#include <limits>
 #include <map>
 #include <memory>
+#include <tuw_nav_msgs/JointsIWS.h>
 
+using tuw_iwos_tools::Side;
 using tuw_iwos_odometer::MixedOdometer;
 using dynamic_reconfigure::Server;
 
 MixedOdometer::MixedOdometer(double wheelbase,
                              double wheeloffset,
-                             const std::shared_ptr<ros::NodeHandle> &node_handle)
+                             const std::shared_ptr<ros::NodeHandle>& node_handle)
 {
   this->node_handle_ = node_handle;
 
@@ -27,6 +29,12 @@ MixedOdometer::MixedOdometer(double wheelbase,
 
   this->this_time_ = ros::Time::now();
   this->last_time_ = ros::Time::now();
+
+  this->icc_tool_ = std::make_unique<tuw_iwos_tools::IccTool>(this->wheelbase_, this->wheeloffset_, 0.0, 0.0, 0.0);
+  this->icc_ = std::make_shared<tuw::Point2D>(0.0, 0.0, 0.0);
+  this->r_pointer = std::make_shared<std::map<tuw_iwos_tools::Side, double>>();
+  this->v_pointer = std::make_shared<std::map<tuw_iwos_tools::Side, double>>();
+  this->w_pointer = std::make_shared<std::map<tuw_iwos_tools::Side, double>>();
 
   this->odometer_message_ = std::make_shared<nav_msgs::Odometry>();
   this->odometer_message_->header.frame_id = "odom";
@@ -51,7 +59,7 @@ MixedOdometer::MixedOdometer(double wheelbase,
   this->transform_message_->transform.rotation = this->quaternion_;
 }
 
-void MixedOdometer::configCallback(tuw_iwos_odometer::MixedOdometerConfig &config, uint32_t level)
+void MixedOdometer::configCallback(tuw_iwos_odometer::MixedOdometerConfig& config, uint32_t level)
 {
   if (config.publish_odom_message && !this->odometer_publisher_is_advertised_)
   {
@@ -65,47 +73,48 @@ void MixedOdometer::configCallback(tuw_iwos_odometer::MixedOdometerConfig &confi
   }
 
   this->config_ = config;
+  this->icc_tool_->setLinearVelocityTolerance(config.linear_velocity_tolerance);
+  this->icc_tool_->setAngularVelocityTolerance(config.angular_velocity_tolerance);
+  this->icc_tool_->setSteeringPositionTolerance(config.steering_position_tolerance);
 }
 
 bool MixedOdometer::update(const sensor_msgs::JointStateConstPtr& joint_state,
                            const sensor_msgs::ImuConstPtr& imu,
-                           const std::shared_ptr<ros::Duration> &duration)
+                           const std::shared_ptr<ros::Duration>& duration)
 {
   if (duration == nullptr)
   {
     this->this_time_ = ros::Time::now();
     this->duration_ = this->this_time_ - this->last_time_;
     this->last_time_ = this->this_time_;
-  }
-  else
+  } else
   {
     this->duration_ = *duration;
   }
+//  std::shared_ptr<tuw_nav_msgs::JointsIWS> joints;
+  std::shared_ptr<tuw_nav_msgs::JointsIWS> joints =
+          tuw_iwos_tools::MessageTransformer::toJointsIWSPointer(*joint_state);
 
-  this->revolute_velocity_[tuw_iwos_tools::Side::LEFT] = joint_state->velocity[0];
-  this->revolute_velocity_[tuw_iwos_tools::Side::RIGHT] = joint_state->velocity[1];
+  (*this->revolute_velocity_)[tuw_iwos_tools::Side::LEFT] = joints->revolute[0];
+  (*this->revolute_velocity_)[tuw_iwos_tools::Side::RIGHT] = joints->revolute[1];
 
-  this->steering_position_[tuw_iwos_tools::Side::LEFT] = joint_state->position[2];
-  this->steering_position_[tuw_iwos_tools::Side::RIGHT] = joint_state->position[3];
+  (*this->steering_position_)[tuw_iwos_tools::Side::LEFT] = joints->steering[0];
+  (*this->steering_position_)[tuw_iwos_tools::Side::RIGHT] = joints->revolute[1];
 
-  double roll;
-  double pitch;
-  double yaw;
+  double roll, pitch, yaw;
   tf::Quaternion quaternion;
   tf::quaternionMsgToTF(imu->orientation, quaternion);
   tf::Matrix3x3(quaternion).getRPY(roll, pitch, yaw);
   this->orientation_ = yaw;
 
-  // this->pose_.set_x(this->pose_.x());
-  // this->pose_.set_y(this->pose_.y());
   this->pose_.set_theta(this->orientation_);
 
   if (this->config_.broadcast_odom_transform || this->config_.publish_odom_message)
   {
     try
     {
-      this->calculateICC();
-      this->calculateVelocity();
+      this->icc_tool_->calculateIcc(this->revolute_velocity_, this->steering_position_,
+                                    this->icc_, this->r_pointer, this->v_pointer, this->w_pointer);
       this->calculatePose();
     }
     catch (...)
@@ -129,53 +138,12 @@ bool MixedOdometer::update(const sensor_msgs::JointStateConstPtr& joint_state,
   return true;
 }
 
-void MixedOdometer::calculateICC()
-{
-  this->icc_calculator_->calculateIcc(this->revolute_velocity_,
-                                      this->steering_position_,
-                                      this->icc_,
-                                      this->radius_);
-}
-
-void MixedOdometer::calculateVelocity()
-{
-  double v;  // linear velocity
-  double w;  // angular velocity
-
-  // case line motion
-  if ( isinf(this->radius_->at(tuw_iwos_tools::Side::LEFT  )) ||
-       isinf(this->radius_->at(tuw_iwos_tools::Side::RIGHT )) ||
-       isinf(this->radius_->at(tuw_iwos_tools::Side::CENTER)) )
-  {
-    v = (this->revolute_velocity_[tuw_iwos_tools::Side::LEFT] + this->revolute_velocity_[tuw_iwos_tools::Side::RIGHT]) / 2.0;
-    w = 0.0;
-  }
-    // case arc motion
-  else
-  {
-    // calculate angular velocity for the wheel motion arc
-    double w_l = this->revolute_velocity_[tuw_iwos_tools::Side::LEFT ] / this->radius_->at(tuw_iwos_tools::Side::LEFT );
-    double w_r = this->revolute_velocity_[tuw_iwos_tools::Side::RIGHT] / this->radius_->at(tuw_iwos_tools::Side::RIGHT);
-
-    if (abs(w_l - w_r) <= this->config_.revolute_velocity_tolerance)
-    {
-      w = (w_l + w_r) / 2.0;
-      v = w * this->radius_->at(tuw_iwos_tools::Side::CENTER);
-    }
-    else
-    {
-      throw std::runtime_error("failed to calculate center velocity within tolerance");
-    }
-  }
-
-  this->velocity_ = {v, 0.0, w};
-}
-
 void MixedOdometer::calculatePose()
 {
   double dt = this->duration_.toSec() / static_cast<double>(this->config_.calculation_iterations);
+  cv::Vec<double, 3> velocity{this->v_pointer->at(Side::CENTER), 0.0, this->w_pointer->at(Side::CENTER)};
+  cv::Vec<double, 3> change = velocity * dt;
   cv::Vec<double, 3> pose = this->pose_.state_vector();
-  cv::Vec<double, 3> change = this->velocity_ * dt;
   cv::Matx<double, 3, 3> r_2_w;
   cv::Vec<double, 3> increment;
   for (int i = 0; i < this->config_.calculation_iterations; i++)
@@ -197,9 +165,8 @@ void MixedOdometer::updateMessage()
   this->odometer_message_->pose.pose.position.x = this->pose_.x();
   this->odometer_message_->pose.pose.position.y = this->pose_.y();
   this->odometer_message_->pose.pose.orientation = this->quaternion_;
-  this->odometer_message_->twist.twist.linear.x = this->velocity_[0];
-  this->odometer_message_->twist.twist.linear.y = this->velocity_[1];
-  this->odometer_message_->twist.twist.angular.z = this->velocity_[2];
+  this->odometer_message_->twist.twist.linear.x = this->v_pointer->at(Side::CENTER);
+  this->odometer_message_->twist.twist.angular.z = this->w_pointer->at(Side::CENTER);
 }
 
 void MixedOdometer::updateTransform()
