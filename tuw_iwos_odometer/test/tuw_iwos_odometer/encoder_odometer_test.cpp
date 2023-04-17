@@ -5,11 +5,11 @@
 
 #include <gtest/gtest.h>
 
-#include <tuw_iwos_odometer/encoder_odometer.h>
+#include <tuw_iwos_odometer/odometer_motor.h>
 
 #define ASSERTION_TOLERANCE 0.05
 
-using tuw_iwos_odometer::EncoderOdometer;
+using tuw_iwos_odometer::OdometerMotor;
 using tuw_iwos_odometer::EncoderOdometerConfig;
 
 class JointStateOdometerTest : public ::testing::Test
@@ -43,8 +43,8 @@ protected:
 
   std::shared_ptr<ros::NodeHandle> node_handle_ =
           std::make_shared<ros::NodeHandle>();
-  std::shared_ptr<EncoderOdometer> odometer_calculator_ =
-          std::make_shared<EncoderOdometer>(this->wheelbase_, this->wheeloffset_, this->node_handle_);
+  std::shared_ptr<OdometerMotor> odometer_calculator_ =
+          std::make_shared<OdometerMotor>(this->wheelbase_, this->wheeloffset_, this->node_handle_);
 };
 
 TEST_F(JointStateOdometerTest, odom_no_motion)

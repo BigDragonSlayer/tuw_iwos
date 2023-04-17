@@ -21,38 +21,24 @@
 
 #include <tuw_iwos_tools/icc_tool.h>
 #include <tuw_iwos_odometer/MixedOdometerConfig.h>
+#include <tuw_iwos_odometer/odometer.h>
 
 namespace tuw_iwos_odometer
 {
-class MixedOdometer
+class OdometerSensor : public Odometer
 {
 public:
-  MixedOdometer() = default;
-  ~MixedOdometer() = default;
-  MixedOdometer(double wheelbase, double wheeloffset, const std::shared_ptr<ros::NodeHandle>& node_handle);
-  void configCallback(MixedOdometerConfig& config, uint32_t level);
+  OdometerSensor(double wheelbase, double wheeloffset, const std::shared_ptr<ros::NodeHandle>& node_handle);
   bool update(const sensor_msgs::JointStateConstPtr& joint_state,
               const sensor_msgs::ImuConstPtr& imu,
               const std::shared_ptr<ros::Duration>& duration = nullptr);
 protected:
+  void updateOdometerMessage() override;
+  void updateOdometerTransform() override;
+
   void calculatePose();
 
-  void updateMessage();
-  void updateTransform();
-
   std::shared_ptr<ros::NodeHandle> node_handle_;
-
-  bool odometer_publisher_is_advertised_ {false};
-  ros::Publisher odometer_publisher_;
-  tf::TransformBroadcaster tf_broadcaster_;
-
-  MixedOdometerConfig config_;
-  std::shared_ptr<dynamic_reconfigure::Server<MixedOdometerConfig>> reconfigure_server_;
-  dynamic_reconfigure::Server<MixedOdometerConfig>::CallbackType callback_type_;
-
-  geometry_msgs::Quaternion quaternion_;
-  std::shared_ptr<nav_msgs::Odometry> odometer_message_;
-  std::shared_ptr<geometry_msgs::TransformStamped> transform_message_;
 
   std::unique_ptr<tuw_iwos_tools::IccTool> icc_tool_;
 

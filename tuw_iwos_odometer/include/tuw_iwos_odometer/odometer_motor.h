@@ -21,39 +21,24 @@
 
 #include <tuw_iwos_tools/icc_tool.h>
 #include <tuw_iwos_odometer/EncoderOdometerConfig.h>
-
+#include <tuw_iwos_odometer/odometer.h>
 
 namespace tuw_iwos_odometer
 {
-class EncoderOdometer
+class OdometerMotor : public Odometer
 {
 public:
-  EncoderOdometer() = default;
-  ~EncoderOdometer() = default;
-  EncoderOdometer(double wheelbase, double wheeloffset, const std::shared_ptr<ros::NodeHandle>& node_handle);
-  void configCallback(EncoderOdometerConfig& config, uint32_t level);
+  OdometerMotor(double wheelbase, double wheeloffset, const std::shared_ptr<ros::NodeHandle>& node_handle);
   bool update(const sensor_msgs::JointStateConstPtr& joint_state,
               const std::shared_ptr<ros::Duration>& duration = nullptr);
   tuw::Pose2D get_pose();  // required for unit test
 protected:
   void calculatePose();
 
-  void updateMessage();
-  void updateTransform();
+  void updateOdometerMessage() override;
+  void updateOdometerTransform() override;
 
   std::shared_ptr<ros::NodeHandle> node_handle_;
-
-  bool odometer_publisher_is_advertised_{false};
-  ros::Publisher odometer_publisher_;
-  tf::TransformBroadcaster tf_broadcaster_;
-
-  EncoderOdometerConfig config_;
-  std::shared_ptr<dynamic_reconfigure::Server<EncoderOdometerConfig>> reconfigure_server_;
-  dynamic_reconfigure::Server<EncoderOdometerConfig>::CallbackType callback_type_;
-
-  geometry_msgs::Quaternion quaternion_;
-  std::shared_ptr<nav_msgs::Odometry> odometer_message_;
-  std::shared_ptr<geometry_msgs::TransformStamped> transform_message_;
 
   std::unique_ptr<tuw_iwos_tools::IccTool> icc_tool_;
 

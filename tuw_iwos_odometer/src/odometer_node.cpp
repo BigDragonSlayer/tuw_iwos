@@ -6,10 +6,17 @@
 
 using tuw_iwos_odometer::OdometerNode;
 using message_filters::Subscriber;
+using dynamic_reconfigure::Server;
 
 OdometerNode::OdometerNode()
 {
   this->node_handle_ = std::make_shared<ros::NodeHandle>();
+
+  this->reconfigure_server_ =
+          std::make_shared<Server<OdometerNodeConfig>>(ros::NodeHandle(*this->node_handle_, "EncoderOdometer"));
+  this->callback_type_ = boost::bind(&OdometerNode::configCallback, this, _1, _2);
+  this->reconfigure_server_->setCallback(this->callback_type_);
+
   this->encoder_subscriber_ =
           std::make_unique<Subscriber<sensor_msgs::JointState>>(*this->node_handle_, "joint_states", 50);
   this->rpy_imu_subscriber_ =
@@ -40,8 +47,8 @@ OdometerNode::OdometerNode()
 
   this->ats_->registerCallback(boost::bind(&OdometerNode::synchronizedUpdateMixedOdometer, this, _1, _2));
 
-  this->encoder_odometer_ = std::make_unique<EncoderOdometer>(0.5, 0.1, this->node_handle_);
-  this->mixed_odometer_ = std::make_unique<MixedOdometer>(0.5, 0.1, this->node_handle_);
+  this->odometer_publisher_ = this->node_handle_->advertise<nav_msgs::Odometry>("odom", 50);
+  this->odometer_broadcaster_ = tf::TransformBroadcaster();
 }
 
 void tuw_iwos_odometer::OdometerNode::run()
@@ -51,13 +58,66 @@ void tuw_iwos_odometer::OdometerNode::run()
 
 void OdometerNode::updateEncoderOdometer(const sensor_msgs::JointStateConstPtr &joint_state)
 {
-  this->encoder_odometer_->update(joint_state);
+  if (this->odometer_motor_ != nullptr)
+  {
+    this->odometer_motor_->update(joint_state);
+//    if (this->config_.publish_odom_message)
+//      TODO(eugen): publish odom message
+//    if (this->config_.broadcast_odom_transform);
+//      TODO(eugen): publish odom transform
+  }
 }
 
 void OdometerNode::synchronizedUpdateMixedOdometer(const sensor_msgs::JointStateConstPtr &joint_state,
                                                    const sensor_msgs::ImuConstPtr &imu)
 {
-  this->mixed_odometer_->update(joint_state, imu);
+  if (this->odometer_sensor_ != nullptr)
+  {
+    this->odometer_sensor_->update(joint_state, imu);
+//    if (this->config_.publish_odom_message)
+//      TODO(eugen): publish odom message
+//    if (this->config_.broadcast_odom_transform);
+//      TODO(eugen): publish odom transform
+  }
+}
+
+void OdometerNode::configCallback(tuw_iwos_odometer::OdometerNodeConfig& config, uint32_t level)
+{
+  if (this->config_.odometer != config.odometer)
+  {
+    if (config.odometer == OdometerNode_odometer_motor)
+    {
+      if (this->odometer_sensor_ != nullptr)
+        this->odometer_sensor_.release();
+
+      this->odometer_motor_ = std::make_unique<OdometerMotor>(0.5, 0.1, this->node_handle_);
+    }
+    if (config.odometer == OdometerNode_odometer_sensor)
+    {
+      if (this->odometer_motor_ != nullptr)
+        this->odometer_motor_.release();
+
+      this->odometer_sensor_ = std::make_unique<OdometerSensor>(0.5, 0.1, this->node_handle_);
+    }
+  }
+  
+  if (config.odometer == OdometerNode_odometer_motor)
+  {
+    this->odometer_motor_->setCalculationIterations(config.calculation_iterations);
+    this->odometer_motor_->setLinearVelocityTolerance(config.linear_velocity_tolerance);
+    this->odometer_motor_->setAngularVelocityTolerance(config.angular_velocity_tolerance);
+    this->odometer_motor_->setSteeringPositionTolerance(config.steering_position_tolerance);
+  }
+  
+  if (config.odometer == OdometerNode_odometer_sensor)
+  {
+    this->odometer_sensor_->setCalculationIterations(config.calculation_iterations);
+    this->odometer_sensor_->setLinearVelocityTolerance(config.linear_velocity_tolerance);
+    this->odometer_sensor_->setAngularVelocityTolerance(config.angular_velocity_tolerance);
+    this->odometer_sensor_->setSteeringPositionTolerance(config.steering_position_tolerance);
+  }
+  
+  this->config_ = config;
 }
 
 int main(int argc, char **argv)

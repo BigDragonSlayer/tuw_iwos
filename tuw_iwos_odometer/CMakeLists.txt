@@ -21,8 +21,7 @@ find_package(
 )
 
 generate_dynamic_reconfigure_options(
-  config/encoder_odometer.cfg
-  config/mixed_odometer.cfg
+  config/odometer_node.cfg
 )
 
 catkin_package(
@@ -47,8 +46,9 @@ roslint_cpp()
 
 add_library(
   ${PROJECT_NAME}
-  src/${PROJECT_NAME}/encoder_odometer.cpp
-  src/${PROJECT_NAME}/mixed_odometer.cpp
+  src/${PROJECT_NAME}/odometer.cpp
+  src/${PROJECT_NAME}/odometer_motor.cpp
+  src/${PROJECT_NAME}/odometer_sensor.cpp
 )
 
 target_link_libraries(
