@@ -19,7 +19,6 @@ catkin_package(
   INCLUDE_DIRS
     include
   CATKIN_DEPENDS
-    tuw_nav_msgs
 )
 
 include_directories(
