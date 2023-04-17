@@ -78,7 +78,7 @@ void EncoderOdometer::configCallback(EncoderOdometerConfig& config, uint32_t lev
   this->icc_tool_->setSteeringPositionTolerance(config.steering_position_tolerance);
 }
 
-bool EncoderOdometer::update(sensor_msgs::JointState joint_state,
+bool EncoderOdometer::update(const sensor_msgs::JointStateConstPtr& joint_state,
                              const std::shared_ptr<ros::Duration>& duration)
 {
   if (duration == nullptr)
@@ -92,7 +92,7 @@ bool EncoderOdometer::update(sensor_msgs::JointState joint_state,
   }
 
   std::shared_ptr<tuw_nav_msgs::JointsIWS> joints =
-          tuw_iwos_tools::MessageTransformer::toJointsIWSPointer(std::move(joint_state));
+          tuw_iwos_tools::MessageTransformer::toJointsIWSPointer(*joint_state);
 
   (*this->revolute_velocity_)[tuw_iwos_tools::Side::LEFT] = joints->revolute[0];
   (*this->revolute_velocity_)[tuw_iwos_tools::Side::RIGHT] = joints->revolute[1];

@@ -32,7 +32,7 @@ public:
   ~EncoderOdometer() = default;
   EncoderOdometer(double wheelbase, double wheeloffset, const std::shared_ptr<ros::NodeHandle>& node_handle);
   void configCallback(EncoderOdometerConfig& config, uint32_t level);
-  bool update(sensor_msgs::JointState joint_state,
+  bool update(const sensor_msgs::JointStateConstPtr& joint_state,
               const std::shared_ptr<ros::Duration>& duration = nullptr);
   tuw::Pose2D get_pose();  // required for unit test
 protected:

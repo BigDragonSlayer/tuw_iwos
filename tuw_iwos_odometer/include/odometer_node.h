@@ -5,16 +5,13 @@
 
 #include <memory>
 
-#include <ros/ros.h>
-
 #include <message_filters/subscriber.h>
 #include <message_filters/time_synchronizer.h>
 #include <message_filters/sync_policies/approximate_time.h>
-
+#include <ros/ros.h>
 #include <tf/transform_broadcaster.h>
 
 #include <tuw_iwos_odometer/encoder_odometer.h>
-#include <tuw_iwos_odometer/imu_odometer.h>
 #include <tuw_iwos_odometer/mixed_odometer.h>
 
 using message_filters::sync_policies::ApproximateTime;
@@ -28,8 +25,7 @@ public:
   OdometerNode();
   ~OdometerNode() = default;
   void run();
-  void updateEncoderOdometer(const sensor_msgs::JointStatePtr& joint_state);
-  void updateImuOdometer(const sensor_msgs::ImuPtr& imu);
+  void updateEncoderOdometer(const sensor_msgs::JointStateConstPtr& joint_state);
   void synchronizedUpdateMixedOdometer(const sensor_msgs::JointStateConstPtr& joint_state,
                                        const sensor_msgs::ImuConstPtr& imu);
 private:
@@ -46,7 +42,6 @@ private:
   boost::shared_ptr<ats> ats_;
 
   std::unique_ptr<EncoderOdometer> encoder_odometer_;
-  std::unique_ptr<ImuOdometer> imu_odometer_;
   std::unique_ptr<MixedOdometer> mixed_odometer_;
 };
 }  // namespace tuw_iwos_odometer
