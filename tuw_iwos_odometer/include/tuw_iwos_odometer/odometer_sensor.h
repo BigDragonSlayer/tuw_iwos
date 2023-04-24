@@ -20,7 +20,6 @@
 #include <tuw_geometry/pose2d.h>
 
 #include <tuw_iwos_tools/icc_tool.h>
-#include <tuw_iwos_odometer/MixedOdometerConfig.h>
 #include <tuw_iwos_odometer/odometer.h>
 
 namespace tuw_iwos_odometer
