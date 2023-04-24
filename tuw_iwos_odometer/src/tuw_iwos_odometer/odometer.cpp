@@ -1,7 +1,8 @@
 // Copyright 2023 Eugen Kaltenegger
 
-
 #include <tuw_iwos_odometer/odometer.h>
+
+#include <memory>
 
 using tuw_iwos_odometer::Odometer;
 

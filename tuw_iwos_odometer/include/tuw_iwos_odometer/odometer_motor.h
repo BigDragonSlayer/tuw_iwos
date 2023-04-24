@@ -1,7 +1,7 @@
 // Copyright 2023 Eugen Kaltenegger
 
-#ifndef TUW_IWOS_ODOMETER_ENCODER_ODOMETER_H
-#define TUW_IWOS_ODOMETER_ENCODER_ODOMETER_H
+#ifndef TUW_IWOS_ODOMETER_ODOMETER_MOTOR_H
+#define TUW_IWOS_ODOMETER_ODOMETER_MOTOR_H
 
 #include <map>
 #include <memory>
@@ -58,4 +58,4 @@ protected:
 };
 }  // namespace tuw_iwos_odometer
 
-#endif  // TUW_IWOS_ODOMETER_ENCODER_ODOMETER_H
+#endif  // TUW_IWOS_ODOMETER_ODOMETER_MOTOR_H

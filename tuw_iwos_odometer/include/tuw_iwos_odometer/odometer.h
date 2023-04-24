@@ -1,7 +1,7 @@
 // Copyright 2023 Eugen Kaltenegger
 
-#ifndef DIP_WS_ODOMETER_H
-#define DIP_WS_ODOMETER_H
+#ifndef TUW_IWOS_ODOMETER_ODOMETER_H
+#define TUW_IWOS_ODOMETER_ODOMETER_H
 
 #include <memory>
 #include <nav_msgs/Odometry.h>
@@ -34,6 +34,6 @@ protected:
   double angular_velocity_tolerance_ {0.0};
   double steering_position_tolerance_ {0.0};
 };
-}
+}  // namespace tuw_iwos_odometer
 
-#endif //DIP_WS_ODOMETER_H
+#endif  // TUW_IWOS_ODOMETER_ODOMETER_H

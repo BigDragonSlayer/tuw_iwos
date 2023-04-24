@@ -13,7 +13,7 @@ using dynamic_reconfigure::Server;
 
 OdometerMotor::OdometerMotor(double wheelbase,
                              double wheeloffset,
-                             const std::shared_ptr<ros::NodeHandle>& node_handle)
+                             const std::shared_ptr<ros::NodeHandle> &node_handle)
 {
   this->node_handle_ = node_handle;
 
@@ -30,15 +30,16 @@ OdometerMotor::OdometerMotor(double wheelbase,
   this->w_pointer = std::make_shared<std::map<tuw_iwos_tools::Side, double>>();
 }
 
-bool OdometerMotor::update(const sensor_msgs::JointStateConstPtr& joint_state,
-                           const std::shared_ptr<ros::Duration>& duration)
+bool OdometerMotor::update(const sensor_msgs::JointStateConstPtr &joint_state,
+                           const std::shared_ptr<ros::Duration> &duration)
 {
   if (duration == nullptr)
   {
     this->this_time_ = ros::Time::now();
     this->duration_ = this->this_time_ - this->last_time_;
     this->last_time_ = this->this_time_;
-  } else
+  }
+  else
   {
     this->duration_ = *duration;
   }
