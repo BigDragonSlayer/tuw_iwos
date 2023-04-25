@@ -51,7 +51,7 @@ bool OdometerMotor::update(const sensor_msgs::JointStateConstPtr &joint_state,
   (*this->revolute_velocity_)[tuw_iwos_tools::Side::RIGHT] = joints->revolute[1];
 
   (*this->steering_position_)[tuw_iwos_tools::Side::LEFT] = joints->steering[0];
-  (*this->steering_position_)[tuw_iwos_tools::Side::RIGHT] = joints->revolute[1];
+  (*this->steering_position_)[tuw_iwos_tools::Side::RIGHT] = joints->steering[1];
 
   try
   {
