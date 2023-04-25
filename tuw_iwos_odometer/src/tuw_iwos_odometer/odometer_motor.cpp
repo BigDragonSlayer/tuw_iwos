@@ -24,6 +24,8 @@ OdometerMotor::OdometerMotor(double wheelbase,
   this->last_time_ = ros::Time::now();
 
   this->icc_tool_ = std::make_unique<tuw_iwos_tools::IccTool>(this->wheelbase_, this->wheeloffset_, 0.0, 0.0, 0.0);
+  this->revolute_velocity_ = std::make_shared<std::map<tuw_iwos_tools::Side, double>>();
+  this->steering_position_ = std::make_shared<std::map<tuw_iwos_tools::Side, double>>();
   this->icc_ = std::make_shared<tuw::Point2D>(0.0, 0.0, 0.0);
   this->r_pointer = std::make_shared<std::map<tuw_iwos_tools::Side, double>>();
   this->v_pointer = std::make_shared<std::map<tuw_iwos_tools::Side, double>>();
