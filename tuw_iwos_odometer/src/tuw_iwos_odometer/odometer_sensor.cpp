@@ -15,13 +15,13 @@ OdometerSensor::OdometerSensor(double wheelbase,
                                double wheeloffset,
                                const std::shared_ptr<ros::NodeHandle>& node_handle)
 {
-  this->node_handle_ = node_handle;
-
   this->wheelbase_ = wheelbase;
   this->wheeloffset_ = wheeloffset;
 
   this->this_time_ = ros::Time::now();
   this->last_time_ = ros::Time::now();
+
+  this->pose_ = std::make_shared<tuw::Pose2D>(0.0, 0.0, 0.0);
 
   this->icc_tool_ = std::make_unique<tuw_iwos_tools::IccTool>(this->wheelbase_, this->wheeloffset_, 0.0, 0.0, 0.0);
   this->icc_ = std::make_shared<tuw::Point2D>(0.0, 0.0, 0.0);
@@ -60,7 +60,7 @@ bool OdometerSensor::update(const sensor_msgs::JointStateConstPtr& joint_state,
   tf::Matrix3x3(quaternion).getRPY(roll, pitch, yaw);
   this->orientation_ = yaw;
 
-  this->pose_.set_theta(this->orientation_);
+  this->pose_->set_theta(this->orientation_);
 
   try
   {
@@ -84,7 +84,7 @@ void OdometerSensor::calculatePose()
   double dt = this->duration_.toSec() / static_cast<double>(this->calculation_iterations_);
   cv::Vec<double, 3> velocity{this->v_pointer->at(Side::CENTER), 0.0, this->w_pointer->at(Side::CENTER)};
   cv::Vec<double, 3> change = velocity * dt;
-  cv::Vec<double, 3> pose = this->pose_.state_vector();
+  cv::Vec<double, 3> pose = this->pose_->state_vector();
   cv::Matx<double, 3, 3> r_2_w;
   cv::Vec<double, 3> increment;
   for (int i = 0; i < this->calculation_iterations_; i++)
@@ -95,27 +95,30 @@ void OdometerSensor::calculatePose()
     increment = r_2_w * change;
     pose += increment;
   }
-  this->pose_ = tuw::Pose2D(pose);
+  this->pose_->set_x(pose[0]);
+  this->pose_->set_y(pose[1]);
+  this->pose_->set_theta(pose[2]);
 }
 
 void OdometerSensor::updateOdometerMessage()
 {
-  this->quaternion_ = tf::createQuaternionMsgFromYaw(this->orientation_);
-
+  this->odometer_message_->header.seq = this->odometer_message_->header.seq + 1;
   this->odometer_message_->header.stamp = this->this_time_;
-  this->odometer_message_->pose.pose.position.x = this->pose_.x();
-  this->odometer_message_->pose.pose.position.y = this->pose_.y();
-  this->odometer_message_->pose.pose.orientation = this->quaternion_;
+
+  this->odometer_message_->pose.pose.position.x = this->pose_->x();
+  this->odometer_message_->pose.pose.position.y = this->pose_->y();
+  this->odometer_message_->pose.pose.orientation = tf::createQuaternionMsgFromYaw(this->orientation_);
+
   this->odometer_message_->twist.twist.linear.x = this->v_pointer->at(Side::CENTER);
   this->odometer_message_->twist.twist.angular.z = this->w_pointer->at(Side::CENTER);
 }
 
 void OdometerSensor::updateOdometerTransform()
 {
-  this->quaternion_ = tf::createQuaternionMsgFromYaw(this->orientation_);
-
+  this->transform_message_->header.seq = this->odometer_message_->header.seq + 1;
   this->transform_message_->header.stamp = this->this_time_;
-  this->transform_message_->transform.translation.x = this->pose_.x();
-  this->transform_message_->transform.translation.y = this->pose_.y();
-  this->transform_message_->transform.rotation = this->quaternion_;
+
+  this->transform_message_->transform.translation.x = this->pose_->x();
+  this->transform_message_->transform.translation.y = this->pose_->y();
+  this->transform_message_->transform.rotation = tf::createQuaternionMsgFromYaw(this->orientation_);
 }

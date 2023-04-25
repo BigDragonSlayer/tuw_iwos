@@ -8,13 +8,15 @@ using tuw_iwos_odometer::Odometer;
 
 Odometer::Odometer()
 {
+  this->pose_ = std::make_shared<tuw::Pose2D>(0.0, 0.0, 0.0);
+
   this->odometer_message_ = std::make_shared<nav_msgs::Odometry>();
   this->odometer_message_->header.frame_id = "odom";
   this->odometer_message_->child_frame_id = "base_link";
   this->odometer_message_->pose.pose.position.x = 0.0;
   this->odometer_message_->pose.pose.position.y = 0.0;
   this->odometer_message_->pose.pose.position.z = 0.0;
-  this->odometer_message_->pose.pose.orientation = this->quaternion_;
+  this->odometer_message_->pose.pose.orientation = tf::createQuaternionMsgFromYaw(0.0);
   this->odometer_message_->twist.twist.linear.x = 0.0;
   this->odometer_message_->twist.twist.linear.y = 0.0;
   this->odometer_message_->twist.twist.linear.z = 0.0;
@@ -28,7 +30,12 @@ Odometer::Odometer()
   this->transform_message_->transform.translation.x = 0.0;
   this->transform_message_->transform.translation.y = 0.0;
   this->transform_message_->transform.translation.z = 0.0;
-  this->transform_message_->transform.rotation = this->quaternion_;
+  this->transform_message_->transform.rotation = tf::createQuaternionMsgFromYaw(0.0);
+}
+
+std::shared_ptr<tuw::Pose2D> Odometer::getPose() const
+{
+  return this->pose_;
 }
 
 std::shared_ptr<nav_msgs::Odometry> Odometer::getOdometerMessage() const

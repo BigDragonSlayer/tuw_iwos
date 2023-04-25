@@ -37,8 +37,6 @@ protected:
   void updateOdometerMessage() override;
   void updateOdometerTransform() override;
 
-  std::shared_ptr<ros::NodeHandle> node_handle_;
-
   std::unique_ptr<tuw_iwos_tools::IccTool> icc_tool_;
 
   double wheelbase_{0.0};
@@ -54,7 +52,6 @@ protected:
   std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> r_pointer;
   std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> v_pointer;
   std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> w_pointer;
-  tuw::Pose2D pose_{0.0, 0.0, 0.0};
 };
 }  // namespace tuw_iwos_odometer
 

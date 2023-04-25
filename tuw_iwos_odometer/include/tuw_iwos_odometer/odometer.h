@@ -6,6 +6,8 @@
 #include <memory>
 #include <nav_msgs/Odometry.h>
 #include <geometry_msgs/TransformStamped.h>
+#include <tuw_geometry/pose2d.h>
+#include <tf/transform_datatypes.h>
 
 namespace tuw_iwos_odometer
 {
@@ -15,6 +17,7 @@ public:
   Odometer();
   virtual void updateOdometerMessage() = 0;
   virtual void updateOdometerTransform() = 0;
+  std::shared_ptr<tuw::Pose2D> getPose() const;
   std::shared_ptr<nav_msgs::Odometry> getOdometerMessage() const;
   std::shared_ptr<geometry_msgs::TransformStamped> getTransformMessage() const;
   void setCalculationIterations(int calculation_iterations);
@@ -26,7 +29,7 @@ public:
   double getAngularVelocityTolerance() const;
   double getSteeringPositionTolerance() const;
 protected:
-  geometry_msgs::Quaternion quaternion_;
+  std::shared_ptr<tuw::Pose2D> pose_;
   std::shared_ptr<nav_msgs::Odometry> odometer_message_;
   std::shared_ptr<geometry_msgs::TransformStamped> transform_message_;
   int calculation_iterations_ {0};

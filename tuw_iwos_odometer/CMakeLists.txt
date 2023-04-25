@@ -61,7 +61,7 @@ if (CATKIN_ENABLE_TESTING)
   catkin_add_gtest(
     ${PROJECT_NAME}_tests
     test/all_tests.cpp
-    test/${PROJECT_NAME}/encoder_odometer_test.cpp
+    test/${PROJECT_NAME}/motor_odometer_test.cpp
   )
 
   target_link_libraries(
