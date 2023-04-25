@@ -99,7 +99,7 @@ void OdometerNode::configCallback(tuw_iwos_odometer::OdometerNodeConfig& config,
       if (this->odometer_motor_ != nullptr)
         this->odometer_motor_.release();
 
-      this->odometer_sensor_ = std::make_unique<OdometerSensor>(0.5, 0.1, this->node_handle_);
+      this->odometer_sensor_ = std::make_unique<OdometerSensor>(0.5, 0.1);
     }
   }
 

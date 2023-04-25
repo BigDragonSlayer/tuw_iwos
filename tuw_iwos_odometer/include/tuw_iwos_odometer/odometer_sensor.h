@@ -20,6 +20,7 @@
 #include <tuw_geometry/pose2d.h>
 
 #include <tuw_iwos_tools/icc_tool.h>
+#include <tuw_iwos_tools/message_transformer.h>
 #include <tuw_iwos_odometer/odometer.h>
 
 namespace tuw_iwos_odometer
@@ -27,38 +28,36 @@ namespace tuw_iwos_odometer
 class OdometerSensor : public Odometer
 {
 public:
-  OdometerSensor(double wheelbase, double wheeloffset, const std::shared_ptr<ros::NodeHandle>& node_handle);
-  bool update(const sensor_msgs::JointStateConstPtr& joint_state,
-              const sensor_msgs::ImuConstPtr& imu,
-              const std::shared_ptr<ros::Duration>& duration = nullptr);
-  bool update(const sensor_msgs::JointStateConstPtr& joint_state_start,
-              const sensor_msgs::JointStateConstPtr& joint_state_end,
-              const sensor_msgs::ImuConstPtr& imu_start,
-              const sensor_msgs::ImuConstPtr& imu_end,
-              const std::shared_ptr<tuw::Pose2D> pose_start,
-              const std::shared_ptr<tuw::Pose2D> pose_end);
+  OdometerSensor(double wheelbase, double wheeloffset);
+  bool update(const sensor_msgs::JointStateConstPtr &this_joint_state,
+              const sensor_msgs::ImuConstPtr &this_imu);
+  bool update(const sensor_msgs::JointStateConstPtr &joint_state_start,
+              const sensor_msgs::JointStateConstPtr &joint_state_end,
+              const sensor_msgs::ImuConstPtr &imu_start,
+              const sensor_msgs::ImuConstPtr &imu_end,
+              const std::shared_ptr<tuw::Pose2D> &pose_pointer);
 protected:
-  void updateOdometerMessage() override;
-  void updateOdometerTransform() override;
+  void updateOdometerMessage(ros::Time time) override;
+  void updateOdometerTransform(ros::Time time) override;
 
-  void calculatePose();
+  double wheelbase_{0.0};
+  double wheeloffset_{0.0};
 
-  std::unique_ptr<tuw_iwos_tools::IccTool> icc_tool_;
+  sensor_msgs::JointStateConstPtr current_joint_state_{nullptr};
+  sensor_msgs::JointStateConstPtr previous_joint_state_{nullptr};
+  sensor_msgs::ImuConstPtr current_imu_{nullptr};
+  sensor_msgs::ImuConstPtr previous_imu_{nullptr};
 
-  double wheelbase_ {0.0};
-  double wheeloffset_ {0.0};
+  std::unique_ptr<tuw_iwos_tools::IccTool> icc_tool_{nullptr};
 
-  ros::Time this_time_;
-  ros::Time last_time_;
-  ros::Duration duration_;
-
-  std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> revolute_velocity_;
-  std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> steering_position_;
-  double orientation_{0.0};
-  std::shared_ptr<tuw::Point2D> icc_;
-  std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> r_pointer;
-  std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> v_pointer;
-  std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> w_pointer;
+  std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> revolute_velocity_{nullptr};
+  std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> steering_position_{nullptr};
+  std::shared_ptr<tuw::Point2D> icc_pointer_{nullptr};
+  std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> r_pointer_{nullptr};
+  std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> v_pointer_{nullptr};
+  std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> w_pointer_{nullptr};
+  double imu_orientation_start_{0.0};
+  double imu_orientation_end_{0.0};
 };
 }  // namespace tuw_iwos_odometer
 

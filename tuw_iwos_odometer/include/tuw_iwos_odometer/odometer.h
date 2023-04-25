@@ -15,8 +15,8 @@ class Odometer
 {
 public:
   Odometer();
-  virtual void updateOdometerMessage() = 0;
-  virtual void updateOdometerTransform() = 0;
+  virtual void updateOdometerMessage(ros::Time time) = 0;
+  virtual void updateOdometerTransform(ros::Time time) = 0;
   std::shared_ptr<tuw::Pose2D> getPose() const;
   std::shared_ptr<nav_msgs::Odometry> getOdometerMessage() const;
   std::shared_ptr<geometry_msgs::TransformStamped> getTransformMessage() const;

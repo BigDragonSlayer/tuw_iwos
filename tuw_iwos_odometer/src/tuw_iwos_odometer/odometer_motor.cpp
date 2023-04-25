@@ -6,17 +6,16 @@
 #include <map>
 #include <memory>
 
-using tuw_iwos_tools::Side;
 using tuw_iwos_odometer::OdometerMotor;
-using dynamic_reconfigure::Server;
+using tuw_iwos_tools::Side;
 
-OdometerMotor::OdometerMotor(double wheelbase,
-                             double wheeloffset)
+OdometerMotor::OdometerMotor(double wheelbase, double wheeloffset)
 {
   this->wheelbase_ = wheelbase;
   this->wheeloffset_ = wheeloffset;
 
   this->icc_tool_ = std::make_unique<tuw_iwos_tools::IccTool>(this->wheelbase_, this->wheeloffset_, 0.0, 0.0, 0.0);
+
   this->revolute_velocity_ = std::make_shared<std::map<tuw_iwos_tools::Side, double>>();
   this->steering_position_ = std::make_shared<std::map<tuw_iwos_tools::Side, double>>();
   this->icc_pointer_ = std::make_shared<tuw::Point2D>(0.0, 0.0, 0.0);
@@ -27,18 +26,19 @@ OdometerMotor::OdometerMotor(double wheelbase,
 
 bool OdometerMotor::update(const sensor_msgs::JointStateConstPtr &this_joint_state)
 {
-  if (this->previous_joint_state == nullptr)
+  if (this->previous_joint_state_ == nullptr)
   {
-    this->current_joint_state = this_joint_state;
-    this->previous_joint_state = this_joint_state;
+    this->current_joint_state_ = this_joint_state;
+    this->previous_joint_state_ = this_joint_state;
     return false;
-  } else
+  }
+  else
   {
-    this->current_joint_state = this_joint_state;
-    this->update(this->previous_joint_state,
-                 this->current_joint_state,
+    this->current_joint_state_ = this_joint_state;
+    this->update(this->previous_joint_state_,
+                 this->current_joint_state_,
                  this->pose_);
-    this->previous_joint_state = this_joint_state;
+    this->previous_joint_state_ = this_joint_state;
     return true;
   }
 }
@@ -47,8 +47,11 @@ bool OdometerMotor::update(const sensor_msgs::JointStateConstPtr &joint_state_st
                            const sensor_msgs::JointStateConstPtr &joint_state_end,
                            const std::shared_ptr<tuw::Pose2D> &pose_pointer)
 {
+  const sensor_msgs::JointStateConstPtr &joint_state = joint_state_end;
+
+  // manage joint state
   std::shared_ptr<tuw_nav_msgs::JointsIWS> joints =
-          tuw_iwos_tools::MessageTransformer::toJointsIWSPointer(*joint_state_end);
+          tuw_iwos_tools::MessageTransformer::toJointsIWSPointer(*joint_state);
 
   (*this->revolute_velocity_)[tuw_iwos_tools::Side::LEFT] = joints->revolute[0];
   (*this->revolute_velocity_)[tuw_iwos_tools::Side::RIGHT] = joints->revolute[1];
@@ -56,6 +59,7 @@ bool OdometerMotor::update(const sensor_msgs::JointStateConstPtr &joint_state_st
   (*this->steering_position_)[tuw_iwos_tools::Side::LEFT] = joints->steering[0];
   (*this->steering_position_)[tuw_iwos_tools::Side::RIGHT] = joints->steering[1];
 
+  // manage time
   ros::Time previous_time = joint_state_start->header.stamp;
   ros::Time current_time = joint_state_end->header.stamp;
 
@@ -63,6 +67,7 @@ bool OdometerMotor::update(const sensor_msgs::JointStateConstPtr &joint_state_st
 
   double dt = time.toSec() / static_cast<double>(this->calculation_iterations_);
 
+  // calculate pose
   try
   {
     this->icc_tool_->calculateIcc(this->revolute_velocity_,
@@ -100,16 +105,16 @@ bool OdometerMotor::update(const sensor_msgs::JointStateConstPtr &joint_state_st
   pose_pointer->set_y(pose[1]);
   pose_pointer->set_theta(pose[2]);
 
-  this->updateOdometerMessage();
-  this->updateOdometerTransform();
+  this->updateOdometerMessage(current_time);
+  this->updateOdometerTransform(current_time);
 
   return true;
 }
 
-void OdometerMotor::updateOdometerMessage()
+void OdometerMotor::updateOdometerMessage(ros::Time time)
 {
   this->odometer_message_->header.seq = this->odometer_message_->header.seq + 1;
-  this->odometer_message_->header.stamp = this->previous_joint_state->header.stamp;
+  this->odometer_message_->header.stamp = time;
 
   this->odometer_message_->pose.pose.position.x = this->pose_->x();
   this->odometer_message_->pose.pose.position.y = this->pose_->y();
@@ -119,10 +124,10 @@ void OdometerMotor::updateOdometerMessage()
   this->odometer_message_->twist.twist.angular.z = this->w_pointer_->at(Side::CENTER);
 }
 
-void OdometerMotor::updateOdometerTransform()
+void OdometerMotor::updateOdometerTransform(ros::Time time)
 {
   this->transform_message_->header.seq = this->odometer_message_->header.seq + 1;
-  this->odometer_message_->header.stamp = this->previous_joint_state->header.stamp;
+  this->odometer_message_->header.stamp = time;
 
   this->transform_message_->transform.translation.x = this->pose_->x();
   this->transform_message_->transform.translation.y = this->pose_->y();
