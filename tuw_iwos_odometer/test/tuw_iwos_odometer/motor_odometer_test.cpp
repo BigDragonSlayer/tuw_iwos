@@ -1,6 +1,7 @@
 // Copyright 2023 Eugen Kaltenegger
 
 #include <memory>
+#include <string>
 #include <vector>
 
 #include <gtest/gtest.h>
