@@ -48,8 +48,10 @@ MessageTransformer::toJointsIWSPointer(sensor_msgs::JointState joint_state)
   joints_pointer->header = joint_state.header;
   joints_pointer->type_revolute = "measured_velocity";
   joints_pointer->type_steering = "measured_position";
+  joints_pointer->revolute.resize(2);
   joints_pointer->revolute[0] = joint_state.velocity[index_revolute[Side::LEFT]];
   joints_pointer->revolute[1] = joint_state.velocity[index_revolute[Side::RIGHT]];
+  joints_pointer->steering.resize(2);
   joints_pointer->steering[0] = joint_state.position[index_steering[Side::LEFT]];
   joints_pointer->steering[1] = joint_state.position[index_steering[Side::RIGHT]];
 
