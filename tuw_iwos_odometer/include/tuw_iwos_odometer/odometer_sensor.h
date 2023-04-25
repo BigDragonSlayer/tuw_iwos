@@ -37,8 +37,6 @@ protected:
 
   void calculatePose();
 
-  std::shared_ptr<ros::NodeHandle> node_handle_;
-
   std::unique_ptr<tuw_iwos_tools::IccTool> icc_tool_;
 
   double wheelbase_ {0.0};
