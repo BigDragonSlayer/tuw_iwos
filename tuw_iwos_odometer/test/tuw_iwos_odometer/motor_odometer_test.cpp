@@ -9,6 +9,10 @@
 #include <tuw_iwos_odometer/odometer_motor.h>
 
 #define ASSERTION_TOLERANCE 0.1
+#define CALCULATION_ITERATIONS 100
+#define LINEAR_VELOCITY_TOLERANCE 0.1
+#define ANGULAR_VELOCITY_TOLERANCE 0.1
+#define STEERING_POSITION_TOLERANCE 0.1
 
 using tuw_iwos_odometer::OdometerMotor;
 
@@ -20,10 +24,10 @@ public:
     this->odometer_calculator_ = std::make_shared<OdometerMotor>(this->wheelbase_,
                                                                  this->wheeloffset_,
                                                                  std::make_shared<ros::NodeHandle>());
-    this->odometer_calculator_->setCalculationIterations(100);
-    this->odometer_calculator_->setLinearVelocityTolerance(0.1);
-    this->odometer_calculator_->setAngularVelocityTolerance(0.1);
-    this->odometer_calculator_->setSteeringPositionTolerance(0.1);
+    this->odometer_calculator_->setCalculationIterations(CALCULATION_ITERATIONS);
+    this->odometer_calculator_->setLinearVelocityTolerance(LINEAR_VELOCITY_TOLERANCE);
+    this->odometer_calculator_->setAngularVelocityTolerance(ANGULAR_VELOCITY_TOLERANCE);
+    this->odometer_calculator_->setSteeringPositionTolerance(STEERING_POSITION_TOLERANCE);
   }
 
   void JointState(double p_r_l, double p_r_r, double p_s_l, double p_s_r,
