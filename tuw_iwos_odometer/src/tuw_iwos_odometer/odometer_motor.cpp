@@ -15,8 +15,6 @@ OdometerMotor::OdometerMotor(double wheelbase,
                              double wheeloffset,
                              const std::shared_ptr<ros::NodeHandle> &node_handle)
 {
-  this->node_handle_ = node_handle;
-
   this->wheelbase_ = wheelbase;
   this->wheeloffset_ = wheeloffset;
 
