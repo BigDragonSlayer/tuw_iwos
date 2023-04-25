@@ -20,6 +20,7 @@
 #include <tuw_geometry/pose2d.h>
 
 #include <tuw_iwos_tools/icc_tool.h>
+#include <tuw_iwos_tools/message_transformer.h>
 #include <tuw_iwos_odometer/odometer.h>
 
 namespace tuw_iwos_odometer
@@ -27,31 +28,30 @@ namespace tuw_iwos_odometer
 class OdometerMotor : public Odometer
 {
 public:
-  OdometerMotor(double wheelbase, double wheeloffset, const std::shared_ptr<ros::NodeHandle>& node_handle);
-  bool update(const sensor_msgs::JointStateConstPtr& joint_state,
-              const std::shared_ptr<ros::Duration>& duration = nullptr);
-  tuw::Pose2D get_pose();  // required for unit test
-protected:
-  void calculatePose();
+  OdometerMotor(double wheelbase, double wheeloffset);
+  bool update(const sensor_msgs::JointStateConstPtr &joint_state);
+  bool update(const sensor_msgs::JointStateConstPtr &joint_state_start,
+              const sensor_msgs::JointStateConstPtr &joint_state_end,
+              const std::shared_ptr<tuw::Pose2D> &pose_pointer);
 
+protected:
   void updateOdometerMessage() override;
   void updateOdometerTransform() override;
 
-  std::unique_ptr<tuw_iwos_tools::IccTool> icc_tool_;
+  sensor_msgs::JointStateConstPtr current_joint_state{nullptr};
+  sensor_msgs::JointStateConstPtr previous_joint_state{nullptr};
+
+  std::unique_ptr<tuw_iwos_tools::IccTool> icc_tool_{nullptr};
 
   double wheelbase_{0.0};
   double wheeloffset_{0.0};
 
-  ros::Time this_time_;
-  ros::Time last_time_;
-  ros::Duration duration_;
-
-  std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> revolute_velocity_;
-  std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> steering_position_;
-  std::shared_ptr<tuw::Point2D> icc_;
-  std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> r_pointer;
-  std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> v_pointer;
-  std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> w_pointer;
+  std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> revolute_velocity_{nullptr};
+  std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> steering_position_{nullptr};
+  std::shared_ptr<tuw::Point2D> icc_pointer_{nullptr};
+  std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> r_pointer_{nullptr};
+  std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> v_pointer_{nullptr};
+  std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> w_pointer_{nullptr};
 };
 }  // namespace tuw_iwos_odometer
 

@@ -31,6 +31,12 @@ public:
   bool update(const sensor_msgs::JointStateConstPtr& joint_state,
               const sensor_msgs::ImuConstPtr& imu,
               const std::shared_ptr<ros::Duration>& duration = nullptr);
+  bool update(const sensor_msgs::JointStateConstPtr& joint_state_start,
+              const sensor_msgs::JointStateConstPtr& joint_state_end,
+              const sensor_msgs::ImuConstPtr& imu_start,
+              const sensor_msgs::ImuConstPtr& imu_end,
+              const std::shared_ptr<tuw::Pose2D> pose_start,
+              const std::shared_ptr<tuw::Pose2D> pose_end);
 protected:
   void updateOdometerMessage() override;
   void updateOdometerTransform() override;

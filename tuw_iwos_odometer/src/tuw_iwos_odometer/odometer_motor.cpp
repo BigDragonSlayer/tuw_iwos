@@ -2,50 +2,53 @@
 
 #include <tuw_iwos_odometer/odometer_motor.h>
 
+#include <algorithm>
 #include <map>
 #include <memory>
-
-#include <tuw_iwos_tools/message_transformer.h>
 
 using tuw_iwos_tools::Side;
 using tuw_iwos_odometer::OdometerMotor;
 using dynamic_reconfigure::Server;
 
 OdometerMotor::OdometerMotor(double wheelbase,
-                             double wheeloffset,
-                             const std::shared_ptr<ros::NodeHandle> &node_handle)
+                             double wheeloffset)
 {
   this->wheelbase_ = wheelbase;
   this->wheeloffset_ = wheeloffset;
 
-  this->this_time_ = ros::Time::now();
-  this->last_time_ = ros::Time::now();
-
   this->icc_tool_ = std::make_unique<tuw_iwos_tools::IccTool>(this->wheelbase_, this->wheeloffset_, 0.0, 0.0, 0.0);
   this->revolute_velocity_ = std::make_shared<std::map<tuw_iwos_tools::Side, double>>();
   this->steering_position_ = std::make_shared<std::map<tuw_iwos_tools::Side, double>>();
-  this->icc_ = std::make_shared<tuw::Point2D>(0.0, 0.0, 0.0);
-  this->r_pointer = std::make_shared<std::map<tuw_iwos_tools::Side, double>>();
-  this->v_pointer = std::make_shared<std::map<tuw_iwos_tools::Side, double>>();
-  this->w_pointer = std::make_shared<std::map<tuw_iwos_tools::Side, double>>();
+  this->icc_pointer_ = std::make_shared<tuw::Point2D>(0.0, 0.0, 0.0);
+  this->r_pointer_ = std::make_shared<std::map<tuw_iwos_tools::Side, double>>();
+  this->v_pointer_ = std::make_shared<std::map<tuw_iwos_tools::Side, double>>();
+  this->w_pointer_ = std::make_shared<std::map<tuw_iwos_tools::Side, double>>();
 }
 
-bool OdometerMotor::update(const sensor_msgs::JointStateConstPtr &joint_state,
-                           const std::shared_ptr<ros::Duration> &duration)
+bool OdometerMotor::update(const sensor_msgs::JointStateConstPtr &this_joint_state)
 {
-  if (duration == nullptr)
+  if (this->previous_joint_state == nullptr)
   {
-    this->this_time_ = ros::Time::now();
-    this->duration_ = this->this_time_ - this->last_time_;
-    this->last_time_ = this->this_time_;
-  }
-  else
+    this->current_joint_state = this_joint_state;
+    this->previous_joint_state = this_joint_state;
+    return false;
+  } else
   {
-    this->duration_ = *duration;
+    this->current_joint_state = this_joint_state;
+    this->update(this->previous_joint_state,
+                 this->current_joint_state,
+                 this->pose_);
+    this->previous_joint_state = this_joint_state;
+    return true;
   }
+}
 
+bool OdometerMotor::update(const sensor_msgs::JointStateConstPtr &joint_state_start,
+                           const sensor_msgs::JointStateConstPtr &joint_state_end,
+                           const std::shared_ptr<tuw::Pose2D> &pose_pointer)
+{
   std::shared_ptr<tuw_nav_msgs::JointsIWS> joints =
-          tuw_iwos_tools::MessageTransformer::toJointsIWSPointer(*joint_state);
+          tuw_iwos_tools::MessageTransformer::toJointsIWSPointer(*joint_state_end);
 
   (*this->revolute_velocity_)[tuw_iwos_tools::Side::LEFT] = joints->revolute[0];
   (*this->revolute_velocity_)[tuw_iwos_tools::Side::RIGHT] = joints->revolute[1];
@@ -53,16 +56,49 @@ bool OdometerMotor::update(const sensor_msgs::JointStateConstPtr &joint_state,
   (*this->steering_position_)[tuw_iwos_tools::Side::LEFT] = joints->steering[0];
   (*this->steering_position_)[tuw_iwos_tools::Side::RIGHT] = joints->steering[1];
 
+  ros::Time previous_time = joint_state_start->header.stamp;
+  ros::Time current_time = joint_state_end->header.stamp;
+
+  ros::Duration time = current_time - previous_time;
+
+  double dt = time.toSec() / static_cast<double>(this->calculation_iterations_);
+
   try
   {
-    this->icc_tool_->calculateIcc(this->revolute_velocity_, this->steering_position_,
-                                  this->icc_, this->r_pointer, this->v_pointer, this->w_pointer);
-    this->calculatePose();
+    this->icc_tool_->calculateIcc(this->revolute_velocity_,
+                                  this->steering_position_,
+                                  this->icc_pointer_,
+                                  this->r_pointer_,
+                                  this->v_pointer_,
+                                  this->w_pointer_);
   }
   catch (...)
   {
     return false;
   }
+
+  double v = this->v_pointer_->at(Side::CENTER);
+  double w = this->w_pointer_->at(Side::CENTER);
+  double x = pose_pointer->x();
+  double y = pose_pointer->y();
+  double theta = pose_pointer->theta();
+
+  cv::Vec<double, 3> step{v * dt, 0.0, w * dt};
+  cv::Vec<double, 3> pose{x, y, theta};
+  cv::Matx<double, 3, 3> transform = cv::Matx<double, 3, 3>().eye();
+
+  for (int i = 0; i < this->calculation_iterations_; i++)
+  {
+    transform(0, 0) = +cos(pose[2]);
+    transform(0, 1) = -sin(pose[2]);
+    transform(1, 0) = +sin(pose[2]);
+    transform(1, 1) = +cos(pose[2]);
+    pose = pose + (transform * step);
+  }
+
+  pose_pointer->set_x(pose[0]);
+  pose_pointer->set_y(pose[1]);
+  pose_pointer->set_theta(pose[2]);
 
   this->updateOdometerMessage();
   this->updateOdometerTransform();
@@ -70,44 +106,23 @@ bool OdometerMotor::update(const sensor_msgs::JointStateConstPtr &joint_state,
   return true;
 }
 
-void OdometerMotor::calculatePose()
-{
-  double dt = this->duration_.toSec() / static_cast<double>(this->calculation_iterations_);
-  cv::Vec<double, 3> velocity{this->v_pointer->at(Side::CENTER), 0.0, this->w_pointer->at(Side::CENTER)};
-  cv::Vec<double, 3> change = velocity * dt;
-  cv::Vec<double, 3> pose = this->pose_->state_vector();
-  cv::Matx<double, 3, 3> r_2_w;
-  cv::Vec<double, 3> increment;
-  for (int i = 0; i < this->calculation_iterations_; i++)
-  {
-    r_2_w = cv::Matx<double, 3, 3>(+cos(pose[2]), -sin(pose[2]), 0.0,
-                                   +sin(pose[2]), +cos(pose[2]), 0.0,
-                                   0.0, 0.0, 1.0);
-    increment = r_2_w * change;
-    pose += increment;
-  }
-  this->pose_->set_x(pose[0]);
-  this->pose_->set_y(pose[1]);
-  this->pose_->set_theta(pose[2]);
-}
-
 void OdometerMotor::updateOdometerMessage()
 {
   this->odometer_message_->header.seq = this->odometer_message_->header.seq + 1;
-  this->odometer_message_->header.stamp = this->this_time_;
+  this->odometer_message_->header.stamp = this->previous_joint_state->header.stamp;
 
   this->odometer_message_->pose.pose.position.x = this->pose_->x();
   this->odometer_message_->pose.pose.position.y = this->pose_->y();
   this->odometer_message_->pose.pose.orientation = tf::createQuaternionMsgFromYaw(this->pose_->theta());
 
-  this->odometer_message_->twist.twist.linear.x = this->v_pointer->at(Side::CENTER);
-  this->odometer_message_->twist.twist.angular.z = this->w_pointer->at(Side::CENTER);
+  this->odometer_message_->twist.twist.linear.x = this->v_pointer_->at(Side::CENTER);
+  this->odometer_message_->twist.twist.angular.z = this->w_pointer_->at(Side::CENTER);
 }
 
 void OdometerMotor::updateOdometerTransform()
 {
   this->transform_message_->header.seq = this->odometer_message_->header.seq + 1;
-  this->transform_message_->header.stamp = this->this_time_;
+  this->odometer_message_->header.stamp = this->previous_joint_state->header.stamp;
 
   this->transform_message_->transform.translation.x = this->pose_->x();
   this->transform_message_->transform.translation.y = this->pose_->y();
