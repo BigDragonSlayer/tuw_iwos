@@ -1,10 +1,10 @@
 config:
   - identifier: motor_poles
-    value: 5
+    value: 20
   - identifier: regulation_loop_delay
     value: 1
   - identifier: overvoltage_protection
-    value: 1
+    value: 0
   - identifier: driver_switch
     value: 1
   - identifier: ramp_switch
@@ -18,16 +18,16 @@ config:
   - identifier: motor_halted_velocity
     value: 5
   - identifier: maximum_current
-    value: 4000
+    value: 2000
   - identifier: position_p_parameter
     value: 0
   - identifier: velocity_p_parameter
-    value: 1000
+    value: 800
   - identifier: velocity_i_parameter
-    value: 500
+    value: 400
   - identifier: current_p_parameter
-    value: 1000
+    value: 800
   - identifier: current_i_parameter
-    value: 500
+    value: 400
   - identifier: init_sine_mode
     value: 1
