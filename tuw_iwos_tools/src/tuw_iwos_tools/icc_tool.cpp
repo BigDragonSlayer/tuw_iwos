@@ -79,7 +79,7 @@ void IccTool::calculateIcc(const std::shared_ptr<std::map<Side, double>>& revolu
 
         v_c = (*v_l + *v_r) / 2.0;
 
-        w_c = v_c / r_c;
+        w_c = (-*v_l +*v_r) / this->wheelbase_;
 
         if (abs(r_l) > std::numeric_limits<double>::min())
           w_l = *v_l / r_l;
