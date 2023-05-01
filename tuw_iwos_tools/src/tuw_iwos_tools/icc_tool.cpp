@@ -166,6 +166,15 @@ void IccTool::calculateIcc(const std::shared_ptr<std::map<Side, double>>& revolu
     }
   }
 
+  if (std::isnan(icc_x) || std::isnan(icc_y))
+    throw std::runtime_error("error in ICC calculation, coordinates contain NAN");
+
+  if (std::isnan(v_c) || std::isnan(*v_l) || std::isnan(*v_r))
+    throw std::runtime_error("error in ICC calculation, linear velocity vector contains NAN");
+
+  if (std::isnan(w_c) || std::isnan( w_l) || std::isnan( w_r))
+    throw std::runtime_error("error in ICC calculation, angular velocity vector contains NAN");
+
   icc_pointer->set(icc_x, icc_y);
 
   (*r_pointer)[Side::LEFT] = r_l;
