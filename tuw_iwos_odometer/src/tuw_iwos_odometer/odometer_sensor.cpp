@@ -73,7 +73,7 @@ bool tuw_iwos_odometer::OdometerSensor::update(const sensor_msgs::JointStateCons
   tf::Quaternion quaternion;
   tf::quaternionMsgToTF(imu_start->orientation, quaternion);
   tf::Matrix3x3(quaternion).getRPY(roll, pitch, yaw_start);
-  this->imu_orientation_start_ = yaw_end;
+  this->imu_orientation_start_ = yaw_start;
   tf::quaternionMsgToTF(imu_end->orientation, quaternion);
   tf::Matrix3x3(quaternion).getRPY(roll, pitch, yaw_end);
   this->imu_orientation_end_ = yaw_end;
