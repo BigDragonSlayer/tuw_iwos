@@ -1,20 +1,17 @@
 <launch>
 
-  <arg name="gamepad"               default="true"/>
-  <arg name="laser"                 default="true"/>
-  <arg name="odom"                  default="true"/>
   <arg name="imu"                   default="true"/>
   <arg name="imu_filter"            default="false"/>
+  <arg name="laser"                 default="true"/>
+  <arg name="gamepad"               default="true"/>
+  <arg name="odometer"              default="true"/>
   <arg name="robot_localization"    default="false"/>
   <arg name="rviz"                  default="false"/>
 
-  <group if="$(eval gamepad == true)">
-    <include file="$(find tuw_iwos_launches)/launch/device/gamepad.launch"/>
-  </group>
-
-  <group if="$(eval laser == true)">
-    <include file="$(find tuw_iwos_launches)/launch/device/laser.launch"/>
-  </group>
+  <include file="$(find tuw_iwos_robot_description)/launch/robot_description_publisher.launch"/>
+  <include file="$(find tuw_iwos_robot_description)/launch/robot_state_publisher.launch"/>
+  <include file="$(find tuw_iwos_hardware)/launch/hardware.launch"/>
+  <include file="$(find tuw_iwos_hardware_broker)/launch/hardware_broker.launch"/>
 
   <group if="$(eval imu == true)">
     <include file="$(find tuw_sensor_transducer)/launch/imu.launch">
@@ -22,12 +19,15 @@
     </include>
   </group>
 
-  <include file="$(find tuw_iwos_robot_description)/launch/robot_description_publisher.launch"/>
-  <include file="$(find tuw_iwos_robot_description)/launch/robot_state_publisher.launch"/>
-  <include file="$(find tuw_iwos_hardware)/launch/hardware.launch"/>
-  <include file="$(find tuw_iwos_hardware_broker)/launch/hardware_broker.launch"/>
+  <group if="$(eval laser == true)">
+    <include file="$(find tuw_iwos_launches)/launch/device/laser.launch"/>
+  </group>
 
-  <group if="$(eval odom == true)">
+  <group if="$(eval gamepad == true)">
+    <include file="$(find tuw_iwos_launches)/launch/device/gamepad.launch"/>
+  </group>
+
+  <group if="$(eval odometer == true)">
     <include file="$(find tuw_iwos_launches)/launch/odometer.launch">
       <arg name="robot_localization" value="$(arg robot_localization)" />
     </include>
