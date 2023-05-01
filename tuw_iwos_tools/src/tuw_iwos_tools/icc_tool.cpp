@@ -79,9 +79,17 @@ void IccTool::calculateIcc(const std::shared_ptr<std::map<Side, double>>& revolu
 
         v_c = (*v_l + *v_r) / 2.0;
 
-        w_l = *v_l / r_l;
-        w_r = *v_r / r_r;
-        w_c = (w_l + w_r) / 2.0;
+        w_c = v_c / r_c;
+
+        if (abs(r_l) > std::numeric_limits<double>::min())
+          w_l = *v_l / r_l;
+        else
+          w_l = w_c;
+
+        if (abs(r_r) > std::numeric_limits<double>::min())
+          w_r = *v_r / r_r;
+        else
+          w_r = w_c;
       }
     }
       // case: crab steering
