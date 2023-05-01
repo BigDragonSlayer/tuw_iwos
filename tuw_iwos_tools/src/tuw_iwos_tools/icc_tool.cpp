@@ -144,12 +144,14 @@ void IccTool::calculateIcc(const std::shared_ptr<std::map<Side, double>>& revolu
 
     // find intersection of the lines
     tuw::Point2D icc = l_l.intersection(l_r);
+    icc_x = icc.x();
+    icc_y = icc.y();
 
     // calculate radius
     // positive if icc is to the left of the wheel, negative if icc is to the right of the wheel
-    r_c = abs(this->base_link_.distanceTo(icc)) * IccTool::vectorSide(this->base_link_, icc) == Side::LEFT ? 1.0 : -1.0;
-    r_l = abs(b_l.distanceTo(icc)) * IccTool::vectorSide(p_l, icc) == Side::LEFT ? 1.0 : -1.0;
-    r_r = abs(b_r.distanceTo(icc)) * IccTool::vectorSide(p_l, icc) == Side::LEFT ? 1.0 : -1.0;
+    r_c = abs(this->base_link_.distanceTo(icc)) * (IccTool::vectorSide(this->base_link_, icc) == Side::LEFT ? 1.0 : -1.0);
+    r_l = abs(b_l.distanceTo(icc)) * (IccTool::vectorSide(p_l, icc) == Side::LEFT ? 1.0 : -1.0);
+    r_r = abs(b_r.distanceTo(icc)) * (IccTool::vectorSide(p_r, icc) == Side::LEFT ? 1.0 : -1.0);
 
     w_l = *v_l / r_l;
     w_r = *v_r / r_r;
