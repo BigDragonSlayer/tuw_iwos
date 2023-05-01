@@ -77,9 +77,14 @@ void OdometerNode::synchronizedUpdateMixedOdometer(const sensor_msgs::JointState
     this->odometer_sensor_->update(joint_state, imu);
 
     if (this->config_.publish_odom_message)
+    {
       this->odometer_publisher_.publish(*this->odometer_sensor_->getOdometerMessage());
+    }
+
     if (this->config_.broadcast_odom_transform)
+    {
       this->transform_broadcaster_.sendTransform(*this->odometer_sensor_->getTransformMessage());
+    }
   }
 }
 
