@@ -259,3 +259,107 @@ TEST_F(IccCalculatorTest, icc_right_curve_backward)
   ASSERT_EQ(this->w_pointer_->at(Side::RIGHT), +M_PI);
   ASSERT_EQ(this->w_pointer_->at(Side::CENTER), +M_PI);
 }
+
+TEST_F(IccCalculatorTest, icc_left_wheel_no_motion_turn_forward)
+{
+  (*this->revolute_velocity_)[Side::LEFT] = +0.0;
+  (*this->revolute_velocity_)[Side::RIGHT] = +(M_PI * this->wheelbase_);
+  (*this->steering_position_)[Side::LEFT] = +0.0;
+  (*this->steering_position_)[Side::RIGHT] = +0.0;
+
+  this->icc_calculator_->calculateIcc(this->revolute_velocity_, this->steering_position_,
+                                      this->icc_, this->r_pointer_, this->v_pointer_, this->w_pointer_);
+
+  ASSERT_EQ(this->icc_->x(), +0.0);
+  ASSERT_EQ(this->icc_->y(), +(this->wheelbase_ / 2.0));
+
+  ASSERT_EQ(this->r_pointer_->at(Side::LEFT), +0.00);
+  ASSERT_EQ(this->r_pointer_->at(Side::RIGHT), +this->wheelbase_);
+  ASSERT_EQ(this->r_pointer_->at(Side::CENTER), +(this->wheelbase_ / 2.0));
+
+  ASSERT_EQ(this->v_pointer_->at(Side::LEFT), +0.0);
+  ASSERT_EQ(this->v_pointer_->at(Side::RIGHT), +(M_PI * this->wheelbase_));
+  ASSERT_EQ(this->v_pointer_->at(Side::CENTER), +(M_PI * this->wheelbase_ / 2.0));
+
+  ASSERT_EQ(this->w_pointer_->at(Side::LEFT), +M_PI);
+  ASSERT_EQ(this->w_pointer_->at(Side::RIGHT), +M_PI);
+  ASSERT_EQ(this->w_pointer_->at(Side::CENTER), +M_PI);
+}
+
+TEST_F(IccCalculatorTest, icc_left_wheel_no_motion_turn_backward)
+{
+  (*this->revolute_velocity_)[Side::LEFT] = +0.0;
+  (*this->revolute_velocity_)[Side::RIGHT] = -(M_PI * this->wheelbase_);
+  (*this->steering_position_)[Side::LEFT] = +0.0;
+  (*this->steering_position_)[Side::RIGHT] = +0.0;
+
+  this->icc_calculator_->calculateIcc(this->revolute_velocity_, this->steering_position_,
+                                      this->icc_, this->r_pointer_, this->v_pointer_, this->w_pointer_);
+
+  ASSERT_EQ(this->icc_->x(), +0.0);
+  ASSERT_EQ(this->icc_->y(), +(this->wheelbase_ / 2.0));
+
+  ASSERT_EQ(this->r_pointer_->at(Side::LEFT), +0.00);
+  ASSERT_EQ(this->r_pointer_->at(Side::RIGHT), +this->wheelbase_);
+  ASSERT_EQ(this->r_pointer_->at(Side::CENTER), +(this->wheelbase_ / 2.0));
+
+  ASSERT_EQ(this->v_pointer_->at(Side::LEFT), +0.0);
+  ASSERT_EQ(this->v_pointer_->at(Side::RIGHT), -(M_PI * this->wheelbase_));
+  ASSERT_EQ(this->v_pointer_->at(Side::CENTER), -(M_PI * this->wheelbase_ / 2.0));
+
+  ASSERT_EQ(this->w_pointer_->at(Side::LEFT), -M_PI);
+  ASSERT_EQ(this->w_pointer_->at(Side::RIGHT), -M_PI);
+  ASSERT_EQ(this->w_pointer_->at(Side::CENTER), -M_PI);
+}
+
+TEST_F(IccCalculatorTest, icc_right_wheel_no_motion_turn_forward)
+{
+  (*this->revolute_velocity_)[Side::LEFT] = +(M_PI * this->wheelbase_);
+  (*this->revolute_velocity_)[Side::RIGHT] = +0.0;
+  (*this->steering_position_)[Side::LEFT] = +0.0;
+  (*this->steering_position_)[Side::RIGHT] = +0.0;
+
+  this->icc_calculator_->calculateIcc(this->revolute_velocity_, this->steering_position_,
+                                      this->icc_, this->r_pointer_, this->v_pointer_, this->w_pointer_);
+
+  ASSERT_EQ(this->icc_->x(), +0.0);
+  ASSERT_EQ(this->icc_->y(), -(this->wheelbase_ / 2.0));
+
+  ASSERT_EQ(this->r_pointer_->at(Side::LEFT), -this->wheelbase_);
+  ASSERT_EQ(this->r_pointer_->at(Side::RIGHT), +0.0);
+  ASSERT_EQ(this->r_pointer_->at(Side::CENTER), -(this->wheelbase_ / 2.0));
+
+  ASSERT_EQ(this->v_pointer_->at(Side::LEFT), +(M_PI * this->wheelbase_));
+  ASSERT_EQ(this->v_pointer_->at(Side::RIGHT), +0.0);
+  ASSERT_EQ(this->v_pointer_->at(Side::CENTER), +(M_PI * this->wheelbase_ / 2.0));
+
+  ASSERT_EQ(this->w_pointer_->at(Side::LEFT), -M_PI);
+  ASSERT_EQ(this->w_pointer_->at(Side::RIGHT), -M_PI);
+  ASSERT_EQ(this->w_pointer_->at(Side::CENTER), -M_PI);
+}
+
+TEST_F(IccCalculatorTest, icc_right_wheel_no_motion_turn_backward)
+{
+  (*this->revolute_velocity_)[Side::LEFT] = -(M_PI * this->wheelbase_);
+  (*this->revolute_velocity_)[Side::RIGHT] = +0.0;
+  (*this->steering_position_)[Side::LEFT] = +0.0;
+  (*this->steering_position_)[Side::RIGHT] = +0.0;
+
+  this->icc_calculator_->calculateIcc(this->revolute_velocity_, this->steering_position_,
+                                      this->icc_, this->r_pointer_, this->v_pointer_, this->w_pointer_);
+
+  ASSERT_EQ(this->icc_->x(), +0.0);
+  ASSERT_EQ(this->icc_->y(), -(this->wheelbase_ / 2.0));
+
+  ASSERT_EQ(this->r_pointer_->at(Side::LEFT), -this->wheelbase_);
+  ASSERT_EQ(this->r_pointer_->at(Side::RIGHT), +0.0);
+  ASSERT_EQ(this->r_pointer_->at(Side::CENTER), -(this->wheelbase_ / 2.0));
+
+  ASSERT_EQ(this->v_pointer_->at(Side::LEFT), -(M_PI * this->wheelbase_));
+  ASSERT_EQ(this->v_pointer_->at(Side::RIGHT), +0.0);
+  ASSERT_EQ(this->v_pointer_->at(Side::CENTER), -(M_PI * this->wheelbase_ / 2.0));
+
+  ASSERT_EQ(this->w_pointer_->at(Side::LEFT), +M_PI);
+  ASSERT_EQ(this->w_pointer_->at(Side::RIGHT), +M_PI);
+  ASSERT_EQ(this->w_pointer_->at(Side::CENTER), +M_PI);
+}
