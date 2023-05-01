@@ -9,7 +9,7 @@
 using tuw_iwos_odometer::OdometerSensor;
 using tuw_iwos_tools::Side;
 
-OdometerSensor::OdometerSensor(double wheelbase, double wheeloffset)
+OdometerSensor::OdometerSensor(double wheelbase, double wheeloffset) : Odometer()
 {
   this->wheelbase_ = wheelbase;
   this->wheeloffset_ = wheeloffset;
