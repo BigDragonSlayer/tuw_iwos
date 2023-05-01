@@ -1,5 +1,9 @@
 // Copyright 2023 Eugen Kaltenegger
 
+#include <limits>
+#include <map>
+#include <memory>
+
 #include <gtest/gtest.h>
 #include <tuw_geometry/point2d.h>
 #include "tuw_iwos_tools/icc_tool.h"

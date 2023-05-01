@@ -2,11 +2,13 @@
 
 #include <tuw_iwos_tools/icc_tool.h>
 
-#include <tuw_geometry/pose2d.h>
-#include <tuw_geometry/line2d.h>
 #include <map>
+#include <memory>
 #include <limits>
 #include <utility>
+
+#include <tuw_geometry/pose2d.h>
+#include <tuw_geometry/line2d.h>
 
 using tuw_iwos_tools::IccTool;
 using tuw_iwos_tools::Side;

@@ -1,7 +1,7 @@
 // Copyright 2023 Eugen Kaltenegger
 
-#ifndef TUW_IWOS_TOOLS_ICC_CALCULATOR_H
-#define TUW_IWOS_TOOLS_ICC_CALCULATOR_H
+#ifndef TUW_IWOS_TOOLS_ICC_TOOL_H
+#define TUW_IWOS_TOOLS_ICC_TOOL_H
 
 #include <tuw_iwos_tools/side.h>
 #include <tuw_geometry/pose2d.h>
@@ -39,4 +39,4 @@ private:
 };
 }  // namespace tuw_iwos_tools
 
-#endif  // TUW_IWOS_TOOLS_ICC_CALCULATOR_H
+#endif  // TUW_IWOS_TOOLS_ICC_TOOL_H
