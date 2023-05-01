@@ -127,7 +127,7 @@ void OdometerMotor::updateOdometerMessage(ros::Time time)
 void OdometerMotor::updateOdometerTransform(ros::Time time)
 {
   this->transform_message_->header.seq = this->odometer_message_->header.seq + 1;
-  this->odometer_message_->header.stamp = time;
+  this->transform_message_->header.stamp = time;
 
   this->transform_message_->transform.translation.x = this->pose_->x();
   this->transform_message_->transform.translation.y = this->pose_->y();
