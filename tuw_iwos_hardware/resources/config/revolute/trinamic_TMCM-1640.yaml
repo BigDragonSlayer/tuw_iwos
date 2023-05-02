@@ -18,16 +18,16 @@ config:
   - identifier: motor_halted_velocity
     value: 5
   - identifier: maximum_current
-    value: 2000
+    value: 3000
   - identifier: position_p_parameter
     value: 0
   - identifier: velocity_p_parameter
-    value: 800
+    value: 2000
   - identifier: velocity_i_parameter
-    value: 400
+    value: 100
   - identifier: current_p_parameter
-    value: 800
+    value: 1500
   - identifier: current_i_parameter
-    value: 400
+    value: 300
   - identifier: init_sine_mode
     value: 1
