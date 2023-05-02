@@ -9,6 +9,8 @@
 #include "tuw_iwos_tools/icc_tool.h"
 #include "tuw_iwos_tools/side.h"
 
+#define DOUBLE_TOLERANCE 0.000001
+
 using tuw_iwos_tools::Side;
 using tuw_iwos_tools::IccTool;
 
@@ -366,4 +368,66 @@ TEST_F(IccCalculatorTest, icc_right_wheel_no_motion_turn_backward)
   ASSERT_EQ(this->w_pointer_->at(Side::LEFT), +M_PI);
   ASSERT_EQ(this->w_pointer_->at(Side::RIGHT), +M_PI);
   ASSERT_EQ(this->w_pointer_->at(Side::CENTER), +M_PI);
+}
+
+TEST_F(IccCalculatorTest, iwos_diamond_left_turn)
+{
+  double expected_x = -((cos(M_PI / 8.0) * this->wheeloffset_) +
+                        (tan(M_PI / 8.0) * (sin(M_PI / 8.0) * this->wheeloffset_ + this->wheelbase_ / 2.0)) -
+                        this->wheeloffset_);
+  double expected_radius = (sin(M_PI / 8.0) * this->wheeloffset_ + this->wheelbase_ / 2.0) / cos(M_PI / 8.0);
+
+  (*this->revolute_velocity_)[Side::LEFT] = -(expected_radius * M_PI / 2.0);
+  (*this->revolute_velocity_)[Side::RIGHT] = +(expected_radius * M_PI / 2.0);
+  (*this->steering_position_)[Side::LEFT] = -(M_PI / 8.0);
+  (*this->steering_position_)[Side::RIGHT] = +(M_PI / 8.0);
+
+  this->icc_calculator_->calculateIcc(this->revolute_velocity_, this->steering_position_,
+                                      this->icc_, this->r_pointer_, this->v_pointer_, this->w_pointer_);
+
+  ASSERT_NEAR(this->icc_->x(), expected_x, DOUBLE_TOLERANCE);
+  ASSERT_NEAR(this->icc_->y(), +0.0, DOUBLE_TOLERANCE);
+
+  ASSERT_NEAR(this->r_pointer_->at(Side::LEFT), -expected_radius, DOUBLE_TOLERANCE);
+  ASSERT_NEAR(this->r_pointer_->at(Side::RIGHT), +expected_radius, DOUBLE_TOLERANCE);
+  ASSERT_NEAR(this->r_pointer_->at(Side::CENTER), -expected_x, DOUBLE_TOLERANCE);
+
+  ASSERT_NEAR(this->v_pointer_->at(Side::LEFT), -(expected_radius * M_PI / 2.0), DOUBLE_TOLERANCE);
+  ASSERT_NEAR(this->v_pointer_->at(Side::RIGHT), +(expected_radius * M_PI / 2.0), DOUBLE_TOLERANCE);
+  ASSERT_NEAR(this->v_pointer_->at(Side::CENTER), -(expected_x * M_PI / 2.0), DOUBLE_TOLERANCE);
+
+  ASSERT_NEAR(this->w_pointer_->at(Side::LEFT), +M_PI / 2.0, DOUBLE_TOLERANCE);
+  ASSERT_NEAR(this->w_pointer_->at(Side::RIGHT), +M_PI / 2.0, DOUBLE_TOLERANCE);
+  ASSERT_NEAR(this->w_pointer_->at(Side::CENTER), +M_PI / 2.0, DOUBLE_TOLERANCE);
+}
+
+TEST_F(IccCalculatorTest, iwos_diamond_right_turn)
+{
+  double expected_x = -((cos(M_PI / 8.0) * this->wheeloffset_) +
+                        (tan(M_PI / 8.0) * (sin(M_PI / 8.0) * this->wheeloffset_ + this->wheelbase_ / 2.0)) -
+                        this->wheeloffset_);
+  double expected_radius = (sin(M_PI / 8.0) * this->wheeloffset_ + this->wheelbase_ / 2.0) / cos(M_PI / 8.0);
+
+  (*this->revolute_velocity_)[Side::LEFT] = +(expected_radius * M_PI / 2.0);
+  (*this->revolute_velocity_)[Side::RIGHT] = -(expected_radius * M_PI / 2.0);
+  (*this->steering_position_)[Side::LEFT] = -(M_PI / 8.0);
+  (*this->steering_position_)[Side::RIGHT] = +(M_PI / 8.0);
+
+  this->icc_calculator_->calculateIcc(this->revolute_velocity_, this->steering_position_,
+                                      this->icc_, this->r_pointer_, this->v_pointer_, this->w_pointer_);
+
+  ASSERT_NEAR(this->icc_->x(), expected_x, DOUBLE_TOLERANCE);
+  ASSERT_NEAR(this->icc_->y(), +0.0, DOUBLE_TOLERANCE);
+
+  ASSERT_NEAR(this->r_pointer_->at(Side::LEFT), -expected_radius, DOUBLE_TOLERANCE);
+  ASSERT_NEAR(this->r_pointer_->at(Side::RIGHT), +expected_radius, DOUBLE_TOLERANCE);
+  ASSERT_NEAR(this->r_pointer_->at(Side::CENTER), -expected_x, DOUBLE_TOLERANCE);
+
+  ASSERT_NEAR(this->v_pointer_->at(Side::LEFT), +(expected_radius * M_PI / 2.0), DOUBLE_TOLERANCE);
+  ASSERT_NEAR(this->v_pointer_->at(Side::RIGHT), -(expected_radius * M_PI / 2.0), DOUBLE_TOLERANCE);
+  ASSERT_NEAR(this->v_pointer_->at(Side::CENTER), +(expected_x * M_PI / 2.0), DOUBLE_TOLERANCE);
+
+  ASSERT_NEAR(this->w_pointer_->at(Side::LEFT), -M_PI / 2.0, DOUBLE_TOLERANCE);
+  ASSERT_NEAR(this->w_pointer_->at(Side::RIGHT), -M_PI / 2.0, DOUBLE_TOLERANCE);
+  ASSERT_NEAR(this->w_pointer_->at(Side::CENTER), -M_PI / 2.0, DOUBLE_TOLERANCE);
 }
