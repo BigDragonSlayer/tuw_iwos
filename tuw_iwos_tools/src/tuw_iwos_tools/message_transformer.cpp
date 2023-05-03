@@ -130,13 +130,13 @@ geometry_msgs::Quaternion MessageTransformer::toQuaternionMessage(double roll, d
 }
 
 void MessageTransformer::fromQuaternionMessage(geometry_msgs::Quaternion quaternion_message,
-                                               const std::shared_ptr<double>& r,
-                                               const std::shared_ptr<double>& p,
-                                               const std::shared_ptr<double>& y)
+                                               double& r,
+                                               double& p,
+                                               double& y)
 {
   tf2::Quaternion quaternion_transform(quaternion_message.x,
                                        quaternion_message.y,
                                        quaternion_message.z,
                                        quaternion_message.w);
-  tf2::Matrix3x3(quaternion_transform).getRPY(*r, *p, *y);
+  tf2::Matrix3x3(quaternion_transform).getRPY(r, p, y);
 }

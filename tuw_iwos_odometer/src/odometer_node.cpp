@@ -13,7 +13,7 @@ OdometerNode::OdometerNode()
   this->node_handle_ = std::make_shared<ros::NodeHandle>();
 
   this->reconfigure_server_ =
-          std::make_shared<Server<OdometerNodeConfig>>(ros::NodeHandle(*this->node_handle_, "EncoderOdometer"));
+          std::make_shared<Server<OdometerNodeConfig>>(ros::NodeHandle(*this->node_handle_, "OdometerNode"));
   this->callback_type_ = boost::bind(&OdometerNode::configCallback, this, _1, _2);
   this->reconfigure_server_->setCallback(this->callback_type_);
 

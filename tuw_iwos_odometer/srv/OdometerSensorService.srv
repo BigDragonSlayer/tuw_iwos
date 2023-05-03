@@ -1,0 +1,9 @@
+geometry_msgs/PoseStamped pose_start
+sensor_msgs/JointState joint_state_start
+sensor_msgs/JointState joint_state_end
+sensor_msgs/Imu imu_start
+sensor_msgs/Imu imu_end
+
+---
+
+geometry_msgs/PoseStamped pose_end

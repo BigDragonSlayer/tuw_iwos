@@ -11,7 +11,7 @@ find_package(
   roslib
   roslint
   dynamic_reconfigure
-  tf
+  tf2
   tuw_geometry
   sensor_msgs
   nav_msgs
@@ -20,8 +20,22 @@ find_package(
   tuw_nav_msgs
 )
 
+add_service_files(
+  FILES
+  OdometerMotorService.srv
+  OdometerSensorService.srv
+)
+
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+  sensor_msgs
+  geometry_msgs
+)
+
 generate_dynamic_reconfigure_options(
   config/odometer_node.cfg
+  config/odometer_service_node.cfg
 )
 
 catkin_package(
@@ -95,6 +109,23 @@ add_dependencies(
 
 target_link_libraries(
   ${PROJECT_NAME}_node
+  ${PROJECT_NAME}
+  ${catkin_LIBRARIES}
+)
+
+add_executable(
+  ${PROJECT_NAME}_service_node
+  src/odometer_service_node.cpp
+)
+
+add_dependencies(
+  ${PROJECT_NAME}_service_node
+  ${PROJECT_NAME}
+  ${PROJECT_NAME}_gencfg
+)
+
+target_link_libraries(
+  ${PROJECT_NAME}_service_node
   ${PROJECT_NAME}
   ${catkin_LIBRARIES}
 )
