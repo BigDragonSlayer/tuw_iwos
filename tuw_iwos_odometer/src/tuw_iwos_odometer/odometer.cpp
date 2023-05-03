@@ -52,38 +52,3 @@ void Odometer::setCalculationIterations(int calculation_iterations)
 {
   this->calculation_iterations_ = calculation_iterations;
 }
-
-void Odometer::setLinearVelocityTolerance(double linear_velocity_tolerance)
-{
-  this->linear_velocity_tolerance_ = linear_velocity_tolerance;
-}
-
-void Odometer::setAngularVelocityTolerance(double angular_velocity_tolerance)
-{
-  this->angular_velocity_tolerance_ = angular_velocity_tolerance;
-}
-
-void Odometer::setSteeringPositionTolerance(double steering_position_tolerance)
-{
-  this->steering_position_tolerance_ = steering_position_tolerance;
-}
-
-int Odometer::getCalculationIterations() const
-{
-  return this->calculation_iterations_;
-}
-
-double Odometer::getLinearVelocityTolerance() const
-{
-  return this->linear_velocity_tolerance_;
-}
-
-double Odometer::getAngularVelocityTolerance() const
-{
-  return this->angular_velocity_tolerance_;
-}
-
-double Odometer::getSteeringPositionTolerance() const
-{
-  return this->steering_position_tolerance_;
-}

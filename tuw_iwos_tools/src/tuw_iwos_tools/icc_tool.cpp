@@ -113,7 +113,7 @@ void IccTool::calculateIcc(const std::shared_ptr<std::map<Side, double>>& revolu
         w_l = 0.0;
         w_r = 0.0;
       }
-        // case: invalid crab steering (INVALID)
+      // case: invalid crab steering (INVALID)
       else
       {
         throw std::runtime_error("invalid mode for IWOS, crab steering with velocity difference out of tolerance");

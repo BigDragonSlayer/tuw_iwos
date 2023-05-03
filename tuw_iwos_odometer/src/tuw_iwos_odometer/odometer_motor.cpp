@@ -77,8 +77,9 @@ bool OdometerMotor::update(const sensor_msgs::JointStateConstPtr &joint_state_st
                                   this->v_pointer_,
                                   this->w_pointer_);
   }
-  catch (...)
+  catch (std::runtime_error& exception)
   {
+    ROS_WARN("%s", exception.what());
     return false;
   }
 
@@ -133,3 +134,19 @@ void OdometerMotor::updateOdometerTransform(ros::Time time)
   this->transform_message_->transform.translation.y = this->pose_->y();
   this->transform_message_->transform.rotation = tf::createQuaternionMsgFromYaw(this->pose_->theta());
 }
+
+void OdometerMotor::setLinearVelocityTolerance(double linear_velocity_tolerance)
+{
+  this->icc_tool_->setLinearVelocityTolerance(linear_velocity_tolerance);
+}
+
+void OdometerMotor::setAngularVelocityTolerance(double angular_velocity_tolerance)
+{
+  this->icc_tool_->setAngularVelocityTolerance(angular_velocity_tolerance);
+}
+
+void OdometerMotor::setSteeringPositionTolerance(double steering_position_tolerance)
+{
+  this->icc_tool_->setSteeringPositionTolerance(steering_position_tolerance);
+}
+

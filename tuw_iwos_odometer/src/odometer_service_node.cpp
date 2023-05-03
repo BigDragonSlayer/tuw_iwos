@@ -67,6 +67,11 @@ bool OdometerServiceNode::updateOdometerMotor(OdometerMotorService::Request& req
 
   bool update_success = this->odometer_motor_->update(joint_state_start, joint_state_end, pose);
 
+  if (not update_success)
+  {
+    ROS_INFO("failed to calculate ICC");
+  }
+
   response.pose_end.header.frame_id = "odom";
   response.pose_end.header.seq = request.pose_start.header.seq + 1;
   response.pose_end.header.stamp = request.joint_state_end.header.stamp;

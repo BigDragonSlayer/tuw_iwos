@@ -169,3 +169,18 @@ void OdometerSensor::updateOdometerTransform(ros::Time time)
   this->transform_message_->transform.translation.y = this->pose_->y();
   this->transform_message_->transform.rotation = tf::createQuaternionMsgFromYaw(this->imu_orientation_start_);
 }
+
+void OdometerSensor::setLinearVelocityTolerance(double linear_velocity_tolerance)
+{
+  this->icc_tool_->setLinearVelocityTolerance(linear_velocity_tolerance);
+}
+
+void OdometerSensor::setAngularVelocityTolerance(double angular_velocity_tolerance)
+{
+  this->icc_tool_->setAngularVelocityTolerance(angular_velocity_tolerance);
+}
+
+void OdometerSensor::setSteeringPositionTolerance(double steering_position_tolerance)
+{
+  this->icc_tool_->setSteeringPositionTolerance(steering_position_tolerance);
+}

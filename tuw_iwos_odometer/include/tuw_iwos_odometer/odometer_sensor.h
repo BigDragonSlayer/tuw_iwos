@@ -36,6 +36,9 @@ public:
               const sensor_msgs::ImuConstPtr &imu_start,
               const sensor_msgs::ImuConstPtr &imu_end,
               const std::shared_ptr<tuw::Pose2D> &pose_pointer);
+  void setLinearVelocityTolerance(double linear_velocity_tolerance) override;
+  void setAngularVelocityTolerance(double angular_velocity_tolerance) override;
+  void setSteeringPositionTolerance(double steering_position_tolerance) override;
 protected:
   void updateOdometerMessage(ros::Time time) override;
   void updateOdometerTransform(ros::Time time) override;

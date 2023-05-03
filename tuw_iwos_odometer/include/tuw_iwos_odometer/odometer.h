@@ -21,21 +21,17 @@ public:
   std::shared_ptr<nav_msgs::Odometry> getOdometerMessage() const;
   std::shared_ptr<geometry_msgs::TransformStamped> getTransformMessage() const;
   void setCalculationIterations(int calculation_iterations);
-  void setLinearVelocityTolerance(double linear_velocity_tolerance);
-  void setAngularVelocityTolerance(double angular_velocity_tolerance);
-  void setSteeringPositionTolerance(double steering_position_tolerance);
-  int getCalculationIterations() const;
-  double getLinearVelocityTolerance() const;
-  double getAngularVelocityTolerance() const;
-  double getSteeringPositionTolerance() const;
+  virtual void setLinearVelocityTolerance(double linear_velocity_tolerance) = 0;
+  virtual void setAngularVelocityTolerance(double angular_velocity_tolerance) = 0;
+  virtual void setSteeringPositionTolerance(double steering_position_tolerance) = 0;
 protected:
   std::shared_ptr<tuw::Pose2D> pose_;
   std::shared_ptr<nav_msgs::Odometry> odometer_message_;
   std::shared_ptr<geometry_msgs::TransformStamped> transform_message_;
   int calculation_iterations_ {0};
-  double linear_velocity_tolerance_ {0.0};
-  double angular_velocity_tolerance_ {0.0};
-  double steering_position_tolerance_ {0.0};
+//  double linear_velocity_tolerance_ {0.0};
+//  double angular_velocity_tolerance_ {0.0};
+//  double steering_position_tolerance_ {0.0};
 };
 }  // namespace tuw_iwos_odometer
 
