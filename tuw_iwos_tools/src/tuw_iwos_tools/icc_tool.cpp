@@ -149,7 +149,8 @@ void IccTool::calculateIcc(const std::shared_ptr<std::map<Side, double>>& revolu
 
     // calculate radius
     // positive if icc is to the left of the wheel, negative if icc is to the right of the wheel
-    r_c = abs(this->base_link_.distanceTo(icc)) * (IccTool::vectorSide(this->base_link_, icc) == Side::LEFT ? 1.0 : -1.0);
+    double center_distance = abs(this->base_link_.distanceTo(icc));
+    r_c = center_distance * (IccTool::vectorSide(this->base_link_, icc) == Side::LEFT ? 1.0 : -1.0);
     r_l = abs(b_l.distanceTo(icc)) * (IccTool::vectorSide(p_l, icc) == Side::LEFT ? 1.0 : -1.0);
     r_r = abs(b_r.distanceTo(icc)) * (IccTool::vectorSide(p_r, icc) == Side::LEFT ? 1.0 : -1.0);
 
