@@ -19,9 +19,9 @@ public:
   static std::shared_ptr<tuw_nav_msgs::JointsIWS> toJointsIWSPointer(sensor_msgs::JointStateConstPtr joint_state);
   static geometry_msgs::Quaternion toQuaternionMessage(double roll, double pitch, double yaw);
   static void fromQuaternionMessage(geometry_msgs::Quaternion,
-                                    const std::shared_ptr<double>& roll,
-                                    const std::shared_ptr<double>& pitch,
-                                    const std::shared_ptr<double>& yaw);
+                                    const std::shared_ptr<double>& r,
+                                    const std::shared_ptr<double>& p,
+                                    const std::shared_ptr<double>& y);
 };
 }  // namespace tuw_iwos_tools
 
