@@ -8,10 +8,12 @@
 
 #include <tuw_iwos_tools/side.h>
 
+#include <tf2/LinearMath/Quaternion.h>
+#include <tf2/LinearMath/Matrix3x3.h>
+
 using tuw_iwos_tools::MessageTransformer;
 
-std::shared_ptr<tuw_nav_msgs::JointsIWS>
-MessageTransformer::toJointsIWSPointer(sensor_msgs::JointState joint_state)
+std::shared_ptr<tuw_nav_msgs::JointsIWS> MessageTransformer::toJointsIWSPointer(sensor_msgs::JointState joint_state)
 {
   std::map<Side, int> index_revolute{{Side::LEFT,  -1},
                                      {Side::RIGHT, -1}};
@@ -63,8 +65,7 @@ MessageTransformer::toJointsIWSPointer(sensor_msgs::JointState joint_state)
   return joints_pointer;
 }
 
-std::shared_ptr<tuw_nav_msgs::JointsIWS>
-MessageTransformer::toJointsIWSPointer(sensor_msgs::JointStatePtr joint_state)
+std::shared_ptr<tuw_nav_msgs::JointsIWS> MessageTransformer::toJointsIWSPointer(sensor_msgs::JointStatePtr joint_state)
 {
   std::map<Side, int> index_revolute{{Side::LEFT,  -1},
                                      {Side::RIGHT, -1}};
@@ -112,4 +113,30 @@ MessageTransformer::toJointsIWSPointer(sensor_msgs::JointStatePtr joint_state)
   joints_pointer->steering[1] = joint_state->position[index_steering[Side::RIGHT]];
 
   return joints_pointer;
+}
+
+geometry_msgs::Quaternion MessageTransformer::toQuaternionMessage(double roll, double pitch, double yaw)
+{
+  tf2::Quaternion quaternion_transform;
+  quaternion_transform.setRPY(roll, pitch, yaw);
+
+  geometry_msgs::Quaternion quaternion_message;
+  quaternion_message.x = quaternion_transform.getX();
+  quaternion_message.y = quaternion_transform.getY();
+  quaternion_message.z = quaternion_transform.getZ();
+  quaternion_message.w = quaternion_transform.getW();
+
+  return quaternion_message;
+}
+
+void MessageTransformer::fromQuaternionMessage(geometry_msgs::Quaternion quaternion_message,
+                                               const std::shared_ptr<double>& roll,
+                                               const std::shared_ptr<double>& pitch,
+                                               const std::shared_ptr<double>& yaw)
+{
+  tf2::Quaternion quaternion_transform(quaternion_message.x,
+                                       quaternion_message.y,
+                                       quaternion_message.z,
+                                       quaternion_message.w);
+  tf2::Matrix3x3(quaternion_transform).getRPY(*roll, *pitch, *yaw);
 }
