@@ -91,7 +91,7 @@ bool OdometerMotor::update(const sensor_msgs::JointStateConstPtr &joint_state_st
 
   cv::Vec<double, 3> step{v * dt, 0.0, w * dt};
   cv::Vec<double, 3> pose{x, y, theta};
-  cv::Matx<double, 3, 3> transform = cv::Matx<double, 3, 3>().eye();
+  cv::Matx<double, 3, 3> transform = cv::Matx<double, 3, 3>().eye(); // transform from robot to world
 
   for (int i = 0; i < this->calculation_iterations_; i++)
   {
