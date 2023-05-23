@@ -5,6 +5,13 @@
 
 using tuw_iwos_motion_model::IWOSPose;
 
+IWOSPose::IWOSPose()
+{
+  this->pose = std::make_shared<tuw::Pose2D>();
+  this->offset = std::make_shared<double>();
+}
+
+
 IWOSPose::IWOSPose(geometry_msgs::Pose pose, std_msgs::Float64 orientation_offset)
 {
   double roll, pitch, yaw;
