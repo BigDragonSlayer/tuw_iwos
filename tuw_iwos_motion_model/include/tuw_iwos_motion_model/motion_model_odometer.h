@@ -3,41 +3,34 @@
 #ifndef TUW_IWOS_MOTION_MODEL_MOTION_MODEL_ODOMETER_H
 #define TUW_IWOS_MOTION_MODEL_MOTION_MODEL_ODOMETER_H
 
-#include <map>
-#include <memory>
+#include <utility>
 #include <random>
-#include <vector>
 
-
-#include <geometry_msgs/PoseStamped.h>
-#include <geometry_msgs/PoseWithCovarianceStamped.h>
-
+#include <tuw_iwos_motion_model/iwos_pose.h>
 #include <tuw_iwos_motion_model/MotionModelConfig.h>
-
-#include <sensor_msgs/JointState.h>
-
-#include <tuw_nav_msgs/JointsIWS.h>
-#include <tuw_geometry/pose2d.h>
-#include <tuw_iwos_tools/side.h>
+#include "motion_model_odometer_noise.h"
 
 namespace tuw_iwos_motion_model
 {
 class MotionModelOdometer
 {
 public:
-  void updateSample(const std::shared_ptr<tuw::Pose2D>& sample,
-                    ros::Duration duration,
-                    const std::map<tuw_iwos_tools::Side, double>& revolute_velocity,
-                    const std::map<tuw_iwos_tools::Side, double>& steering_position);
-  void updateSamples(const std::shared_ptr<tuw_nav_msgs::JointsIWS>& last_joint_state,
-                     const std::shared_ptr<tuw_nav_msgs::JointsIWS>& this_joint_state);
+  MotionModelOdometer();
+  double motion_model_odometry(const std::pair<IWOSPose, IWOSPose>& odometry,
+                               IWOSPose state_start,
+                               IWOSPose state_end,
+                               MotionModelOdometerNoise noise);
+  IWOSPose motion_model_odometry_sample(const std::pair<IWOSPose, IWOSPose>& odometry,
+                                        IWOSPose state_before,
+                                        MotionModelOdometerNoise noise);
 private:
   static std::default_random_engine default_random_engine_;
   static std::normal_distribution<double> normal_distribution_;
 
-  MotionModelConfig config_;
+  static double probability_normal_distribution(double a, double b_square);
+  static double sample_normal_distribution(double b_square);
 
-  std::vector<std::shared_ptr<tuw::Pose2D>> samples;
+  MotionModelConfig config_;
 };
 }  // namespace tuw_iwos_motion_model
 
