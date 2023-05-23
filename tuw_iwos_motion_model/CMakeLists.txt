@@ -48,6 +48,7 @@ roslint_cpp()
 
 add_library(
   ${PROJECT_NAME}
+  src/${PROJECT_NAME}/iwos_pose.cpp
   src/${PROJECT_NAME}/motion_model_odometer.cpp
 )
 
