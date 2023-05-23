@@ -22,6 +22,6 @@ private:
   std::shared_ptr<tuw::Pose2D> pose;
   std::shared_ptr<double> offset;
 };
-}
+}  // namespace tuw_iwos_motion_model
 
 #endif //DIP_WS_IWOS_POSE_H

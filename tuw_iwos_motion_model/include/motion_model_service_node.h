@@ -5,13 +5,12 @@
 
 namespace tuw_iwos_motion_model
 {
-class MotionModelNode
+class MotionModelServiceNode
 {
   // TODO(eugen):
   // - subscriber for joint state
   // - publisher for pose array
   // - reconfigure
-  // - gradient decent mode
 };
 }  // namespace tuw_iwos_motion_model
 

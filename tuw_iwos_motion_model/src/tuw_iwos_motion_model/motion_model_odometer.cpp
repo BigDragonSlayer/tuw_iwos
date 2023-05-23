@@ -118,6 +118,8 @@ IWOSPose MotionModelOdometer::motion_model_odometry_sample(const std::pair<IWOSP
   pose.getPose()->set_y(y_prime);
   pose.getPose()->set_theta(theta_prime);
   *pose.getOffset() = iota_prime;
+
+  return pose;
 }
 
 double MotionModelOdometer::probability_normal_distribution(double a, double b_square)
