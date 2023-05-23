@@ -17,6 +17,18 @@ find_package(
   dynamic_reconfigure
 )
 
+add_service_files(
+  FILES
+  IWOSMotionModelOdometry.srv
+  IWOSMotionModelOdometrySample.srv
+)
+
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+  geometry_msgs
+)
+
 generate_dynamic_reconfigure_options(
   config/motion_model.cfg
 )

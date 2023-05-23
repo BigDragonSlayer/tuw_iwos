@@ -1,0 +1,23 @@
+geometry_msgs/PoseStamped pose_start
+std_msgs/Float64 pose_orientation_offset_start
+geometry_msgs/PoseStamped pose_end
+std_msgs/Float64 pose_orientation_offset_end
+
+geometry_msgs/PoseStamped odometry_start
+std_msgs/Float64 odometry_orientation_offset_start
+geometry_msgs/PoseStamped odometry_end
+std_msgs/Float64 odometry_orientation_offset_end
+
+std_msgs/Float64 alpha_1
+std_msgs/Float64 alpha_2
+std_msgs/Float64 alpha_3
+std_msgs/Float64 alpha_4
+std_msgs/Float64 alpha_5
+std_msgs/Float64 alpha_6
+std_msgs/Float64 alpha_7
+std_msgs/Float64 alpha_8
+std_msgs/Float64 alpha_9
+
+---
+
+std_msgs/Float64 probability
