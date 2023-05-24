@@ -7,7 +7,7 @@
 #include <random>
 
 #include <tuw_iwos_motion_model/iwos_pose.h>
-#include <tuw_iwos_motion_model/MotionModelConfig.h>
+#include <tuw_iwos_motion_model/MotionModelServiceNodeConfig.h>
 #include "motion_model_odometer_noise.h"
 
 namespace tuw_iwos_motion_model
@@ -23,6 +23,8 @@ public:
   IWOSPose motion_model_odometry_sample(const std::pair<IWOSPose, IWOSPose>& odometry,
                                         IWOSPose state_before,
                                         MotionModelOdometerNoise noise);
+  void setAlphaValues(double alpha_values []);
+  void setNumberOfSamples(int number_of_samples);
 private:
   static std::default_random_engine default_random_engine_;
   static std::normal_distribution<double> normal_distribution_;
@@ -30,9 +32,9 @@ private:
   static double probability_normal_distribution(double a, double b_square);
   static double sample_normal_distribution(double b_square);
 
-  MotionModelConfig config_;
+  int number_of_samples {1};
+  double alpha_values [9];
 };
 }  // namespace tuw_iwos_motion_model
-
 
 #endif  // TUW_IWOS_MOTION_MODEL_MOTION_MODEL_ODOMETER_H

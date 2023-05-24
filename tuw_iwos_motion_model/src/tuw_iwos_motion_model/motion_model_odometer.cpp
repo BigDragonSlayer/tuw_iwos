@@ -131,3 +131,16 @@ double MotionModelOdometer::sample_normal_distribution(double b_square)
 {
   return normal_distribution_(default_random_engine_) * b_square;
 }
+
+void tuw_iwos_motion_model::MotionModelOdometer::setAlphaValues(double alpha_values [])
+{
+  for (int i = 0; i < 9; ++i)
+  {
+    this->alpha_values[i] = alpha_values[i];
+  }
+}
+
+void tuw_iwos_motion_model::MotionModelOdometer::setNumberOfSamples(int number_of_samples)
+{
+  this->number_of_samples = number_of_samples;
+}
