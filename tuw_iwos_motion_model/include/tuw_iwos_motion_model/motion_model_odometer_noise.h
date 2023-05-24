@@ -7,19 +7,20 @@ namespace tuw_iwos_motion_model
 {
 struct MotionModelOdometerNoise
 {
-  double alpha_values[9];
+  std::vector<double> alpha_values;
 
-  MotionModelOdometerNoise(const double alpha_values[])
+  explicit MotionModelOdometerNoise(const std::vector<std_msgs::Float64_<std::allocator<void>>>& input)
   {
-    for (int i = 0; i < 9; ++i)
+    this->alpha_values.resize(input.size());
+    for (int i = 0; i < input.size(); ++i)
     {
-      this->alpha_values[i] = alpha_values[i];
+      this->alpha_values[i] = input.at(i).data;
     }
   }
 
   double alpha(int index)
   {
-    return this->alpha_values[index];
+    return this->alpha_values[index-1];
   }
 };
 }  // tuw_iwos_motion_model

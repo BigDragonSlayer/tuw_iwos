@@ -1,10 +1,10 @@
 geometry_msgs/PoseStamped pose_start
 std_msgs/Float64 pose_orientation_offset_start
-geometry_msgs/PoseStamped pose_end
-std_msgs/Float64 pose_orientation_offset_end
 
 geometry_msgs/PoseStamped odometry_start
 std_msgs/Float64 odometry_orientation_offset_start
+geometry_msgs/PoseStamped odometry_end
+std_msgs/Float64 odometry_orientation_offset_end
 
 std_msgs/Float64[] alpha_values
 
@@ -12,5 +12,5 @@ std_msgs/Int64 number_of_samples
 
 ---
 
-geometry_msgs/PoseStamped[] odometry_end
+geometry_msgs/Pose[] odometry_end
 std_msgs/Float64[] odometry_orientation_offset_end

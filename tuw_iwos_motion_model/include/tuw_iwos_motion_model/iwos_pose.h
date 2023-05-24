@@ -18,6 +18,8 @@ public:
   IWOSPose(geometry_msgs::Pose, std_msgs::Float64 orientation_offset);
   std::shared_ptr<tuw::Pose2D> getPose();
   std::shared_ptr<double> getOffset();
+  geometry_msgs::Pose toPose();
+  std_msgs::Float64 toFloat64();
 private:
   std::shared_ptr<tuw::Pose2D> pose;
   std::shared_ptr<double> offset;

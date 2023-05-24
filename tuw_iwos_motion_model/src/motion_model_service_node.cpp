@@ -21,7 +21,6 @@ MotionModelServiceNode::MotionModelServiceNode()
           "motion_model_odometry_service", &MotionModelServiceNode::motionModelOdometry, this);
   this->motion_model_odometry_sample_service_ = this->node_handle_->advertiseService(
           "motion_model_odometry_sample_service", &MotionModelServiceNode::motionModelOdometrySample, this);
-
 }
 
 void MotionModelServiceNode::run()
@@ -41,13 +40,35 @@ void MotionModelServiceNode::configCallback(MotionModelServiceNodeConfig& config
 bool MotionModelServiceNode::motionModelOdometry(IWOSMotionModelOdometry::Request& request,
                                                  IWOSMotionModelOdometry::Response& response)
 {
-
+  MotionModelOdometerNoise noise(request.alpha_values);
+  IWOSPose odometry_start(request.odometry_start.pose, request.odometry_orientation_offset_start);
+  IWOSPose odometry_end(request.odometry_end.pose, request.odometry_orientation_offset_end);
+  std::pair<IWOSPose, IWOSPose> odometry (odometry_start, odometry_end);
+  IWOSPose state_start(request.pose_start.pose, request.pose_orientation_offset_start);
+  IWOSPose state_end(request.pose_end.pose, request.pose_orientation_offset_end);
+  response.probability.data = this->motion_model_odometer_->motion_model_odometry(odometry, state_start, state_end, noise);
+  return true;
 }
 
 bool MotionModelServiceNode::motionModelOdometrySample(IWOSMotionModelOdometrySample::Request& request,
                                                        IWOSMotionModelOdometrySample::Response& response)
 {
+  MotionModelOdometerNoise noise(request.alpha_values);
+  IWOSPose odometry_start(request.odometry_start.pose, request.odometry_orientation_offset_start);
+  IWOSPose odometry_end(request.odometry_end.pose, request.odometry_orientation_offset_end);
+  std::pair<IWOSPose, IWOSPose> odometry (odometry_start, odometry_end);
+  IWOSPose state_start(request.pose_start.pose, request.pose_orientation_offset_start);
 
+  response.odometry_end.resize(request.number_of_samples.data);
+  response.odometry_orientation_offset_end.resize(request.number_of_samples.data);
+
+  for (int i = 0; i < request.number_of_samples.data; ++i)
+  {
+    IWOSPose state_end = this->motion_model_odometer_->motion_model_odometry_sample(odometry, state_start, noise);
+    response.odometry_end[i] = state_end.toPose();
+    response.odometry_orientation_offset_end[i] = state_end.toFloat64();
+  }
+  return true;
 }
 
 int main(int argc, char** argv)

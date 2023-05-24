@@ -33,3 +33,20 @@ std::shared_ptr<double> IWOSPose::getOffset()
 {
   return this->offset;
 }
+
+geometry_msgs::Pose tuw_iwos_motion_model::IWOSPose::toPose()
+{
+  geometry_msgs::Pose pose;
+  pose.position.x = this->pose->x();
+  pose.position.y = this->pose->y();
+  pose.position.z = 0.0;
+  pose.orientation = tuw_iwos_tools::MessageTransformer::toQuaternionMessage(0.0, 0.0, this->pose->theta());
+  return (pose);
+}
+
+std_msgs::Float64 tuw_iwos_motion_model::IWOSPose::toFloat64()
+{
+  std_msgs::Float64 float64;
+  float64.data = *this->offset;
+  return float64;
+}
