@@ -8,7 +8,9 @@ std_msgs/Float64 odometry_orientation_offset_start
 
 std_msgs/Float64[] alpha_values
 
+std_msgs/Int64 number_of_samples
+
 ---
 
-geometry_msgs/PoseStamped odometry_end
-std_msgs/Float64 odometry_orientation_offset_end
+geometry_msgs/PoseStamped[] odometry_end
+std_msgs/Float64[] odometry_orientation_offset_end
