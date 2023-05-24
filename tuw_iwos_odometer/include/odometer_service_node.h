@@ -29,6 +29,7 @@ public:
 private:
   bool updateOdometerMotor(OdometerMotorService::Request &request, OdometerMotorService::Response &response);
   bool updateOdometerSensor(OdometerSensorService::Request &request, OdometerSensorService::Response &response);
+
   std::shared_ptr<ros::NodeHandle> node_handle_;
 
   std::shared_ptr<dynamic_reconfigure::Server<OdometerServiceNodeConfig>> reconfigure_server_;
