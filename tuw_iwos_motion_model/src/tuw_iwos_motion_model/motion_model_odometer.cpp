@@ -1,7 +1,6 @@
 // Copyright 2023 Eugen Kaltenegger
 
-#include <map>
-#include <memory>
+#include <utility>
 
 #include <tuw_iwos_motion_model/motion_model_odometer.h>
 #include <tuw_iwos_tools/side.h>
@@ -136,11 +135,11 @@ void tuw_iwos_motion_model::MotionModelOdometer::setAlphaValues(double alpha_val
 {
   for (int i = 0; i < 9; ++i)
   {
-    this->alpha_values[i] = alpha_values[i];
+    this->alpha_values_[i] = alpha_values[i];
   }
 }
 
 void tuw_iwos_motion_model::MotionModelOdometer::setNumberOfSamples(int number_of_samples)
 {
-  this->number_of_samples = number_of_samples;
+  this->number_of_samples_ = number_of_samples;
 }

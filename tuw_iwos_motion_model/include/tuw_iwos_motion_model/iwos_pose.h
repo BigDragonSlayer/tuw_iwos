@@ -1,8 +1,9 @@
 // Copyright 2023 Eugen Kaltenegger
 
-#ifndef DIP_WS_IWOS_POSE_H
-#define DIP_WS_IWOS_POSE_H
+#ifndef TUW_IWOS_MOTION_MODEL_IWOS_POSE_H
+#define TUW_IWOS_MOTION_MODEL_IWOS_POSE_H
 
+#include <memory>
 
 #include <geometry_msgs/Pose.h>
 #include <std_msgs/Float64.h>
@@ -26,4 +27,4 @@ private:
 };
 }  // namespace tuw_iwos_motion_model
 
-#endif //DIP_WS_IWOS_POSE_H
+#endif  // TUW_IWOS_MOTION_MODEL_IWOS_POSE_H

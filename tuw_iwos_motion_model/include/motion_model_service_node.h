@@ -3,11 +3,13 @@
 #ifndef MOTION_MODEL_SERVICE_NODE_H
 #define MOTION_MODEL_SERVICE_NODE_H
 
+#include <memory>
+
+#include <dynamic_reconfigure/server.h>
+#include <tuw_iwos_motion_model/motion_model_odometer.h>
+#include <tuw_iwos_motion_model/MotionModelServiceNodeConfig.h>
 #include <tuw_iwos_motion_model/IWOSMotionModelOdometry.h>
 #include <tuw_iwos_motion_model/IWOSMotionModelOdometrySample.h>
-#include <tuw_iwos_motion_model/MotionModelServiceNodeConfig.h>
-#include <dynamic_reconfigure/server.h>
-#include "tuw_iwos_motion_model/motion_model_odometer.h"
 
 namespace tuw_iwos_motion_model
 {

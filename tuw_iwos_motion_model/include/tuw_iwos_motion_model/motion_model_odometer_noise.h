@@ -1,7 +1,10 @@
 // Copyright 2023 Eugen Kaltenegger
 
-#ifndef DIP_WS_MOTION_MODEL_ODOMETER_NOISE_H
-#define DIP_WS_MOTION_MODEL_ODOMETER_NOISE_H
+#ifndef TUW_IWOS_MOTION_MODEL_MOTION_MODEL_ODOMETER_NOISE_H
+#define TUW_IWOS_MOTION_MODEL_MOTION_MODEL_ODOMETER_NOISE_H
+
+#include <memory>
+#include <vector>
 
 namespace tuw_iwos_motion_model
 {
@@ -23,6 +26,6 @@ struct MotionModelOdometerNoise
     return this->alpha_values[index-1];
   }
 };
-}  // tuw_iwos_motion_model
+}  // namespace tuw_iwos_motion_model
 
-#endif //DIP_WS_MOTION_MODEL_ODOMETER_NOISE_H
+#endif  // TUW_IWOS_MOTION_MODEL_MOTION_MODEL_ODOMETER_NOISE_H

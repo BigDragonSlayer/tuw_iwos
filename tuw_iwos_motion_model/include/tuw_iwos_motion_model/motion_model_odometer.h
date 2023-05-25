@@ -7,8 +7,8 @@
 #include <random>
 
 #include <tuw_iwos_motion_model/iwos_pose.h>
+#include <tuw_iwos_motion_model/motion_model_odometer_noise.h>
 #include <tuw_iwos_motion_model/MotionModelServiceNodeConfig.h>
-#include "motion_model_odometer_noise.h"
 
 namespace tuw_iwos_motion_model
 {
@@ -32,8 +32,8 @@ private:
   static double probability_normal_distribution(double a, double b_square);
   static double sample_normal_distribution(double b_square);
 
-  int number_of_samples {1};
-  double alpha_values [9];
+  int number_of_samples_ {1};
+  double alpha_values_ [9];
 };
 }  // namespace tuw_iwos_motion_model
 
