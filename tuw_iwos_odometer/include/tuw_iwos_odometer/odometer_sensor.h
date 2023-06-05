@@ -35,7 +35,8 @@ public:
               const sensor_msgs::JointStateConstPtr &joint_state_end,
               const sensor_msgs::ImuConstPtr &imu_start,
               const sensor_msgs::ImuConstPtr &imu_end,
-              const std::shared_ptr<tuw::Pose2D> &pose_pointer);
+              const std::shared_ptr<tuw::Pose2D> &pose_pointer,
+              const std::shared_ptr<double> &kappa_pointer);
   void setLinearVelocityTolerance(double linear_velocity_tolerance) override;
   void setAngularVelocityTolerance(double angular_velocity_tolerance) override;
   void setSteeringPositionTolerance(double steering_position_tolerance) override;

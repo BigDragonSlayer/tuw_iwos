@@ -64,8 +64,9 @@ bool OdometerServiceNode::updateOdometerMotor(OdometerMotorService::Request& req
   pose->set_x(request.pose_start.pose.position.x);
   pose->set_y(request.pose_start.pose.position.y);
   pose->set_theta(y);
+  std::shared_ptr<double> kappa = std::make_shared<double>(request.kappa_start.data);
 
-  bool update_success = this->odometer_motor_->update(joint_state_start, joint_state_end, pose);
+  bool update_success = this->odometer_motor_->update(joint_state_start, joint_state_end, pose, kappa);
 
   if (not update_success)
   {
@@ -108,8 +109,9 @@ bool OdometerServiceNode::updateOdometerSensor(OdometerSensorService::Request& r
   pose->set_x(request.pose_start.pose.position.x);
   pose->set_y(request.pose_start.pose.position.y);
   pose->set_theta(y);
+  std::shared_ptr<double> kappa = std::make_shared<double>(request.kappa_start.data);
 
-  bool update_success = this->odometer_sensor_->update(joint_state_start, joint_state_end, imu_start, imu_end, pose);
+  bool update_success = this->odometer_sensor_->update(joint_state_start, joint_state_end, imu_start, imu_end, pose, kappa);
 
   response.pose_end.header.frame_id = "odom";
   response.pose_end.header.seq = request.pose_start.header.seq + 1;

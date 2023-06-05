@@ -32,14 +32,14 @@ public:
   bool update(const sensor_msgs::JointStateConstPtr &joint_state);
   bool update(const sensor_msgs::JointStateConstPtr &joint_state_start,
               const sensor_msgs::JointStateConstPtr &joint_state_end,
-              const std::shared_ptr<tuw::Pose2D> &pose_pointer);
+              const std::shared_ptr<tuw::Pose2D> &pose_pointer,
+              const std::shared_ptr<double> &kappa_pointer);
   void setLinearVelocityTolerance(double linear_velocity_tolerance) override;
   void setAngularVelocityTolerance(double angular_velocity_tolerance) override;
   void setSteeringPositionTolerance(double steering_position_tolerance) override;
 protected:
   void updateOdometerMessage(ros::Time time) override;
   void updateOdometerTransform(ros::Time time) override;
-
 
   double wheelbase_{0.0};
   double wheeloffset_{0.0};

@@ -37,7 +37,8 @@ bool OdometerMotor::update(const sensor_msgs::JointStateConstPtr &this_joint_sta
     this->current_joint_state_ = this_joint_state;
     this->update(this->previous_joint_state_,
                  this->current_joint_state_,
-                 this->pose_);
+                 this->pose_,
+                 this->kappa_);
     this->previous_joint_state_ = this_joint_state;
     return true;
   }
@@ -45,8 +46,10 @@ bool OdometerMotor::update(const sensor_msgs::JointStateConstPtr &this_joint_sta
 
 bool OdometerMotor::update(const sensor_msgs::JointStateConstPtr &joint_state_start,
                            const sensor_msgs::JointStateConstPtr &joint_state_end,
-                           const std::shared_ptr<tuw::Pose2D> &pose_pointer)
+                           const std::shared_ptr<tuw::Pose2D> &pose_pointer,
+                           const std::shared_ptr<double> &kappa_pointer)
 {
+  // TODO: handle kappa
   const sensor_msgs::JointStateConstPtr &joint_state = joint_state_end;
 
   // manage joint state
@@ -102,9 +105,39 @@ bool OdometerMotor::update(const sensor_msgs::JointStateConstPtr &joint_state_st
     pose = pose + (transform * step);
   }
 
+  double kappa;
+  if (isfinite(icc_pointer_->x()) and isfinite(icc_pointer_->x()))
+  {
+    //create normalized ICC vector
+    double icc_vector_x = icc_pointer_->x();
+    double icc_vector_y = icc_pointer_->y();
+    icc_vector_x /= sqrt(pow(icc_vector_x, 2) + pow(icc_vector_y, 2));
+    icc_vector_y /= sqrt(pow(icc_vector_x, 2) + pow(icc_vector_y, 2));
+
+    if (abs(icc_vector_x) > abs(std::numeric_limits<double>::min()) and
+        abs(icc_vector_x) > abs(std::numeric_limits<double>::min()))
+    {
+      // driving direction is orthogonal to ICC
+      cv::Vec<double, 2> driving_direction_vector {icc_vector_y , icc_vector_x};
+      kappa = atan2(driving_direction_vector[1], driving_direction_vector[0]);
+    }
+    else
+    {
+      kappa = 0.0;
+    }
+  }
+  else
+  {
+    double steering_left = (*this->steering_position_)[tuw_iwos_tools::Side::LEFT];
+    double steering_right = (*this->steering_position_)[tuw_iwos_tools::Side::RIGHT];
+    kappa = (steering_left + steering_right) / 2.0;
+  }
+
   pose_pointer->set_x(pose[0]);
   pose_pointer->set_y(pose[1]);
   pose_pointer->set_theta(pose[2]);
+
+  *kappa_pointer = kappa;
 
   this->updateOdometerMessage(current_time);
   this->updateOdometerTransform(current_time);

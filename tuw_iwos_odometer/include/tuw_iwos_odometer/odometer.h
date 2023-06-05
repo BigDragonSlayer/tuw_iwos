@@ -18,6 +18,7 @@ public:
   virtual void updateOdometerMessage(ros::Time time) = 0;
   virtual void updateOdometerTransform(ros::Time time) = 0;
   std::shared_ptr<tuw::Pose2D> getPose() const;
+  std::shared_ptr<double> getKappa() const;
   std::shared_ptr<nav_msgs::Odometry> getOdometerMessage() const;
   std::shared_ptr<geometry_msgs::TransformStamped> getTransformMessage() const;
   void setCalculationIterations(int calculation_iterations);
@@ -26,6 +27,7 @@ public:
   virtual void setSteeringPositionTolerance(double steering_position_tolerance) = 0;
 protected:
   std::shared_ptr<tuw::Pose2D> pose_;
+  std::shared_ptr<double> kappa_;  // offset from facing to driving direction
   std::shared_ptr<nav_msgs::Odometry> odometer_message_;
   std::shared_ptr<geometry_msgs::TransformStamped> transform_message_;
   int calculation_iterations_ {0};

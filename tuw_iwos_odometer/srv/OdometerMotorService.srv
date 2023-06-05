@@ -1,7 +1,9 @@
 geometry_msgs/PoseStamped pose_start
+std_msgs/Float64 kappa_start
 sensor_msgs/JointState joint_state_start
 sensor_msgs/JointState joint_state_end
 
 ---
 
 geometry_msgs/PoseStamped pose_end
+std_msgs/Float64 kappa_end

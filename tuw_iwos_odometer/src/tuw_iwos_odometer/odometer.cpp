@@ -9,6 +9,7 @@ using tuw_iwos_odometer::Odometer;
 Odometer::Odometer()
 {
   this->pose_ = std::make_shared<tuw::Pose2D>(0.0, 0.0, 0.0);
+  this->kappa_ = std::make_shared<double>(0.0);
 
   this->odometer_message_ = std::make_shared<nav_msgs::Odometry>();
   this->odometer_message_->header.frame_id = "odom";
@@ -36,6 +37,11 @@ Odometer::Odometer()
 std::shared_ptr<tuw::Pose2D> Odometer::getPose() const
 {
   return this->pose_;
+}
+
+std::shared_ptr<double> tuw_iwos_odometer::Odometer::getKappa() const
+{
+  return this->kappa_;
 }
 
 std::shared_ptr<nav_msgs::Odometry> Odometer::getOdometerMessage() const

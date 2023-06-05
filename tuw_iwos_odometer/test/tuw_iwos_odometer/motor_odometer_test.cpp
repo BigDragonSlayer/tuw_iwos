@@ -92,6 +92,7 @@ TEST_F(JointStateOdometerTest, odom_no_motion)
   this->odometer_calculator_->update(this->JointState(2.0));
 
   ASSERT_TRUE(this->odometer_calculator_->getPose()->equal(this->end_, ASSERTION_TOLERANCE));
+  EXPECT_NEAR(*this->odometer_calculator_->getKappa(), 0.0, ASSERTION_TOLERANCE);
 }
 
 TEST_F(JointStateOdometerTest, odom_90_deg_rotation_left)
@@ -107,6 +108,7 @@ TEST_F(JointStateOdometerTest, odom_90_deg_rotation_left)
   this->odometer_calculator_->update(this->JointState(2.0));
 
   ASSERT_TRUE(this->odometer_calculator_->getPose()->equal(this->end_, ASSERTION_TOLERANCE));
+  EXPECT_NEAR(*this->odometer_calculator_->getKappa(), 0.0, ASSERTION_TOLERANCE);
 }
 
 TEST_F(JointStateOdometerTest, odom_90_deg_rotation_right)
@@ -124,6 +126,7 @@ TEST_F(JointStateOdometerTest, odom_90_deg_rotation_right)
   this->odometer_calculator_->update(this->JointState(2.0));
 
   ASSERT_TRUE(this->odometer_calculator_->getPose()->equal(this->end_, ASSERTION_TOLERANCE));
+  EXPECT_NEAR(*this->odometer_calculator_->getKappa(), 0.0, ASSERTION_TOLERANCE);
 }
 
 TEST_F(JointStateOdometerTest, odom_180_deg_rotation_left)
@@ -140,6 +143,7 @@ TEST_F(JointStateOdometerTest, odom_180_deg_rotation_left)
   this->odometer_calculator_->update(this->JointState(2.0));
 
   ASSERT_TRUE(this->odometer_calculator_->getPose()->equal(this->end_, ASSERTION_TOLERANCE));
+  EXPECT_NEAR(*this->odometer_calculator_->getKappa(), 0.0, ASSERTION_TOLERANCE);
 }
 
 TEST_F(JointStateOdometerTest, odom_180_deg_rotation_right)
@@ -156,6 +160,7 @@ TEST_F(JointStateOdometerTest, odom_180_deg_rotation_right)
   this->odometer_calculator_->update(this->JointState(2.0));
 
   ASSERT_TRUE(this->odometer_calculator_->getPose()->equal(this->end_, ASSERTION_TOLERANCE));
+  EXPECT_NEAR(*this->odometer_calculator_->getKappa(), 0.0, ASSERTION_TOLERANCE);
 }
 
 TEST_F(JointStateOdometerTest, odom_270_deg_rotation_left)
@@ -172,6 +177,7 @@ TEST_F(JointStateOdometerTest, odom_270_deg_rotation_left)
   this->odometer_calculator_->update(this->JointState(2.0));
 
   ASSERT_TRUE(this->odometer_calculator_->getPose()->equal(this->end_, ASSERTION_TOLERANCE));
+  EXPECT_NEAR(*this->odometer_calculator_->getKappa(), 0.0, ASSERTION_TOLERANCE);
 }
 
 TEST_F(JointStateOdometerTest, odom_270_deg_rotation_right)
@@ -188,6 +194,7 @@ TEST_F(JointStateOdometerTest, odom_270_deg_rotation_right)
   this->odometer_calculator_->update(this->JointState(2.0));
 
   ASSERT_TRUE(this->odometer_calculator_->getPose()->equal(this->end_, ASSERTION_TOLERANCE));
+  EXPECT_NEAR(*this->odometer_calculator_->getKappa(), 0.0, ASSERTION_TOLERANCE);
 }
 
 TEST_F(JointStateOdometerTest, odom_360_deg_rotation_left)
@@ -204,6 +211,7 @@ TEST_F(JointStateOdometerTest, odom_360_deg_rotation_left)
   this->odometer_calculator_->update(this->JointState(2.0));
 
   ASSERT_TRUE(this->odometer_calculator_->getPose()->equal(this->end_, ASSERTION_TOLERANCE));
+  EXPECT_NEAR(*this->odometer_calculator_->getKappa(), 0.0, ASSERTION_TOLERANCE);
 }
 
 TEST_F(JointStateOdometerTest, odom_360_deg_rotation_right)
@@ -220,6 +228,7 @@ TEST_F(JointStateOdometerTest, odom_360_deg_rotation_right)
   this->odometer_calculator_->update(this->JointState(2.0));
 
   ASSERT_TRUE(this->odometer_calculator_->getPose()->equal(this->end_, ASSERTION_TOLERANCE));
+  EXPECT_NEAR(*this->odometer_calculator_->getKappa(), 0.0, ASSERTION_TOLERANCE);
 }
 
 TEST_F(JointStateOdometerTest, odom_straight_forward)
@@ -236,6 +245,7 @@ TEST_F(JointStateOdometerTest, odom_straight_forward)
   this->odometer_calculator_->update(this->JointState(2.0));
 
   ASSERT_TRUE(this->odometer_calculator_->getPose()->equal(this->end_, ASSERTION_TOLERANCE));
+  EXPECT_NEAR(*this->odometer_calculator_->getKappa(), 0.0, ASSERTION_TOLERANCE);
 }
 
 TEST_F(JointStateOdometerTest, odom_straight_backward)
@@ -252,6 +262,7 @@ TEST_F(JointStateOdometerTest, odom_straight_backward)
   this->odometer_calculator_->update(this->JointState(2.0));
 
   ASSERT_TRUE(this->odometer_calculator_->getPose()->equal(this->end_, ASSERTION_TOLERANCE));
+  EXPECT_NEAR(*this->odometer_calculator_->getKappa(), 0.0, ASSERTION_TOLERANCE);
 }
 
 TEST_F(JointStateOdometerTest, odom_left_curve_forward_90_deg)
@@ -268,6 +279,7 @@ TEST_F(JointStateOdometerTest, odom_left_curve_forward_90_deg)
   this->odometer_calculator_->update(this->JointState(2.0));
 
   ASSERT_TRUE(this->odometer_calculator_->getPose()->equal(this->end_, ASSERTION_TOLERANCE));
+  EXPECT_NEAR(*this->odometer_calculator_->getKappa(), 0.0, ASSERTION_TOLERANCE);
 }
 
 TEST_F(JointStateOdometerTest, odom_right_curve_forward_90_deg)
@@ -285,6 +297,7 @@ TEST_F(JointStateOdometerTest, odom_right_curve_forward_90_deg)
   this->odometer_calculator_->update(this->JointState(2.0));
 
   ASSERT_TRUE(this->odometer_calculator_->getPose()->equal(this->end_, ASSERTION_TOLERANCE));
+  EXPECT_NEAR(*this->odometer_calculator_->getKappa(), 0.0, ASSERTION_TOLERANCE);
 }
 
 TEST_F(JointStateOdometerTest, odom_left_curve_forward_180_deg)
@@ -302,6 +315,7 @@ TEST_F(JointStateOdometerTest, odom_left_curve_forward_180_deg)
   this->odometer_calculator_->update(this->JointState(2.0));
 
   ASSERT_TRUE(this->odometer_calculator_->getPose()->equal(this->end_, ASSERTION_TOLERANCE));
+  EXPECT_NEAR(*this->odometer_calculator_->getKappa(), 0.0, ASSERTION_TOLERANCE);
 }
 
 TEST_F(JointStateOdometerTest, odom_right_curve_forward_180_deg)
@@ -319,6 +333,7 @@ TEST_F(JointStateOdometerTest, odom_right_curve_forward_180_deg)
   this->odometer_calculator_->update(this->JointState(2.0));
 
   ASSERT_TRUE(this->odometer_calculator_->getPose()->equal(this->end_, ASSERTION_TOLERANCE));
+  EXPECT_NEAR(*this->odometer_calculator_->getKappa(), 0.0, ASSERTION_TOLERANCE);
 }
 
 TEST_F(JointStateOdometerTest, odom_left_curve_forward_270_deg)
@@ -336,6 +351,7 @@ TEST_F(JointStateOdometerTest, odom_left_curve_forward_270_deg)
   this->odometer_calculator_->update(this->JointState(2.0));
 
   ASSERT_TRUE(this->odometer_calculator_->getPose()->equal(this->end_, ASSERTION_TOLERANCE));
+  EXPECT_NEAR(*this->odometer_calculator_->getKappa(), 0.0, ASSERTION_TOLERANCE);
 }
 
 TEST_F(JointStateOdometerTest, odom_right_curve_forward_270_deg)
@@ -353,6 +369,7 @@ TEST_F(JointStateOdometerTest, odom_right_curve_forward_270_deg)
   this->odometer_calculator_->update(this->JointState(2.0));
 
   ASSERT_TRUE(this->odometer_calculator_->getPose()->equal(this->end_, ASSERTION_TOLERANCE));
+  EXPECT_NEAR(*this->odometer_calculator_->getKappa(), 0.0, ASSERTION_TOLERANCE);
 }
 
 TEST_F(JointStateOdometerTest, odom_left_curve_forward_360_deg)
@@ -370,6 +387,7 @@ TEST_F(JointStateOdometerTest, odom_left_curve_forward_360_deg)
   this->odometer_calculator_->update(this->JointState(2.0));
 
   ASSERT_TRUE(this->odometer_calculator_->getPose()->equal(this->end_, ASSERTION_TOLERANCE));
+  EXPECT_NEAR(*this->odometer_calculator_->getKappa(), 0.0, ASSERTION_TOLERANCE);
 }
 
 TEST_F(JointStateOdometerTest, odom_right_curve_forward_360_deg)
@@ -387,6 +405,7 @@ TEST_F(JointStateOdometerTest, odom_right_curve_forward_360_deg)
   this->odometer_calculator_->update(this->JointState(2.0));
 
   ASSERT_TRUE(this->odometer_calculator_->getPose()->equal(this->end_, ASSERTION_TOLERANCE));
+  EXPECT_NEAR(*this->odometer_calculator_->getKappa(), 0.0, ASSERTION_TOLERANCE);
 }
 
 TEST_F(JointStateOdometerTest, odom_left_curve_backward_90_deg)
@@ -404,6 +423,7 @@ TEST_F(JointStateOdometerTest, odom_left_curve_backward_90_deg)
   this->odometer_calculator_->update(this->JointState(2.0));
 
   ASSERT_TRUE(this->odometer_calculator_->getPose()->equal(this->end_, ASSERTION_TOLERANCE));
+  EXPECT_NEAR(*this->odometer_calculator_->getKappa(), 0.0, ASSERTION_TOLERANCE);
 }
 
 TEST_F(JointStateOdometerTest, odom_right_curve_backward_90_deg)
@@ -421,6 +441,7 @@ TEST_F(JointStateOdometerTest, odom_right_curve_backward_90_deg)
   this->odometer_calculator_->update(this->JointState(2.0));
 
   ASSERT_TRUE(this->odometer_calculator_->getPose()->equal(this->end_, ASSERTION_TOLERANCE));
+  EXPECT_NEAR(*this->odometer_calculator_->getKappa(), 0.0, ASSERTION_TOLERANCE);
 }
 
 TEST_F(JointStateOdometerTest, odom_left_curve_backward_180_deg)
@@ -438,6 +459,7 @@ TEST_F(JointStateOdometerTest, odom_left_curve_backward_180_deg)
   this->odometer_calculator_->update(this->JointState(2.0));
 
   ASSERT_TRUE(this->odometer_calculator_->getPose()->equal(this->end_, ASSERTION_TOLERANCE));
+  EXPECT_NEAR(*this->odometer_calculator_->getKappa(), 0.0, ASSERTION_TOLERANCE);
 }
 
 TEST_F(JointStateOdometerTest, odom_right_curve_backward_180_deg)
@@ -455,6 +477,7 @@ TEST_F(JointStateOdometerTest, odom_right_curve_backward_180_deg)
   this->odometer_calculator_->update(this->JointState(2.0));
 
   ASSERT_TRUE(this->odometer_calculator_->getPose()->equal(this->end_, ASSERTION_TOLERANCE));
+  EXPECT_NEAR(*this->odometer_calculator_->getKappa(), 0.0, ASSERTION_TOLERANCE);
 }
 
 TEST_F(JointStateOdometerTest, odom_left_curve_backward_270_deg)
@@ -472,6 +495,7 @@ TEST_F(JointStateOdometerTest, odom_left_curve_backward_270_deg)
   this->odometer_calculator_->update(this->JointState(2.0));
 
   ASSERT_TRUE(this->odometer_calculator_->getPose()->equal(this->end_, ASSERTION_TOLERANCE));
+  EXPECT_NEAR(*this->odometer_calculator_->getKappa(), 0.0, ASSERTION_TOLERANCE);
 }
 
 TEST_F(JointStateOdometerTest, odom_right_curve_backward_270_deg)
@@ -489,6 +513,7 @@ TEST_F(JointStateOdometerTest, odom_right_curve_backward_270_deg)
   this->odometer_calculator_->update(this->JointState(2.0));
 
   ASSERT_TRUE(this->odometer_calculator_->getPose()->equal(this->end_, ASSERTION_TOLERANCE));
+  EXPECT_NEAR(*this->odometer_calculator_->getKappa(), 0.0, ASSERTION_TOLERANCE);
 }
 
 TEST_F(JointStateOdometerTest, odom_left_curve_backward_360_deg)
@@ -506,6 +531,7 @@ TEST_F(JointStateOdometerTest, odom_left_curve_backward_360_deg)
   this->odometer_calculator_->update(this->JointState(2.0));
 
   ASSERT_TRUE(this->odometer_calculator_->getPose()->equal(this->end_, ASSERTION_TOLERANCE));
+  EXPECT_NEAR(*this->odometer_calculator_->getKappa(), 0.0, ASSERTION_TOLERANCE);
 }
 
 TEST_F(JointStateOdometerTest, odom_right_curve_backward_360_deg)
@@ -523,4 +549,5 @@ TEST_F(JointStateOdometerTest, odom_right_curve_backward_360_deg)
   this->odometer_calculator_->update(this->JointState(2.0));
 
   ASSERT_TRUE(this->odometer_calculator_->getPose()->equal(this->end_, ASSERTION_TOLERANCE));
+  EXPECT_NEAR(*this->odometer_calculator_->getKappa(), 0.0, ASSERTION_TOLERANCE);
 }
