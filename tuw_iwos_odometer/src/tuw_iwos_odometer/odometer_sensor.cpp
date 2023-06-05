@@ -58,7 +58,6 @@ bool tuw_iwos_odometer::OdometerSensor::update(const sensor_msgs::JointStateCons
                                                const std::shared_ptr <tuw::Pose2D> &pose_pointer,
                                                const std::shared_ptr<double> &kappa_pointer)
 {
-  // TODO: handle kappa
   const sensor_msgs::JointStateConstPtr &joint_state = joint_state_end;
 
   // manage joint state
