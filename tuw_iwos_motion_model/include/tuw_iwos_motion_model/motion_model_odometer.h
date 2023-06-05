@@ -16,14 +16,14 @@ class MotionModelOdometer
 {
 public:
   MotionModelOdometer();
-  double motion_model_odometry(const std::pair<IWOSPose, IWOSPose>& odometry,
+  static double motion_model_odometry(const std::pair<IWOSPose, IWOSPose>& odometry,
                                IWOSPose state_start,
                                IWOSPose state_end,
                                MotionModelOdometerNoise noise);
-  IWOSPose motion_model_odometry_sample(const std::pair<IWOSPose, IWOSPose>& odometry,
+  static IWOSPose motion_model_odometry_sample(const std::pair<IWOSPose, IWOSPose>& odometry,
                                         IWOSPose state_before,
                                         MotionModelOdometerNoise noise);
-  void setAlphaValues(double alpha_values []);
+  void setAlphaValues(const double alpha_values []);
   void setNumberOfSamples(int number_of_samples);
 private:
   static std::default_random_engine default_random_engine_;
@@ -32,8 +32,10 @@ private:
   static double probability_normal_distribution(double a, double b_square);
   static double sample_normal_distribution(double b_square);
 
+  static double limitToPi(double value);
+
   int number_of_samples_ {1};
-  double alpha_values_ [9];
+  double alpha_values_ [9]{};
 };
 }  // namespace tuw_iwos_motion_model
 
