@@ -125,18 +125,18 @@ IWOSPose MotionModelOdometer::motion_model_odometry_sample(const std::pair<IWOSP
   double x = state_before.getPose()->get_x();
   double y = state_before.getPose()->get_y();
   double theta = state_before.getPose()->get_theta();
-  double iota = *state_before.getOffset();
+  double kappa = *state_before.getOffset();
 
   double x_prime = x + delta_t_hat * cos(theta + delta_r1_hat);
   double y_prime = y + delta_t_hat * sin(theta + delta_r1_hat);
   double theta_prime = theta + delta_r1_hat + delta_r2_hat;
-  double iota_prime = iota + delta_o1_hat + delta_o2_hat;
+  double kappa_prime = kappa + delta_o1_hat + delta_o2_hat;
 
   IWOSPose pose = IWOSPose();
   pose.getPose()->set_x(x_prime);
   pose.getPose()->set_y(y_prime);
   pose.getPose()->set_theta(theta_prime);
-  *pose.getOffset() = iota_prime;
+  *pose.getOffset() = kappa_prime;
 
   return pose;
 }
