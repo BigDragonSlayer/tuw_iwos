@@ -174,4 +174,5 @@ double MotionModelOdometer::limitToPi(double value)
     if (value > M_PI_2)
       value -= M_PI_2;
   }
+  return value;
 }
