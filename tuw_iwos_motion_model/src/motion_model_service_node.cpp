@@ -61,19 +61,19 @@ bool MotionModelServiceNode::motionModelOdometrySample(IWOSMotionModelOdometrySa
                                                        IWOSMotionModelOdometrySample::Response& response)
 {
   MotionModelOdometerNoise noise(request.alpha_values);
-  IWOSPose odometry_start(request.odometry_start.pose, request.odometry_orientation_offset_start);
-  IWOSPose odometry_end(request.odometry_end.pose, request.odometry_orientation_offset_end);
+  IWOSPose odometry_start(request.odometry_start.pose, request.odometry_kappa_start);
+  IWOSPose odometry_end(request.odometry_end.pose, request.odometry_kappa_end);
   std::pair<IWOSPose, IWOSPose> odometry(odometry_start, odometry_end);
-  IWOSPose state_start(request.pose_start.pose, request.pose_orientation_offset_start);
+  IWOSPose state_start(request.pose_start.pose, request.kappa_start);
 
   response.odometry_end.resize(request.number_of_samples.data);
-  response.odometry_orientation_offset_end.resize(request.number_of_samples.data);
+  response.odometry_kappa_end.resize(request.number_of_samples.data);
 
   for (int i = 0; i < request.number_of_samples.data; ++i)
   {
     IWOSPose state_end = this->motion_model_odometer_->motion_model_odometry_sample(odometry, state_start, noise);
     response.odometry_end[i] = state_end.toPose();
-    response.odometry_orientation_offset_end[i] = state_end.toFloat64();
+    response.odometry_kappa_end[i] = state_end.toFloat64();
   }
   return true;
 }
