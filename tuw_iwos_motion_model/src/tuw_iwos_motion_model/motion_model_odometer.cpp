@@ -166,9 +166,9 @@ void MotionModelOdometer::setNumberOfSamples(int number_of_samples)
 
 double MotionModelOdometer::limitToPi(double value)
 {
-  while (value < M_PI_2 || value > M_PI_2)
+  while (value < -M_PI_2 || value > M_PI_2)
   {
-    if (value < M_PI_2)
+    if (value < -M_PI_2)
       value += M_PI_2;
 
     if (value > M_PI_2)
