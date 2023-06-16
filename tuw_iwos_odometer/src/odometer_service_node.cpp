@@ -64,7 +64,7 @@ bool OdometerServiceNode::updateOdometerMotor(OdometerMotorService::Request& req
   pose->set_x(request.pose_start.pose.position.x);
   pose->set_y(request.pose_start.pose.position.y);
   pose->set_theta(y);
-  std::shared_ptr<double> kappa = std::make_shared<double>(request.kappa_start.data);
+  std::shared_ptr<double> kappa = std::make_shared<double>(0.0);
 
   bool update_success = this->odometer_motor_->update(joint_state_start, joint_state_end, pose, kappa);
 
