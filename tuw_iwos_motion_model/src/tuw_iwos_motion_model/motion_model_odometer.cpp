@@ -29,7 +29,7 @@ double MotionModelOdometer::motion_model_odometry(const std::pair<IWOSPose, IWOS
 
   double delta_o1 = -*odometry_start.getOffset();
   double delta_r1 = atan2((odometry_end.getPose()->get_y() - odometry_start.getPose()->get_y()),
-                          (odometry_end.getPose()->get_x() - odometry_start.getPose()->get_x()));
+                          (odometry_end.getPose()->get_x() - odometry_start.getPose()->get_x())) - odometry_start.getPose()->get_theta();
   double delta_t = sqrt(pow(odometry_start.getPose()->get_x() - odometry_end.getPose()->get_x(), 2) +
                         pow(odometry_start.getPose()->get_y() - odometry_end.getPose()->get_y(), 2));
   double delta_r2 = odometry_end.getPose()->get_theta() - odometry_start.getPose()->get_theta() - delta_r1;
@@ -38,11 +38,11 @@ double MotionModelOdometer::motion_model_odometry(const std::pair<IWOSPose, IWOS
   delta_o1 = limitToPi(delta_o1);
   delta_r1 = limitToPi(delta_r1);
   delta_r2 = limitToPi(delta_r2);
-  delta_o1 = limitToPi(delta_o1);
+  delta_o2 = limitToPi(delta_o2);
 
   double delta_o1_hat = -*state_start.getOffset();
   double delta_r1_hat = atan2((state_end.getPose()->get_y() - state_start.getPose()->get_y()),
-                              (state_end.getPose()->get_x() - state_start.getPose()->get_x()));
+                              (state_end.getPose()->get_x() - state_start.getPose()->get_x())) - state_start.getPose()->get_theta();
   double delta_t_hat = sqrt(pow(state_start.getPose()->get_x() - state_end.getPose()->get_x(), 2) +
                             pow(state_start.getPose()->get_y() - state_end.getPose()->get_y(), 2));
   double delta_r2_hat = state_end.getPose()->get_theta() - state_start.getPose()->get_theta() - delta_r1;
@@ -51,7 +51,7 @@ double MotionModelOdometer::motion_model_odometry(const std::pair<IWOSPose, IWOS
   delta_o1_hat = limitToPi(delta_o1_hat);
   delta_r1_hat = limitToPi(delta_r1_hat);
   delta_r2_hat = limitToPi(delta_r2_hat);
-  delta_o1_hat = limitToPi(delta_o1_hat);
+  delta_o2_hat = limitToPi(delta_o2_hat);
 
   double p1 = probability_normal_distribution(delta_o1 - delta_o1_hat,
                                               noise.alpha(1) * pow(delta_o1_hat, 2) +
@@ -68,9 +68,9 @@ double MotionModelOdometer::motion_model_odometry(const std::pair<IWOSPose, IWOS
                                               noise.alpha(8) * pow(delta_r2_hat, 2) +
                                               noise.alpha(9) * pow(delta_t_hat, 2));
   double p4 = probability_normal_distribution(delta_r2 - delta_r2_hat,
-                                              noise.alpha(3) * pow(delta_o2_hat, 2) +
-                                              noise.alpha(4) * pow(delta_r2_hat, 2) +
-                                              noise.alpha(5) * pow(delta_t_hat, 2));
+                                              noise.alpha(4) * pow(delta_o2_hat, 2) +
+                                              noise.alpha(5) * pow(delta_r2_hat, 2) +
+                                              noise.alpha(6) * pow(delta_t_hat, 2));
   double p5 = probability_normal_distribution(delta_o2 - delta_o2_hat,
                                               noise.alpha(1) * pow(delta_o2_hat, 2) +
                                               noise.alpha(2) * pow(delta_r2_hat, 2) +
@@ -88,16 +88,16 @@ IWOSPose MotionModelOdometer::motion_model_odometry_sample(const std::pair<IWOSP
 
   double delta_o1 = -*odometry_start.getOffset();
   double delta_r1 = atan2((odometry_end.getPose()->get_y() - odometry_start.getPose()->get_y()),
-                          (odometry_end.getPose()->get_x() - odometry_start.getPose()->get_x()));
+                          (odometry_end.getPose()->get_x() - odometry_start.getPose()->get_x())) - odometry_start.getPose()->get_theta();
   double delta_t = sqrt(pow(odometry_start.getPose()->get_x() - odometry_end.getPose()->get_x(), 2) +
                         pow(odometry_start.getPose()->get_y() - odometry_end.getPose()->get_y(), 2));
   double delta_r2 = odometry_end.getPose()->get_theta() - odometry_start.getPose()->get_theta() - delta_r1;
   double delta_o2 = *odometry_end.getOffset();
 
-  delta_o1 = limitToPi(delta_o1);
+//  delta_o1 = limitToPi(delta_o1);
   delta_r1 = limitToPi(delta_r1);
   delta_r2 = limitToPi(delta_r2);
-  delta_o1 = limitToPi(delta_o1);
+//  delta_o2 = limitToPi(delta_o2);
 
   double delta_o1_hat = delta_o1 - sample_normal_distribution(noise.alpha(1) * pow(delta_o1, 2) +
                                                               noise.alpha(2) * pow(delta_r1, 2) +
@@ -110,17 +110,17 @@ IWOSPose MotionModelOdometer::motion_model_odometry_sample(const std::pair<IWOSP
                                                             noise.alpha(8) * pow(delta_r1, 2) +
                                                             noise.alpha(8) * pow(delta_r2, 2) +
                                                             noise.alpha(9) * pow(delta_t, 2));
-  double delta_r2_hat = delta_r2 - sample_normal_distribution(noise.alpha(3) * pow(delta_o2, 2) +
-                                                              noise.alpha(4) * pow(delta_r2, 2) +
-                                                              noise.alpha(5) * pow(delta_t, 2));
+  double delta_r2_hat = delta_r2 - sample_normal_distribution(noise.alpha(4) * pow(delta_o2, 2) +
+                                                              noise.alpha(5) * pow(delta_r2, 2) +
+                                                              noise.alpha(6) * pow(delta_t, 2));
   double delta_o2_hat = delta_o2 - sample_normal_distribution(noise.alpha(1) * pow(delta_o2, 2) +
                                                               noise.alpha(2) * pow(delta_r2, 2) +
                                                               noise.alpha(3) * pow(delta_t, 2));
 
-  delta_o1_hat = limitToPi(delta_o1_hat);
+//  delta_o1_hat = limitToPi(delta_o1_hat);
   delta_r1_hat = limitToPi(delta_r1_hat);
   delta_r2_hat = limitToPi(delta_r2_hat);
-  delta_o1_hat = limitToPi(delta_o1_hat);
+//  delta_o2_hat = limitToPi(delta_o2_hat);
 
   double x = state_before.getPose()->get_x();
   double y = state_before.getPose()->get_y();
