@@ -15,6 +15,7 @@ OdometerMotor::OdometerMotor(double wheelbase, double wheeloffset) : Odometer()
   this->wheeloffset_ = wheeloffset;
 
   this->icc_tool_ = std::make_unique<tuw_iwos_tools::IccTool>(this->wheelbase_, this->wheeloffset_, 0.0, 0.0, 0.0);
+  this->kappa_tool_ = std::make_unique<tuw_iwos_tools::KappaTool>(this->wheelbase_, this->wheeloffset_);
 
   this->revolute_velocity_ = std::make_shared<std::map<tuw_iwos_tools::Side, double>>();
   this->steering_position_ = std::make_shared<std::map<tuw_iwos_tools::Side, double>>();
@@ -91,8 +92,10 @@ bool OdometerMotor::update(const sensor_msgs::JointStateConstPtr &joint_state_st
   double y = pose_pointer->y();
   double theta = pose_pointer->theta();
 
+  double kappa = this->kappa_tool_->calculateKappa(this->icc_pointer_, this->steering_position_);
+
   cv::Vec<double, 3> step{v * dt, 0.0, w * dt};
-  cv::Vec<double, 3> pose{x, y, theta};
+  cv::Vec<double, 3> pose{x, y, theta + kappa};
   cv::Matx<double, 3, 3> transform = cv::Matx<double, 3, 3>().eye(); // transform from robot to world
 
   for (int i = 0; i < this->calculation_iterations_; i++)
@@ -104,37 +107,9 @@ bool OdometerMotor::update(const sensor_msgs::JointStateConstPtr &joint_state_st
     pose = pose + (transform * step);
   }
 
-  double kappa;
-  if (isfinite(icc_pointer_->x()) and isfinite(icc_pointer_->x()))
-  {
-    //create normalized ICC vector
-    double icc_vector_x = icc_pointer_->x();
-    double icc_vector_y = icc_pointer_->y();
-    icc_vector_x /= sqrt(pow(icc_vector_x, 2) + pow(icc_vector_y, 2));
-    icc_vector_y /= sqrt(pow(icc_vector_x, 2) + pow(icc_vector_y, 2));
-
-    if (abs(icc_vector_x) > abs(std::numeric_limits<double>::min()) and
-        abs(icc_vector_x) > abs(std::numeric_limits<double>::min()))
-    {
-      // driving direction is orthogonal to ICC
-      cv::Vec<double, 2> driving_direction_vector {icc_vector_y , icc_vector_x};
-      kappa = atan2(driving_direction_vector[1], driving_direction_vector[0]);
-    }
-    else
-    {
-      kappa = 0.0;
-    }
-  }
-  else
-  {
-    double steering_left = (*this->steering_position_)[tuw_iwos_tools::Side::LEFT];
-    double steering_right = (*this->steering_position_)[tuw_iwos_tools::Side::RIGHT];
-    kappa = (steering_left + steering_right) / 2.0;
-  }
-
   pose_pointer->set_x(pose[0]);
   pose_pointer->set_y(pose[1]);
-  pose_pointer->set_theta(pose[2]);
+  pose_pointer->set_theta(pose[2] - kappa);
 
   *kappa_pointer = kappa;
 

@@ -20,6 +20,7 @@
 #include <tuw_geometry/pose2d.h>
 
 #include <tuw_iwos_tools/icc_tool.h>
+#include <tuw_iwos_tools/kappa_tool.h>
 #include <tuw_iwos_tools/message_transformer.h>
 #include <tuw_iwos_odometer/odometer.h>
 
@@ -48,6 +49,7 @@ protected:
   sensor_msgs::JointStateConstPtr previous_joint_state_{nullptr};
 
   std::unique_ptr<tuw_iwos_tools::IccTool> icc_tool_{nullptr};
+  std::unique_ptr<tuw_iwos_tools::KappaTool> kappa_tool_{nullptr};
 
   std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> revolute_velocity_{nullptr};
   std::shared_ptr<std::map<tuw_iwos_tools::Side, double>> steering_position_{nullptr};

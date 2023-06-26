@@ -37,6 +37,7 @@ roslint_cpp()
 add_library(
   ${PROJECT_NAME}
   src/${PROJECT_NAME}/icc_tool.cpp
+  src/${PROJECT_NAME}/kappa_tool.cpp
   src/${PROJECT_NAME}/message_transformer.cpp
   src/icc_publisher_node.cpp
 )
