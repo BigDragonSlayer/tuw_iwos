@@ -81,8 +81,8 @@ bool tuw_iwos_odometer::OdometerSensor::update(const sensor_msgs::JointStateCons
   this->imu_orientation_end_ = yaw_end;
 
   // manage time
-  ros::Time previous_time;
-  ros::Time current_time;
+  ros::Time start_time;
+  ros::Time end_time;
 
   double current_joint_time = joint_state_end->header.stamp.toSec();
   double current_imu_time = imu_end->header.stamp.toSec();
@@ -90,18 +90,19 @@ bool tuw_iwos_odometer::OdometerSensor::update(const sensor_msgs::JointStateCons
   double previous_imu_time = imu_start->header.stamp.toSec();
 
   if (previous_joint_time >= previous_imu_time)
-    previous_time = this->previous_joint_state_->header.stamp;
+    start_time = this->previous_joint_state_->header.stamp;
   else
-    previous_time = this->previous_imu_->header.stamp;
+    start_time = this->previous_imu_->header.stamp;
 
   if (current_joint_time >= current_imu_time)
-    current_time = this->current_joint_state_->header.stamp;
+    end_time = this->current_joint_state_->header.stamp;
   else
-    current_time = this->current_imu_->header.stamp;
+    end_time = this->current_imu_->header.stamp;
 
-  ros::Duration time = current_time - previous_time;
+  ros::Duration duration = end_time - start_time;
 
-  double dt = time.toSec() / static_cast<double>(this->calculation_iterations_);
+  int iterations = std::ceil(duration.toSec() / this->calculation_iteration_duration_);
+  double dt = duration.toSec() / static_cast<double>(iterations);
 
   // calculate pose
   try
@@ -129,7 +130,7 @@ bool tuw_iwos_odometer::OdometerSensor::update(const sensor_msgs::JointStateCons
   cv::Vec<double, 3> pose{x, y, theta};
   cv::Matx<double, 3, 3> transform = cv::Matx<double, 3, 3>().eye();
 
-  for (int i = 0; i < this->calculation_iterations_; i++)
+  for (int i = 0; i < iterations; i++)
   {
     transform(0, 0) = +cos(pose[2]);
     transform(0, 1) = -sin(pose[2]);
@@ -162,8 +163,8 @@ bool tuw_iwos_odometer::OdometerSensor::update(const sensor_msgs::JointStateCons
 
   *kappa_pointer = kappa;
 
-  this->updateOdometerMessage(current_time);
-  this->updateOdometerTransform(current_time);
+  this->updateOdometerMessage(end_time);
+  this->updateOdometerTransform(end_time);
 
   return true;
 }

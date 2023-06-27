@@ -63,12 +63,13 @@ bool OdometerMotor::update(const sensor_msgs::JointStateConstPtr &joint_state_st
   (*this->steering_position_)[tuw_iwos_tools::Side::RIGHT] = joints->steering[1];
 
   // manage time
-  ros::Time previous_time = joint_state_start->header.stamp;
-  ros::Time current_time = joint_state_end->header.stamp;
+  ros::Time start_time = joint_state_start->header.stamp;
+  ros::Time end_time = joint_state_end->header.stamp;
 
-  ros::Duration time = current_time - previous_time;
+  ros::Duration duration = end_time - start_time;
 
-  double dt = time.toSec() / static_cast<double>(this->calculation_iterations_);
+  int iterations = std::ceil(duration.toSec() / this->calculation_iteration_duration_);
+  double dt = duration.toSec() / static_cast<double>(iterations);
 
   // calculate pose
   try
@@ -98,7 +99,7 @@ bool OdometerMotor::update(const sensor_msgs::JointStateConstPtr &joint_state_st
   cv::Vec<double, 3> pose{x, y, theta + kappa};
   cv::Matx<double, 3, 3> transform = cv::Matx<double, 3, 3>().eye(); // transform from robot to world
 
-  for (int i = 0; i < this->calculation_iterations_; i++)
+  for (int i = 0; i < iterations; i++)
   {
     transform(0, 0) = +cos(pose[2]);
     transform(0, 1) = -sin(pose[2]);
@@ -113,8 +114,8 @@ bool OdometerMotor::update(const sensor_msgs::JointStateConstPtr &joint_state_st
 
   *kappa_pointer = kappa;
 
-  this->updateOdometerMessage(current_time);
-  this->updateOdometerTransform(current_time);
+  this->updateOdometerMessage(end_time);
+  this->updateOdometerTransform(end_time);
 
   return true;
 }

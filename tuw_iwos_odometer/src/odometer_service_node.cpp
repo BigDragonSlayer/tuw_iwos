@@ -35,12 +35,12 @@ void OdometerServiceNode::run()
 
 void OdometerServiceNode::configCallback(tuw_iwos_odometer::OdometerServiceNodeConfig& config, uint32_t level)
 {
-  this->odometer_motor_->setCalculationIterations(config.calculation_iterations);
+  this->odometer_motor_->setCalculationIterationDuration(config.calculation_iteration_duration);
   this->odometer_motor_->setLinearVelocityTolerance(config.linear_velocity_tolerance);
   this->odometer_motor_->setAngularVelocityTolerance(config.angular_velocity_tolerance);
   this->odometer_motor_->setSteeringPositionTolerance(config.steering_position_tolerance);
 
-  this->odometer_sensor_->setCalculationIterations(config.calculation_iterations);
+  this->odometer_sensor_->setCalculationIterationDuration(config.calculation_iteration_duration);
   this->odometer_sensor_->setLinearVelocityTolerance(config.linear_velocity_tolerance);
   this->odometer_sensor_->setAngularVelocityTolerance(config.angular_velocity_tolerance);
   this->odometer_sensor_->setSteeringPositionTolerance(config.steering_position_tolerance);

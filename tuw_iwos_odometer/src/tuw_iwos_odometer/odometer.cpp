@@ -54,7 +54,7 @@ std::shared_ptr<geometry_msgs::TransformStamped> Odometer::getTransformMessage()
   return this->transform_message_;
 }
 
-void Odometer::setCalculationIterations(int calculation_iterations)
+void Odometer::setCalculationIterationDuration(double calculation_iteration_duration)
 {
-  this->calculation_iterations_ = calculation_iterations;
+  this->calculation_iteration_duration_ = calculation_iteration_duration;
 }
