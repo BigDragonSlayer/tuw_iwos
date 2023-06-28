@@ -71,6 +71,11 @@ bool OdometerMotor::update(const sensor_msgs::JointStateConstPtr &joint_state_st
   int iterations = std::ceil(duration.toSec() / this->calculation_iteration_duration_);
   double dt = duration.toSec() / static_cast<double>(iterations);
 
+  if (isnan(dt))
+  {
+    throw std::runtime_error("invalid duration");
+  }
+
   // calculate pose
   try
   {

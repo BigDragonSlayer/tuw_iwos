@@ -54,7 +54,7 @@ void IccTool::calculateIcc(const std::shared_ptr<std::map<Side, double>>& revolu
         abs(*alpha_r) - this->steering_position_tolerance_ <= 0.0)
     {
       // case: valid differential drive mode (line)
-      if (abs(*v_l - *v_r) <= this->linear_velocity_tolerance_)
+      if (abs(*v_l - *v_r) <= 0.05)
       {
         icc_x = std::numeric_limits<double>::infinity();
         icc_y = std::numeric_limits<double>::infinity();
@@ -81,7 +81,7 @@ void IccTool::calculateIcc(const std::shared_ptr<std::map<Side, double>>& revolu
 
         v_c = (*v_l + *v_r) / 2.0;
 
-        w_c = (-*v_l +*v_r) / this->wheelbase_;
+        w_c = (-*v_l + *v_r) / this->wheelbase_;
 
         if (abs(r_l) > std::numeric_limits<double>::min())
           w_l = *v_l / r_l;
@@ -177,7 +177,7 @@ void IccTool::calculateIcc(const std::shared_ptr<std::map<Side, double>>& revolu
   if (std::isnan(v_c) || std::isnan(*v_l) || std::isnan(*v_r))
     throw std::runtime_error("error in ICC calculation, linear velocity vector contains NAN");
 
-  if (std::isnan(w_c) || std::isnan( w_l) || std::isnan( w_r))
+  if (std::isnan(w_c) || std::isnan(w_l) || std::isnan(w_r))
     throw std::runtime_error("error in ICC calculation, angular velocity vector contains NAN");
 
   icc_pointer->set(icc_x, icc_y);
