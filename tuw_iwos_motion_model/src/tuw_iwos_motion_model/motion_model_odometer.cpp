@@ -87,7 +87,6 @@ IWOSPose MotionModelOdometer::motion_model_odometry_sample(const std::pair<IWOSP
   IWOSPose odometry_end = odometry.second;
 
   double dt = (*odometry_end.getTime() - *odometry_start.getTime()).toSec();
-  ROS_INFO("dt: %f", dt);
 
   double delta_o1 = -*odometry_start.getOffset();
   double delta_r1 = atan2((odometry_end.getPose()->get_y() - odometry_start.getPose()->get_y()),
