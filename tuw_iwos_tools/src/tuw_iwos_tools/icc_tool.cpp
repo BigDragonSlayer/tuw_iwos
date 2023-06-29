@@ -94,7 +94,7 @@ void IccTool::calculateIcc(const std::shared_ptr<std::map<Side, double>>& revolu
           w_r = w_c;
       }
     }
-      // case: crab steering
+    // case: crab steering
     else
     {
       // case: valid crab steering mode (line)
