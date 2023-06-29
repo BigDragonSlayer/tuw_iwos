@@ -52,7 +52,9 @@ bool MotionModelServiceNode::motionModelOdometry(IWOSMotionModelOdometry::Reques
   std::pair<IWOSPose, IWOSPose> odometry(odometry_start, odometry_end);
   IWOSPose state_start(request.pose_start.pose, request.pose_orientation_offset_start);
   IWOSPose state_end(request.pose_end.pose, request.pose_orientation_offset_end);
-  response.probability.data = this->motion_model_odometer_->motion_model_odometry(odometry, state_start, state_end,
+  response.probability.data = this->motion_model_odometer_->motion_model_odometry(odometry,
+                                                                                  state_start,
+                                                                                  state_end,
                                                                                   noise);
   return true;
 }

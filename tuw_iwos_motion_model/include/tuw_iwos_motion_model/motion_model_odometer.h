@@ -32,7 +32,8 @@ private:
   static double probability_normal_distribution(double a, double b_square);
   static double sample_normal_distribution(double b_square);
 
-  static double limitToPi(double value);
+  static double limitTheta(double value);
+  static double limitKappa(double value);
 
   int number_of_samples_ {1};
   double alpha_values_ [9]{};
