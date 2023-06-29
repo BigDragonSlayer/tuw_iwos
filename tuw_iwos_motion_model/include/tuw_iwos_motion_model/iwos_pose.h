@@ -16,14 +16,16 @@ class IWOSPose
 public:
   IWOSPose();
   ~IWOSPose() = default;
-  IWOSPose(geometry_msgs::Pose, std_msgs::Float64 orientation_offset);
+  IWOSPose(geometry_msgs::Pose, std_msgs::Float64 orientation_offset, ros::Time time);
   std::shared_ptr<tuw::Pose2D> getPose();
   std::shared_ptr<double> getOffset();
+  std::shared_ptr<ros::Time> getTime();
   geometry_msgs::Pose toPose();
   std_msgs::Float64 toFloat64();
 private:
   std::shared_ptr<tuw::Pose2D> pose;
   std::shared_ptr<double> offset;
+  std::shared_ptr<ros::Time> time;
 };
 }  // namespace tuw_iwos_motion_model
 

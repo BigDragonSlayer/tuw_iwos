@@ -86,6 +86,9 @@ IWOSPose MotionModelOdometer::motion_model_odometry_sample(const std::pair<IWOSP
   IWOSPose odometry_start = odometry.first;
   IWOSPose odometry_end = odometry.second;
 
+  double dt = (*odometry_end.getTime() - *odometry_start.getTime()).toSec();
+  ROS_INFO("dt: %f", dt);
+
   double delta_o1 = -*odometry_start.getOffset();
   double delta_r1 = atan2((odometry_end.getPose()->get_y() - odometry_start.getPose()->get_y()),
                           (odometry_end.getPose()->get_x() - odometry_start.getPose()->get_x())) - odometry_start.getPose()->get_theta();
@@ -94,28 +97,28 @@ IWOSPose MotionModelOdometer::motion_model_odometry_sample(const std::pair<IWOSP
   double delta_r2 = odometry_end.getPose()->get_theta() - odometry_start.getPose()->get_theta() - delta_r1;
   double delta_o2 = *odometry_end.getOffset();
 
-  delta_o1 = limitKappa(delta_o1);
-  delta_r1 = limitTheta(delta_r1);
-  delta_r2 = limitTheta(delta_r2);
-  delta_o2 = limitKappa(delta_o2);
+  delta_o1 = limitKappa(delta_o1 * dt);
+  delta_r1 = limitTheta(delta_r1 * dt);
+  delta_r2 = limitTheta(delta_r2 * dt);
+  delta_o2 = limitKappa(delta_o2 * dt);
 
   double delta_o1_hat = delta_o1 - sample_normal_distribution(noise.alpha(1) * pow(delta_o1, 2) +
                                                               noise.alpha(2) * pow(delta_r1, 2) +
-                                                              noise.alpha(3) * pow(delta_t, 2));
+                                                              noise.alpha(3) * pow(delta_t, 2)) * dt;
   double delta_r1_hat = delta_r1 - sample_normal_distribution(noise.alpha(4) * pow(delta_o1, 2) +
                                                               noise.alpha(5) * pow(delta_r1, 2) +
-                                                              noise.alpha(6) * pow(delta_t, 2));
+                                                              noise.alpha(6) * pow(delta_t, 2)) * dt;
   double delta_t_hat = delta_t - sample_normal_distribution(noise.alpha(7) * pow(delta_o1, 2) +
                                                             noise.alpha(7) * pow(delta_o2, 2) +
                                                             noise.alpha(8) * pow(delta_r1, 2) +
                                                             noise.alpha(8) * pow(delta_r2, 2) +
-                                                            noise.alpha(9) * pow(delta_t, 2));
+                                                            noise.alpha(9) * pow(delta_t, 2)) * dt;
   double delta_r2_hat = delta_r2 - sample_normal_distribution(noise.alpha(4) * pow(delta_o2, 2) +
                                                               noise.alpha(5) * pow(delta_r2, 2) +
-                                                              noise.alpha(6) * pow(delta_t, 2));
+                                                              noise.alpha(6) * pow(delta_t, 2)) * dt;
   double delta_o2_hat = delta_o2 - sample_normal_distribution(noise.alpha(1) * pow(delta_o2, 2) +
                                                               noise.alpha(2) * pow(delta_r2, 2) +
-                                                              noise.alpha(3) * pow(delta_t, 2));
+                                                              noise.alpha(3) * pow(delta_t, 2)) * dt;
 
   delta_o1_hat = limitKappa(delta_o1_hat);
   delta_r1_hat = limitTheta(delta_r1_hat);

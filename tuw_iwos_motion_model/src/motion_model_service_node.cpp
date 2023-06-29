@@ -47,11 +47,11 @@ bool MotionModelServiceNode::motionModelOdometry(IWOSMotionModelOdometry::Reques
                                                  IWOSMotionModelOdometry::Response& response)
 {
   MotionModelOdometerNoise noise(request.alpha_values);
-  IWOSPose odometry_start(request.odometry_start.pose, request.odometry_orientation_offset_start);
-  IWOSPose odometry_end(request.odometry_end.pose, request.odometry_orientation_offset_end);
+  IWOSPose odometry_start(request.odometry_start.pose, request.odometry_orientation_offset_start, request.odometry_start.header.stamp);
+  IWOSPose odometry_end(request.odometry_end.pose, request.odometry_orientation_offset_end, request.odometry_end.header.stamp);
   std::pair<IWOSPose, IWOSPose> odometry(odometry_start, odometry_end);
-  IWOSPose state_start(request.pose_start.pose, request.pose_orientation_offset_start);
-  IWOSPose state_end(request.pose_end.pose, request.pose_orientation_offset_end);
+  IWOSPose state_start(request.pose_start.pose, request.pose_orientation_offset_start, request.pose_start.header.stamp);
+  IWOSPose state_end(request.pose_end.pose, request.pose_orientation_offset_end, request.pose_end.header.stamp);
   response.probability.data = this->motion_model_odometer_->motion_model_odometry(odometry,
                                                                                   state_start,
                                                                                   state_end,
@@ -63,10 +63,10 @@ bool MotionModelServiceNode::motionModelOdometrySample(IWOSMotionModelOdometrySa
                                                        IWOSMotionModelOdometrySample::Response& response)
 {
   MotionModelOdometerNoise noise(request.alpha_values);
-  IWOSPose odometry_start(request.odometry_start.pose, request.odometry_kappa_start);
-  IWOSPose odometry_end(request.odometry_end.pose, request.odometry_kappa_end);
+  IWOSPose odometry_start(request.odometry_start.pose, request.odometry_kappa_start, request.odometry_start.header.stamp);
+  IWOSPose odometry_end(request.odometry_end.pose, request.odometry_kappa_end, request.odometry_end.header.stamp);
   std::pair<IWOSPose, IWOSPose> odometry(odometry_start, odometry_end);
-  IWOSPose state_start(request.pose_start.pose, request.kappa_start);
+  IWOSPose state_start(request.pose_start.pose, request.kappa_start, request.pose_start.header.stamp);
 
   response.odometry_end.resize(request.number_of_samples.data);
   response.odometry_kappa_end.resize(request.number_of_samples.data);

@@ -11,10 +11,11 @@ IWOSPose::IWOSPose()
 {
   this->pose = std::make_shared<tuw::Pose2D>();
   this->offset = std::make_shared<double>();
+  this->time = std::make_shared<ros::Time>();
 }
 
 
-IWOSPose::IWOSPose(geometry_msgs::Pose pose, std_msgs::Float64 orientation_offset)
+IWOSPose::IWOSPose(geometry_msgs::Pose pose, std_msgs::Float64 orientation_offset, ros::Time time)
 {
   double roll, pitch, yaw;
   tuw_iwos_tools::MessageTransformer::fromQuaternionMessage(pose.orientation, roll, pitch, yaw);
@@ -24,6 +25,7 @@ IWOSPose::IWOSPose(geometry_msgs::Pose pose, std_msgs::Float64 orientation_offse
   this->pose->set_theta(yaw);
 
   this->offset = std::make_shared<double>(orientation_offset.data);
+  this->time = std::make_shared<ros::Time>(time);
 }
 
 std::shared_ptr<tuw::Pose2D> IWOSPose::getPose()
@@ -34,6 +36,11 @@ std::shared_ptr<tuw::Pose2D> IWOSPose::getPose()
 std::shared_ptr<double> IWOSPose::getOffset()
 {
   return this->offset;
+}
+
+std::shared_ptr<ros::Time> IWOSPose::getTime()
+{
+  return this->time;
 }
 
 geometry_msgs::Pose tuw_iwos_motion_model::IWOSPose::toPose()
