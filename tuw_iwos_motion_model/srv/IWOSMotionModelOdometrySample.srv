@@ -12,5 +12,5 @@ std_msgs/Int64 number_of_samples
 
 ---
 
-geometry_msgs/Pose[] odometry_end
-std_msgs/Float64[] odometry_kappa_end
+geometry_msgs/PoseStamped[] pose_end
+std_msgs/Float64[] kappa_end

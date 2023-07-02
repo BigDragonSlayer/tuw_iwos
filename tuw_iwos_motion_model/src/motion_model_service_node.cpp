@@ -68,14 +68,15 @@ bool MotionModelServiceNode::motionModelOdometrySample(IWOSMotionModelOdometrySa
   std::pair<IWOSPose, IWOSPose> odometry(odometry_start, odometry_end);
   IWOSPose state_start(request.pose_start.pose, request.kappa_start, request.pose_start.header.stamp);
 
-  response.odometry_end.resize(request.number_of_samples.data);
-  response.odometry_kappa_end.resize(request.number_of_samples.data);
+  response.pose_end.resize(request.number_of_samples.data);
+  response.kappa_end.resize(request.number_of_samples.data);
 
   for (int i = 0; i < request.number_of_samples.data; ++i)
   {
     IWOSPose state_end = this->motion_model_odometer_->motion_model_odometry_sample(odometry, state_start, noise);
-    response.odometry_end[i] = state_end.toPose();
-    response.odometry_kappa_end[i] = state_end.toFloat64();
+    response.pose_end[i].header = request.odometry_end.header;
+    response.pose_end[i].pose = state_end.toPose();
+    response.kappa_end[i] = state_end.toFloat64();
   }
   return true;
 }
