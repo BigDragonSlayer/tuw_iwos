@@ -84,6 +84,8 @@ bool OdometerServiceNode::updateOdometerMotor(OdometerMotorService::Request& req
   response.pose_end.pose.orientation =
           tuw_iwos_tools::MessageTransformer::toQuaternionMessage(0.0, 0.0, pose->get_theta());
 
+  response.kappa_end.data = *kappa;
+
   return update_success;
 }
 
