@@ -96,10 +96,10 @@ IWOSPose MotionModelOdometer::motion_model_odometry_sample(const std::pair<IWOSP
   double delta_r2 = odometry_end.getPose()->get_theta() - odometry_start.getPose()->get_theta() - delta_r1;
   double delta_o2 = *odometry_end.getOffset();
 
-  delta_o1 = limitKappa(delta_o1 * dt);
-  delta_r1 = limitTheta(delta_r1 * dt);
-  delta_r2 = limitTheta(delta_r2 * dt);
-  delta_o2 = limitKappa(delta_o2 * dt);
+  delta_o1 = limitKappa(delta_o1);
+  delta_r1 = limitTheta(delta_r1);
+  delta_r2 = limitTheta(delta_r2);
+  delta_o2 = limitKappa(delta_o2);
 
   double delta_o1_hat = delta_o1 - sample_normal_distribution(noise.alpha(1) * pow(delta_o1, 2) +
                                                               noise.alpha(2) * pow(delta_r1, 2) +
