@@ -9,8 +9,8 @@ OdometerServiceNode::OdometerServiceNode()
 {
   this->node_handle_ = std::make_shared<ros::NodeHandle>("~");
 
-  this->odometer_motor_ = std::make_unique<OdometerMotor>(0.5, 0.1);
-  this->odometer_sensor_ = std::make_unique<OdometerSensor>(0.5, 0.1);
+  this->odometer_motor_ = std::make_unique<OdometerMotor>(0.35, 0.1);
+  this->odometer_sensor_ = std::make_unique<OdometerSensor>(0.35, 0.1);
 
   this->reconfigure_server_ =
           std::make_shared<dynamic_reconfigure::Server<OdometerServiceNodeConfig>>

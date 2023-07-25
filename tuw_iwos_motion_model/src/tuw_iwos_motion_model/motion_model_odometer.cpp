@@ -96,10 +96,10 @@ IWOSPose MotionModelOdometer::motion_model_odometry_sample(const std::pair<IWOSP
   double delta_r2 = odometry_end.getPose()->get_theta() - odometry_start.getPose()->get_theta() - delta_r1;
   double delta_o2 = *odometry_end.getOffset();
 
-  delta_o1 = limitKappa(delta_o1);
-  delta_r1 = limitTheta(delta_r1);
-  delta_r2 = limitTheta(delta_r2);
-  delta_o2 = limitKappa(delta_o2);
+//  delta_o1 = limitKappa(delta_o1);
+//  delta_r1 = limitTheta(delta_r1);
+//  delta_r2 = limitTheta(delta_r2);
+//  delta_o2 = limitKappa(delta_o2);
 
   double delta_o1_hat = delta_o1 - sample_normal_distribution(noise.alpha(1) * pow(delta_o1, 2) +
                                                               noise.alpha(2) * pow(delta_r1, 2) +
@@ -119,10 +119,10 @@ IWOSPose MotionModelOdometer::motion_model_odometry_sample(const std::pair<IWOSP
                                                               noise.alpha(2) * pow(delta_r2, 2) +
                                                               noise.alpha(3) * pow(delta_t, 2));
 
-  delta_o1_hat = limitKappa(delta_o1_hat);
-  delta_r1_hat = limitTheta(delta_r1_hat);
-  delta_r2_hat = limitTheta(delta_r2_hat);
-  delta_o2_hat = limitKappa(delta_o2_hat);
+//  delta_o1_hat = limitKappa(delta_o1_hat);
+//  delta_r1_hat = limitTheta(delta_r1_hat);
+//  delta_r2_hat = limitTheta(delta_r2_hat);
+//  delta_o2_hat = limitKappa(delta_o2_hat);
 
   double x = state_before.getPose()->get_x();
   double y = state_before.getPose()->get_y();
@@ -133,6 +133,9 @@ IWOSPose MotionModelOdometer::motion_model_odometry_sample(const std::pair<IWOSP
   double y_prime = y + delta_t_hat * sin(theta + delta_r1_hat);
   double theta_prime = theta + delta_r1_hat + delta_r2_hat;
   double kappa_prime = kappa + delta_o1_hat + delta_o2_hat;
+
+  theta_prime = limitTheta(theta_prime);
+  kappa_prime = limitKappa(kappa_prime);
 
   IWOSPose pose = IWOSPose();
   pose.getPose()->set_x(x_prime);
