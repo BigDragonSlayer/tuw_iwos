@@ -120,7 +120,7 @@ void IccTool::calculateIcc(const std::shared_ptr<std::map<Side, double>>& revolu
       }
     }
   }
-    // case: kastor wheels are not parallel
+  // case: kastor wheels are not parallel
   else
   {
     // calculate position of kastor pivot point
