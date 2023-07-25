@@ -28,7 +28,7 @@ double KappaTool::calculateKappa(const std::shared_ptr<tuw::Point2D>& icc_pointe
     {
       // driving direction is orthogonal to ICC
       cv::Vec<double, 2> driving_direction_vector {icc_vector_y , icc_vector_x};
-      kappa = atan2(driving_direction_vector[1], driving_direction_vector[0]);
+      kappa = -atan(driving_direction_vector[1] / driving_direction_vector[0]);
     }
     else
     {
