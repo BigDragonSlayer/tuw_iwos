@@ -113,7 +113,7 @@ IWOSPose MotionModelOdometer::motion_model_odometry_sample(const std::pair<IWOSP
   double delta_o2_hat = delta_o2 - sample_normal_distribution(noise.alpha(1) * pow(limitKappa(delta_o2), 2) +
                                                               noise.alpha(2) * pow(limitTheta(delta_r2), 2) +
                                                               noise.alpha(3) * pow(delta_t, 2));
-  
+
   double x = state_before.getPose()->get_x();
   double y = state_before.getPose()->get_y();
   double theta = state_before.getPose()->get_theta();
