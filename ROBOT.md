@@ -4,8 +4,8 @@ This document is a guide on how to operate the Independent Wheel Offset Steering
 
 ## Starting
 
-The Robot requires two lead batteries, each with 12V (white Tamiya connector) connected in parallel resulting in a output of 24V (yellow XT60 connector).
-Make sure the lead batteries are fully charged, connect them in parallel and then connect them to the robot.
+The Robot requires two lead batteries, each with 12V (white Tamiya connector) connected in series resulting in a output of 24V (yellow XT60 connector).
+Make sure the lead batteries are fully charged, connect them in series and then connect them to the robot.
 Additionally, a XTPower battery provides power to the Intel NUC and the router on the robot.
 Make sure the battery is fully charged and connect the Intel NUC to the DC output (black wire, both sides barrel) and connect the router to the 5V/2.1A output (whilte cable USB-a to USB-c).
 
