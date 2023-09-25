@@ -5,7 +5,7 @@ This prototype was created by Eugen Kaltenegger as part of the master thesis. Pl
 Packages outside of this repository that are required are:
 - `tuw_geometry` (branch: `noetic`) 
 - `tuw_msgs` (branch: `noetic`)
-- `tuw_teleop` (branch: `master`)
+- `tuw_teleop` (branch: `noetic`)
 - `tuw_sensor` (branch: `neotic`)
 - `tuw_hardware_interface` (branch: `noetic`)
 
