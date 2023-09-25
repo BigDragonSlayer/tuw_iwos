@@ -2,6 +2,9 @@
 
 ## Description
 This package contains an odometer utilizing joint state information and optionally IMU data.
+For this reason the nodes of this package subscribe to the joint states (and IMU sensor readings) and publish odometer data.
+This data is published to a topic as well as integrated to the TF tree.
+
 For more details on the odometer calculation based on joint state information for the Independent Wheel Offset Steering please refer to the master thesis of Eugen Kaltenegger.
 
 ## Operation

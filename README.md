@@ -14,6 +14,9 @@ For more details please check out the `docker` repository of the `tuw-robotics` 
 In the folder `iwos/iwos-robot` more details on the docker container can be found.
 Additionally, the setup in this repository may be applied to a local setup.
 
+## Operating the Independent Wheel Offset Steering 
+For more details on how to operate the Independent Wheel Offset Steering robot prototpye please check out the [ROBOT.md](./ROBOT.md) file.
+
 ## `tuw_iwos` - Metapackage
 Metapackage for `tuw_iwos`.
 
