@@ -1,4 +1,2 @@
-cmake_minimum_required(VERSION 3.0.2)
+cmake_minimum_required(VERSION 3.14.4)
 project(tuw_iwos)
-find_package(catkin REQUIRED)
-catkin_metapackage()

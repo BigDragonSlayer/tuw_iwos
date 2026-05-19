@@ -2,7 +2,7 @@
 <package format="2">
 
   <name>tuw_iwos</name>
-  <version>0.0.0</version>
+  <version>1.0.0</version>
   <description>Tools for independent wheel offset steering.</description>
 
   <maintainer email="eugen.kaltenegger@gmail.com">Eugen Kaltenegger</maintainer>
@@ -11,10 +11,11 @@
 
   <author email="eugen.kaltenegger@gmail.com">Eugen Kaltenegger</author>
 
-  <buildtool_depend>catkin</buildtool_depend>
+  <doc_depend>python3-sphinx</doc_depend>
+
+  <buildtool_depend>ament_cmake_ros</buildtool_depend>
 
   <export>
-    <metapackage/>
   </export>
 
 </package>
