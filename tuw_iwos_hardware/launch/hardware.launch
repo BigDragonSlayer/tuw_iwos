@@ -7,10 +7,10 @@
 
   <!-- load robot description -->
   <arg name="robot_description_file" default="$(find tuw_iwos_robot_description)/urdf/iwos.xml"/>
-  <param name="robot_description" command="$(find xacro)/xacro $(arg robot_description_file)"/>
+  <!-- param name="robot_description" command="$(find xacro)/xacro $(arg robot_description_file)"/ -->
 
   <!-- load hardware interface param -->
-  <rosparam file="$(find tuw_iwos_hardware)/config/interface/hardware_interface.yaml" command="load"/>
+  <rosparam file="$(find tuw_iwos_hardware)/config/interface/hardware_interface.yaml" value="$(command 'load')"/>
   <!-- load controller description param -->
   <rosparam file="$(find tuw_iwos_hardware)/config/controller/controller.yaml" command="load"/>
 
@@ -26,18 +26,18 @@
 
   <node name="tuw_iwos_hardware_node"
          pkg="tuw_iwos_hardware"
-         type="tuw_iwos_hardware_node"
+         exec="tuw_iwos_hardware_node"
          output="screen"/>
 
   <!-- set logging level to debug if flag is set -->
   <group if="$(arg debug)" >
-    <node pkg="rosservice" type="rosservice" name="set_logger_level_ros" args="call /tuw_iwos_hardware_node/set_logger_level '{logger: 'ros', level: 'DEBUG'}'"/>
-    <node pkg="rosservice" type="rosservice" name="set_logger_level_rosout" args="call /tuw_iwos_hardware_node/set_logger_level '{logger: 'rosout', level: 'DEBUG'}'"/>
+    <node pkg="rosservice" exec="rosservice" name="set_logger_level_ros" args="call /tuw_iwos_hardware_node/set_logger_level '{logger: 'ros', level: 'DEBUG'}'"/>
+    <node pkg="rosservice" exec="rosservice" name="set_logger_level_rosout" args="call /tuw_iwos_hardware_node/set_logger_level '{logger: 'rosout', level: 'DEBUG'}'"/>
   </group>
 
  <node name="controller_starter"
        pkg="controller_manager"
-       type="spawner"
+       exec="spawner"
        output="screen"
        args="/controller/joint_state_controller
              /controller/revolute_left_controller

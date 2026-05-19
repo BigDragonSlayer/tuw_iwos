@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>tuw_iwos_hardware</name>
-  <version>0.0.0</version>
+  <version>1.0.0</version>
   <description>Package to operate IWOS hardware</description>
 
   <maintainer email="eugen.kaltenegger@gmail.com">Eugen Kaltenegger</maintainer>
@@ -10,30 +10,23 @@
 
   <author email="eugen.kaltenegger@gmail.com">Eugen Kaltenegger</author>
 
-  <buildtool_depend>catkin</buildtool_depend>
+  <buildtool_depend>ament_cmake_ros</buildtool_depend>
 
-  <build_depend>roscpp</build_depend>
-  <build_depend>rospy</build_depend>
-  <build_depend>roslint</build_depend>
-  <build_depend>combined_robot_hw</build_depend>
-  <build_depend>controller_manager</build_depend>
+  <depend>rclcpp</depend>
+  <depend>rospy</depend>
+  <depend>roslint</depend>
+  <depend>combined_robot_hw</depend>
+  <depend>controller_manager</depend>
 
-  <build_export_depend>roscpp</build_export_depend>
-  <build_export_depend>rospy</build_export_depend>
-  <build_export_depend>roslint</build_export_depend>
-  <build_export_depend>combined_robot_hw</build_export_depend>
-  <build_export_depend>controller_manager</build_export_depend>
-
-  <exec_depend>roscpp</exec_depend>
-  <exec_depend>rospy</exec_depend>
-  <exec_depend>roslint</exec_depend>
-  <exec_depend>combined_robot_hw</exec_depend>
-  <exec_depend>controller_manager</exec_depend>
   <exec_depend>tuw_hardware_interface_dynamixel</exec_depend>
   <exec_depend>tuw_hardware_interface_trinamic</exec_depend>
 
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
   <export>
     <!-- nothing to export -->
+    <build_type>ament_cmake</build_type>
   </export>
 
 </package>

@@ -1,4 +1,6 @@
 // Copyright 2022 Eugen Kaltenegger
+// TODO includes
+// TODO ros -> rclcpp
 
 #include <tuw_iwos_hardware/control_loop.h>
 
@@ -12,7 +14,7 @@ ControlLoop::ControlLoop()
   this->hardware_node_handle_ = ros::NodeHandle("/hardware");
   this->controller_node_handle_ = ros::NodeHandle("/controller");
 
-  this->update_rate_ = std::make_shared<ros::Rate>(300);
+  this->update_rate_ = std::make_shared<rclcpp::Rate>(300);
 
   this->spinner_ = std::make_shared<ros::AsyncSpinner>(1);
   this->combined_robot_hardware_ = std::make_shared<combined_robot_hw::CombinedRobotHW>();
@@ -48,7 +50,7 @@ void ControlLoop::run()
 
 void ControlLoop::update()
 {
-  this->current_update_time_ = ros::Time::now();
+  this->current_update_time_ = rclcpp::Time::now();
   ros::Duration duration(this->current_update_time_ - this->previous_update_time_);
 
   this->combined_robot_hardware_->read(this->current_update_time_, duration);

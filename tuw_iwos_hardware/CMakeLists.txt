@@ -1,18 +1,21 @@
-cmake_minimum_required(VERSION 3.0.2)
+cmake_minimum_required(VERSION 3.14.4)
 project(tuw_iwos_hardware)
 
-find_package(catkin REQUIRED COMPONENTS
-  roscpp
-  rospy
-  roslint
-  combined_robot_hw
-  controller_manager
-)
+if(NOT CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 17)
+endif()
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
 
-catkin_package(
-  INCLUDE_DIRS
-  include
-  CATKIN_DEPENDS
+find_package(ament_cmake_ros REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(rospy REQUIRED)
+find_package(roslint REQUIRED)
+find_package(combined_robot_hw REQUIRED)
+find_package(controller_manager REQUIRED)
+
+ament_export_dependencies(
   roscpp
   rospy
   roslint
@@ -22,9 +25,9 @@ catkin_package(
   tuw_hardware_interface_dynamixel
 )
 
-include_directories(
-  ./include/
-  ${catkin_INCLUDE_DIRS}
+target_include_directories(${PROJECT_NAME}_node PUBLIC
+  "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+  "$<INSTALL_INTERFACE:include/${PROJECT_NAME}>"
 )
 
 roslint_cpp()
@@ -43,8 +46,13 @@ add_dependencies(
   ${PROJECT_NAME}
 )
 
-target_link_libraries(
-  ${PROJECT_NAME}_node
+target_link_libraries(${PROJECT_NAME}_node PUBLIC
   ${PROJECT_NAME}
-  ${catkin_LIBRARIES}
 )
+
+if(BUILD_TESTING)
+  find_package(ament_lint_auto REQUIRED)
+  ament_lint_auto_find_test_dependencies()
+endif()
+
+ament_package()
