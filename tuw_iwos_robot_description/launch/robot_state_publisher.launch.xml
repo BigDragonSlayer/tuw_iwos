@@ -1,12 +1,12 @@
 <launch>
 
-  <arg name="model" default="$(find tuw_iwos_robot_description)/urdf/iwos.xml"/>
+  <arg name="model" default="$(find-pkg-share tuw_iwos_robot_description)/urdf/iwos.xml"/>
 
-  <include file="$(find tuw_iwos_robot_description)/launch/robot_description_publisher.launch">
+  <include file="$(find-pkg-share tuw_iwos_robot_description)/launch/robot_description_publisher.launch">
     <arg name="model" value="$(arg model)"/>
   </include>
 
-  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+  <node pkg="robot_state_publisher" exec="robot_state_publisher" name="robot_state_publisher">
     <remap from="joint_states" to="joint_states"/>
     <param name="publish_frequency" type="double" value="300.0"/>
   </node>
