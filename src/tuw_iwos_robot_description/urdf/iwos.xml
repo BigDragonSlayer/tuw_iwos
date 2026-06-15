@@ -37,7 +37,7 @@
     <child link="wheel_link_left"/>
     <axis xyz="0 1 0"/>
     <origin xyz="-0.10 0.0 -0.04" rpy="0.0 0.0 0.0"/>
-    <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    <!--hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface-->
   </joint>
   
   <!-- RIGHT -->
@@ -72,7 +72,7 @@
     <child link="wheel_link_right"/>
     <axis xyz="0 1 0"/>
     <origin xyz="-0.10 0.0 -0.04" rpy="0.0 0.0 0.0"/>
-    <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    <!--hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface-->
   </joint>
 
 </robot>

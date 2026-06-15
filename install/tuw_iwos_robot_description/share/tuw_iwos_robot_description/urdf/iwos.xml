@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<robot name="IWOS">
+
+  <link name="base_link">
+    <!-- empty base link -->
+  </link>
+
+  <!-- LEFT -->
+
+  <link name="fork_link_left">
+    <visual>
+      <geometry>
+        <mesh filename="package://tuw_iwos_robot_description/resources/mesh/fork_link.dae"/>
+      </geometry>
+    </visual>
+  </link>
+  
+  <joint name="steering_left" type="revolute">
+    <parent link="base_link"/>
+    <child link="fork_link_left"/>
+    <axis xyz="0 0 1"/>
+    <origin xyz="0.1 0.20 0" rpy="0.0 0.0 0.0"/>
+    <limit effort="10.0" lower="-0.4363" upper="0.4363" velocity="1.0"/>
+  </joint>
+
+  <link name="wheel_link_left">
+    <visual>
+      <origin xyz="0.10 0.0 0.04" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://tuw_iwos_robot_description/resources/mesh/wheel_link.dae"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="revolute_left" type="continuous">
+    <parent link="fork_link_left"/>
+    <child link="wheel_link_left"/>
+    <axis xyz="0 1 0"/>
+    <origin xyz="-0.10 0.0 -0.04" rpy="0.0 0.0 0.0"/>
+    <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+  </joint>
+  
+  <!-- RIGHT -->
+
+  <link name="fork_link_right">
+    <visual>
+      <geometry>
+        <mesh filename="package://tuw_iwos_robot_description/resources/mesh/fork_link.dae"/>
+      </geometry>
+    </visual>
+  </link>
+  
+  <joint name="steering_right" type="revolute">
+    <parent link="base_link"/>
+    <child link="fork_link_right"/>
+    <axis xyz="0 0 1"/>
+    <origin xyz="0.1 -0.20 0" rpy="0.0 0.0 0.0"/>
+    <limit effort="10" lower="-0.4363" upper="0.4363" velocity="1.0"/>
+  </joint>
+
+  <link name="wheel_link_right">
+    <visual>
+      <origin xyz="0.10 0.0 0.04" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://tuw_iwos_robot_description/resources/mesh/wheel_link.dae"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="revolute_right" type="continuous">
+    <parent link="fork_link_right"/>
+    <child link="wheel_link_right"/>
+    <axis xyz="0 1 0"/>
+    <origin xyz="-0.10 0.0 -0.04" rpy="0.0 0.0 0.0"/>
+    <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+  </joint>
+
+</robot>

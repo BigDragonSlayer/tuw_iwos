@@ -13,10 +13,22 @@ find_package(ament_cmake REQUIRED)
 
 install(DIRECTORY
 	launch
-    resources
-    rviz
-    urdf
 	DESTINATION share/${PROJECT_NAME}/
+)
+
+install(DIRECTORY
+  resources
+  DESTINATION share/${PROJECT_NAME}
+)
+
+install(DIRECTORY
+  rviz
+  DESTINATION share/${PROJECT_NAME}
+)
+
+install(DIRECTORY
+  urdf
+  DESTINATION share/${PROJECT_NAME}
 )
 
 if(BUILD_TESTING)

@@ -1,0 +1,7 @@
+<launch>
+
+  <arg name="model" default="$(find-pkg-share tuw_iwos_robot_description)/urdf/iwos.xml"/>
+
+  <param name="robot_description" value="$(command 'xacro $(find-pkg-share tuw_iwos_robot_description)/urdf/iwos.xml')"/>
+
+</launch>

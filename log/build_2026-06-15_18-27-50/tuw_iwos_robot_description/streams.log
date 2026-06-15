@@ -1,0 +1,31 @@
+[0.012s] Invoking command in '/home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/build/tuw_iwos_robot_description': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --build /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/build/tuw_iwos_robot_description -- -j14 -l14
+[0.051s] Invoked command in '/home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/build/tuw_iwos_robot_description' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --build /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/build/tuw_iwos_robot_description -- -j14 -l14
+[0.062s] Invoking command in '/home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/build/tuw_iwos_robot_description': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --install /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/build/tuw_iwos_robot_description
+[0.070s] -- Install configuration: ""
+[0.070s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_robot_description/share/tuw_iwos_robot_description//launch
+[0.070s] -- Installing: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_robot_description/share/tuw_iwos_robot_description//launch/robot_description_devel.launch.xml
+[0.070s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_robot_description/share/tuw_iwos_robot_description//launch/robot_state_publisher.launch.xml
+[0.070s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_robot_description/share/tuw_iwos_robot_description/resources
+[0.070s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_robot_description/share/tuw_iwos_robot_description/resources/mesh
+[0.070s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_robot_description/share/tuw_iwos_robot_description/resources/mesh/wheel_link.dae
+[0.070s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_robot_description/share/tuw_iwos_robot_description/resources/mesh/fork_link.dae
+[0.070s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_robot_description/share/tuw_iwos_robot_description/rviz
+[0.071s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_robot_description/share/tuw_iwos_robot_description/rviz/urdf.rviz
+[0.071s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_robot_description/share/tuw_iwos_robot_description/urdf
+[0.071s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_robot_description/share/tuw_iwos_robot_description/urdf/iwos.xml
+[0.071s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_robot_description/share/ament_index/resource_index/package_run_dependencies/tuw_iwos_robot_description
+[0.071s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_robot_description/share/ament_index/resource_index/parent_prefix_path/tuw_iwos_robot_description
+[0.071s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_robot_description/share/tuw_iwos_robot_description/environment/ament_prefix_path.sh
+[0.071s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_robot_description/share/tuw_iwos_robot_description/environment/ament_prefix_path.dsv
+[0.071s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_robot_description/share/tuw_iwos_robot_description/environment/path.sh
+[0.071s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_robot_description/share/tuw_iwos_robot_description/environment/path.dsv
+[0.071s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_robot_description/share/tuw_iwos_robot_description/local_setup.bash
+[0.071s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_robot_description/share/tuw_iwos_robot_description/local_setup.sh
+[0.071s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_robot_description/share/tuw_iwos_robot_description/local_setup.zsh
+[0.071s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_robot_description/share/tuw_iwos_robot_description/local_setup.dsv
+[0.071s] -- Installing: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_robot_description/share/tuw_iwos_robot_description/package.dsv
+[0.071s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_robot_description/share/ament_index/resource_index/packages/tuw_iwos_robot_description
+[0.071s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_robot_description/share/tuw_iwos_robot_description/cmake/tuw_iwos_robot_descriptionConfig.cmake
+[0.072s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_robot_description/share/tuw_iwos_robot_description/cmake/tuw_iwos_robot_descriptionConfig-version.cmake
+[0.072s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_robot_description/share/tuw_iwos_robot_description/package.xml
+[0.072s] Invoked command in '/home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/build/tuw_iwos_robot_description' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --install /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/build/tuw_iwos_robot_description
