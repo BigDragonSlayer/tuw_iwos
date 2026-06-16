@@ -1,0 +1,25 @@
+[0.026s] Invoking command in '/home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/build/tuw_iwos_hardware': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --build /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/build/tuw_iwos_hardware -- -j14 -l14
+[0.107s] Invoked command in '/home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/build/tuw_iwos_hardware' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --build /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/build/tuw_iwos_hardware -- -j14 -l14
+[0.128s] Invoking command in '/home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/build/tuw_iwos_hardware': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --install /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/build/tuw_iwos_hardware
+[0.146s] -- Install configuration: ""
+[0.147s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_hardware/share/tuw_iwos_hardware/launch
+[0.147s] -- Installing: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_hardware/share/tuw_iwos_hardware/launch/hardware.launch.xml
+[0.147s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_hardware/share/tuw_iwos_hardware/launch/old.hardware.launch.xml
+[0.147s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_hardware/share/tuw_iwos_hardware/bringup
+[0.147s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_hardware/share/tuw_iwos_hardware/bringup/controller.yaml
+[0.147s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_hardware/share/ament_index/resource_index/package_run_dependencies/tuw_iwos_hardware
+[0.147s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_hardware/share/ament_index/resource_index/parent_prefix_path/tuw_iwos_hardware
+[0.148s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_hardware/share/tuw_iwos_hardware/environment/ament_prefix_path.sh
+[0.148s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_hardware/share/tuw_iwos_hardware/environment/ament_prefix_path.dsv
+[0.148s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_hardware/share/tuw_iwos_hardware/environment/path.sh
+[0.148s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_hardware/share/tuw_iwos_hardware/environment/path.dsv
+[0.148s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_hardware/share/tuw_iwos_hardware/local_setup.bash
+[0.148s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_hardware/share/tuw_iwos_hardware/local_setup.sh
+[0.148s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_hardware/share/tuw_iwos_hardware/local_setup.zsh
+[0.149s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_hardware/share/tuw_iwos_hardware/local_setup.dsv
+[0.149s] -- Installing: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_hardware/share/tuw_iwos_hardware/package.dsv
+[0.149s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_hardware/share/ament_index/resource_index/packages/tuw_iwos_hardware
+[0.149s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_hardware/share/tuw_iwos_hardware/cmake/tuw_iwos_hardwareConfig.cmake
+[0.149s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_hardware/share/tuw_iwos_hardware/cmake/tuw_iwos_hardwareConfig-version.cmake
+[0.149s] -- Up-to-date: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos_hardware/share/tuw_iwos_hardware/package.xml
+[0.151s] Invoked command in '/home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/build/tuw_iwos_hardware' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --install /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/build/tuw_iwos_hardware

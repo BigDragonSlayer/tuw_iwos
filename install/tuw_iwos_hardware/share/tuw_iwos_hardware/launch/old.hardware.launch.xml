@@ -1,0 +1,48 @@
+<launch>
+  <!-- set spawn_controllers flag (true / false) -->
+  <arg name="spawn_controllers" default="true"/>
+
+  <!-- set debug flag (true / false) -->
+  <arg name="debug" default="false"/>
+
+  <!-- load robot description -->
+  <arg name="robot_description_file" default="$(find tuw_iwos_robot_description)/urdf/iwos.xml"/>
+  <!-- param name="robot_description" command="$(find xacro)/xacro $(arg robot_description_file)"/ -->
+
+  <!-- load hardware interface param -->
+  <rosparam file="$(find tuw_iwos_hardware)/config/interface/hardware_interface.yaml" value="$(command 'load')"/>
+  <!-- load controller description param -->
+  <rosparam file="$(find tuw_iwos_hardware)/config/controller/controller.yaml" command="load"/>
+
+  load revolute (trinamic) setup description param
+  <rosparam param="trinamic_hardware_interface_setup" subst_value="True">
+    "$(find tuw_iwos_hardware)/config/setup/revolute_setup.yaml"
+  </rosparam>
+
+  load steering (dynamixel) setup description param
+  <rosparam param="dynamixel_hardware_interface_setup" subst_value="True">
+    "$(find tuw_iwos_hardware)/config/setup/steering_setup.yaml"
+  </rosparam>
+
+  <node name="tuw_iwos_hardware_node"
+         pkg="tuw_iwos_hardware"
+         exec="tuw_iwos_hardware_node"
+         output="screen"/>
+
+  <!-- set logging level to debug if flag is set -->
+  <group if="$(arg debug)" >
+    <node pkg="rosservice" exec="rosservice" name="set_logger_level_ros" args="call /tuw_iwos_hardware_node/set_logger_level '{logger: 'ros', level: 'DEBUG'}'"/>
+    <node pkg="rosservice" exec="rosservice" name="set_logger_level_rosout" args="call /tuw_iwos_hardware_node/set_logger_level '{logger: 'rosout', level: 'DEBUG'}'"/>
+  </group>
+
+ <node name="controller_starter"
+       pkg="controller_manager"
+       exec="spawner"
+       output="screen"
+       args="/controller/joint_state_controller
+             /controller/revolute_left_controller
+             /controller/revolute_right_controller
+             /controller/steering_left_controller
+             /controller/steering_right_controller"/>
+
+</launch>

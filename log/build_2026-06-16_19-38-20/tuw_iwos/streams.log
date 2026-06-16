@@ -1,0 +1,18 @@
+[0.042s] Invoking command in '/home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/build/tuw_iwos': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/src/tuw_iwos -DCMAKE_INSTALL_PREFIX=/home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos
+[0.284s] -- The C compiler identification is GNU 13.3.0
+[0.445s] -- The CXX compiler identification is GNU 13.3.0
+[0.479s] -- Detecting C compiler ABI info
+[0.644s] -- Detecting C compiler ABI info - done
+[0.658s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.658s] -- Detecting C compile features
+[0.659s] -- Detecting C compile features - done
+[0.673s] -- Detecting CXX compiler ABI info
+[0.842s] -- Detecting CXX compiler ABI info - done
+[0.855s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.856s] -- Detecting CXX compile features
+[0.856s] -- Detecting CXX compile features - done
+[0.857s] -- Configuring done (0.7s)
+[0.859s] -- Generating done (0.0s)
+[0.860s] -- Build files have been written to: /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/build/tuw_iwos
+[0.867s] Invoked command in '/home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/build/tuw_iwos' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/src/tuw_iwos -DCMAKE_INSTALL_PREFIX=/home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/install/tuw_iwos
+[0.869s] Invoking command in '/home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/build/tuw_iwos': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --build /home/coffee/Documents/Studium/TU/bachelorarbeit/tuw_iwos/build/tuw_iwos -- -j14 -l14

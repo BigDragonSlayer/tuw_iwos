@@ -1,0 +1,10 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 60
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+# placeholder_controller:
+  # ros__parameters:
+    # type: diff_drive_controller/DiffDriveController
