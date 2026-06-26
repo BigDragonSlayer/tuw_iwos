@@ -2,11 +2,9 @@
 # based on: https://github.com/github/gitignore/blob/master/ROS.gitignore
 
 # ROS specific folders and files
-devel/
-logs/
+log/
 build/
-bin/
-lib/
+install/
 msg_gen/
 srv_gen/
 msg/*Action.msg
@@ -17,8 +15,6 @@ msg/*Feedback.msg
 msg/*Goal.msg
 msg/*Result.msg
 msg/_*.py
-build_isolated/
-devel_isolated/
 
 ## IDE
 .vscode/
