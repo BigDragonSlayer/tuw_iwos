@@ -45,5 +45,6 @@
 
   <node pkg="controller_manager" exec="spawner" args="joint_state_broadcaster" /> <!-- TODO check how to do that correctly -->
 
+  <!--node pkg="controller_manager" exec="spawner" args="joint_control --param-file $(find-pkg-share tuw_iwos_hardware)/bringup/controller.yaml" /-->
   <!-- node pkg="controller_manager" exec="spawner" args="placeholder_controller" / -->
 </launch>

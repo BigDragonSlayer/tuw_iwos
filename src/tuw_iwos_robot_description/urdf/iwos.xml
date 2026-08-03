@@ -82,14 +82,32 @@
       <!-- Port and communication settings -->
       <param name="port_name">/dev/ttyUSB0</param>
       <param name="baud_rate">57600</param>
-      <param name="error_timeout_ms">500</param>
+      <param name="error_timeout_ms">1000</param>
 
       <!-- Port and Communication Settings -->
       <param name="number_of_joints">2</param>
-      <param name="number_of_transmissions">0</param>
+      <param name="number_of_transmissions">2</param>
+
+      <!-- Torque must be disabled at initialization -->
+      <param name="disable_torque_at_init">true</param>
+
+      <!-- Transmission <-> Joint matrices -->
+      <param name="transmission_to_joint_matrix">
+      1, 0,
+      0, 1
+      </param>
+      <param name="joint_to_transmission_matrix">
+      1, 0,
+      0, 1
+      </param>
 
       <!-- Some different stuff -->
       <param name="dynamixel_model_folder">/param/dxl_model</param>
+      <param name="dynamixel_state_pub_msg_name">dynamixel_hardware_interface/dxl_state</param>
+      <param name="get_dynamixel_data_srv_name">dynamixel_hardware_interface/get_dxl_data</param>
+      <param name="set_dynamixel_data_srv_name">dynamixel_hardware_interface/set_dxl_data</param>
+      <param name="reboot_dxl_srv_name">dynamixel_hardware_interface/reboot_dxl</param>
+      <param name="set_dxl_torque_srv_name">dynamixel_hardware_interface/set_dxl_torque</param>
     </hardware>
 
     <joint name="steering_right">
@@ -102,15 +120,26 @@
       <state_interface name="position" />
     </joint>
 
-    <!--gpio>
-      <param name="type"></param>
-    </gpio-->
+    <gpio name="dxl1">
+      <param name="type">dxl</param>
+      <param name="ID">0</param>
+      <command_interface name="Goal Position"/>
+      <state_interface name="Present Position"/>
+      <param name="Return Delay Time">0</param>
+    </gpio>
+
+    <gpio name="dxl2">
+      <param name="type">dxl</param>
+      <param name="ID">1</param>
+      <command_interface name="Goal Position"/>
+      <state_interface name="Present Position"/>
+      <param name="Return Delay Time">0</param>
+    </gpio>
   </ros2_control>
 
-  <ros2_control name="IWOS_Wheels" type="system">
+  <!--ros2_control name="IWOS_Wheels" type="system">
     <hardware>
       <plugin>tuw_hardware_trinamic_interface/TrinamicInterface</plugin>
-      <!--param name=""></param-->
     </hardware>
 
     <joint name="revolute_right">
@@ -124,6 +153,6 @@
       <command_interface name="velocity" />
       <state_interface name="velocity" />
     </joint>
-  </ros2_control>
+  </ros2_control-->
 
 </robot>
