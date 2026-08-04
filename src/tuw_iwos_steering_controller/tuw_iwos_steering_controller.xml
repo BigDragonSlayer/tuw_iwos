@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<library path="tuw_iwos_steering_controller">
+  <class name="tuw_iwos_steering_controller/SteeringController" type="tuw_iwos_steering_controller::SteeringController" base_class_type="controller_interface::ControllerInterface">
+    <description>Controller for the Dynamixel steering hinges of the IWOS prototype.</description>
+  </class>
+</library>
