@@ -4,6 +4,7 @@ namespace tuw_iwos_steering_controller {
 
     using namespace controller_interface;
     using namespace rclcpp_lifecycle;
+    using namespace std::chrono_literals;
 
     CallbackReturn SteeringController::on_init() {
         this->left_gpio = auto_declare<std::string>("left_gpio", this->left_gpio);
@@ -11,7 +12,7 @@ namespace tuw_iwos_steering_controller {
         // TODO the joints themselves as parameters
         this->left_joint = auto_declare<std::string>("left_joint", this->left_joint);
 
-        this->cmd_expiration = auto_declare<double>("cmd_expiration", this->expiration);
+        this->cmd_expiration = auto_declare<double>("cmd_expiration", this->cmd_expiration);
 
         return CallbackReturn::SUCCESS;
     }
@@ -20,6 +21,7 @@ namespace tuw_iwos_steering_controller {
         // TODO initialize variables
 
         // TODO subscribers
+        // TODO create custom msg just for this controller
         auto double_callback = [this](std_msgs::msg::Float64::UniquePtr msg) -> void {
             this->cmd = msg->data;
             this->last_cmd = get_node()->get_clock()->now();
@@ -27,14 +29,17 @@ namespace tuw_iwos_steering_controller {
         this->double_subscriber = get_node()->create_subscription<std_msgs::msg::Float64>("left_position", 10, double_callback);
 
         // TODO publishers
+        // TODO publishers that publish what they just wrote to the dynamixel
+        // TODO a publisher for the joint positions
+        // TODO a publisher for the torque
 
         // TODO service client for torque
         this->torque_client = get_node()->create_client<std_srvs::srv::SetBool>("dynamixel_hardware_interface/set_dxl_torque");
 
-        return CallbackReturn::SUCCESS
+        return CallbackReturn::SUCCESS;
     }
 
-    InterfaceConfiguration SteeringController::command_interface_configuration() {
+    InterfaceConfiguration SteeringController::command_interface_configuration() const {
         // return a command interface configuration, that includes all the command interfaces the controller claims
         std::vector<std::string> conf_names;
 
@@ -44,11 +49,12 @@ namespace tuw_iwos_steering_controller {
         return {interface_configuration_type::INDIVIDUAL, conf_names};
     }
 
-    InterfaceConfiguration SteeringController::state_interface_configuration() {
-        // TODO same as for the command_interface_configuration, but for the state interfaces to be read
+    InterfaceConfiguration SteeringController::state_interface_configuration() const {
+        // same as for the command_interface_configuration, but for the state interfaces to be read
         std::vector<std::string> conf_names;
 
         conf_names.push_back(this->left_joint + "/position"); // TODO replace with HW_IF_POSITION
+        // TODO include the other state interfaces
 
         return {interface_configuration_type::INDIVIDUAL, conf_names};
     }
@@ -72,7 +78,7 @@ namespace tuw_iwos_steering_controller {
             }
         }
 
-        // TODO enable torque
+        // enable torque
         // TODO put that in some method
         auto request = std::make_shared<std_srvs::srv::SetBool::Request>();
         request->data = true;
@@ -85,9 +91,9 @@ namespace tuw_iwos_steering_controller {
         }
 
         auto result = torque_client->async_send_request(request);
-        if(rclcpp::spin_until_future_complete(node, result) == rclcpp::FutureReturnCode::SUCCESS) {
+        if(rclcpp::spin_until_future_complete(get_node(), result) == rclcpp::FutureReturnCode::SUCCESS) {
             if(result.get()->success) {
-                RCLCPP_INFO(get_node()->get_logger(), result.get()->message);
+                RCLCPP_INFO(get_node()->get_logger(), result.get()->message.c_str());
             } else {
                 RCLCPP_ERROR(get_node()->get_logger(), "Failed to request to enable torque");
                 return CallbackReturn::ERROR;
@@ -109,10 +115,16 @@ namespace tuw_iwos_steering_controller {
         return CallbackReturn::SUCCESS;
     }
 
-    CallbackReturn SteeringController::update(const rclcpp::Time &time, const rclcpp::Duration &period) {
+    return_type SteeringController::update(const rclcpp::Time &time, const rclcpp::Duration &period) {
         // TODO the real deal
+        double value = 0.0;
 
-        return CallbackReturn::SUCCESS;
+        if(this->last_cmd.seconds() + cmd_expiration > time.seconds()) {
+            value = this->cmd;
+        }
+        this->cmd_position[0].get().set_value(value);
+
+        return return_type::OK;
     }
 }
 
